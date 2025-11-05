@@ -1,0 +1,104 @@
+.login-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #2563eb, #38bdf8);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+  }
+  
+  .login-card {
+    background: #ffffff;
+    width: 380px;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  
+  .login-card h2 {
+    color: #1f2937;
+    margin-bottom: 8px;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  
+  .login-card .subtitle {
+    color: #6b7280;
+    margin-bottom: 25px;
+    font-size: 14px;
+  }
+  
+  .login-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  
+  .login-card input:focus {
+    border-color: #2563eb;
+  }
+  
+  .login-card button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .login-card button:hover {
+    background: linear-gradient(135deg, #1e40af, #1e3a8a);
+  }
+  
+  .login-card .message {
+    margin-top: 10px;
+    color: #22c55e;
+    font-weight: 500;
+  }
+  
+  .login-card .switch {
+    margin-top: 20px;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  .login-card .switch a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .login-card .switch a:hover {
+    text-decoration: underline;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
