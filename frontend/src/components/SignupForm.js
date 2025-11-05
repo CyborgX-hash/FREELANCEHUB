@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { signupUser } from "../api";
+import "./SignupForm.css";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +12,16 @@ const SignupForm = () => {
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await signupUser(formData);
-  
+
     if (result.message === "Signup successful") {
-      setMessage("Signup successful! Redirecting to login...");
+      setMessage("✅ Signup successful! Redirecting...");
       setTimeout(() => {
         window.location.href = "/login";
       }, 1200);
@@ -27,57 +29,69 @@ const SignupForm = () => {
       setMessage(result.message || "Something went wrong");
     }
   };
-  
+
   return (
-    <div style={styles.container}>
-      <h2>Signup</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        <select name="role" onChange={handleChange}>
-          <option value="Client">Client</option>
-          <option value="Freelancer">Freelancer</option>
-        </select>
-        <button type="submit">Signup</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="signup-container">
+      <div className="signup-card">
+        <h2>Create your account</h2>
+        <p className="subtitle">Join FreelanceHub and start your journey 🚀</p>
+
+        <div className="role-selector">
+          <label>
+            <input
+              type="radio"
+              name="role"
+              value="Client"
+              checked={formData.role === "Client"}
+              onChange={handleChange}
+            />
+            Client
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="role"
+              value="Freelancer"
+              checked={formData.role === "Freelancer"}
+              onChange={handleChange}
+            />
+            Freelancer
+          </label>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+
+        {message && <p className="message">{message}</p>}
+
+        <p className="switch">
+          Already have an account? <a href="/login">Login here</a>
+        </p>
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    width: "350px",
-    margin: "40px auto",
-    textAlign: "center",
-    background: "#f2f2f2",
-    padding: "20px",
-    borderRadius: "10px",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
 };
 
 export default SignupForm;

@@ -1,20 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import "./DashboardPage.css";
 
 const DashboardPage = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserName(decoded.name || "User");
+      } catch (error) {
+        console.error("Token decode error:", error);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>Welcome, {user?.name} 👋</h2>
-      <p>Your role: {user?.role}</p>
-      <button
-        onClick={() => {
-          localStorage.clear();
-          window.location.href = "/login";
-        }}
-      >
-        Logout
-      </button>
+    <div className="dashboard-container">
+      <nav className="navbar">
+        <h2>FreelanceHub</h2>
+        <button onClick={handleLogout}>Logout</button>
+      </nav>
+
+      <div className="dashboard-content">
+        <h1>👋 Welcome, {userName}!</h1>
+        <p className="subtitle">Here’s your freelancer workspace.</p>
+
+        <div className="cards-container">
+          <div className="dash-card">
+            <h3>My Projects</h3>
+            <p>View and manage your ongoing freelance projects.</p>
+          </div>
+          <div className="dash-card">
+            <h3>Browse Jobs</h3>
+            <p>Find new freelance gigs that match your skills.</p>
+          </div>
+          <div className="dash-card">
+            <h3>Account Info</h3>
+            <p>Update your profile and preferences.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

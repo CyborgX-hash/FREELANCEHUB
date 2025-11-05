@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import db from "../config/db.js";
 
-// Signup
 export const signup = async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -27,7 +26,6 @@ export const signup = async (req, res) => {
   });
 };
 
-// Login
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
