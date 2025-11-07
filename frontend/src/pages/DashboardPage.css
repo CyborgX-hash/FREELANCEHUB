@@ -1,104 +1,139 @@
+/* ===== Base Layout ===== */
 .dashboard-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #1e3a8a, #2563eb, #38bdf8);
-    background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
-    font-family: "Poppins", sans-serif;
-    color: #fff;
-    overflow-y: auto;
-  }
-  
-  .navbar {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    backdrop-filter: blur(8px);
-    position: sticky;
-    top: 0;
-  }
-  
-  .navbar h2 {
-    font-weight: 600;
-    color: #fff;
-  }
-  
-  .navbar button {
-    padding: 8px 16px;
-    background: #ef4444;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .navbar button:hover {
-    background: #dc2626;
-  }
-  
-  .dashboard-content {
-    text-align: center;
-    margin-top: 60px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #000000, #111827);
+  background-size: 400% 400%;
+  animation: gradientShift 10s ease infinite;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar h2 {
+  font-weight: 600;
+  color: #f9fafb;
+  font-size: 22px;
+}
+
+.navbar button {
+  padding: 8px 16px;
+  background: #ef4444;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.navbar button:hover {
+  background: #dc2626;
+}
+
+/* ===== Dashboard Content ===== */
+.dashboard-content {
+  flex: 1;
+  text-align: center;
+  margin-top: 60px;
+  padding: 0 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-content h1 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #f3f4f6;
+}
+
+.subtitle {
+  color: #9ca3af;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+/* ===== Grid Container ===== */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ===== Card Design ===== */
+.dash-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 30px 25px;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.dash-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+}
+
+.dash-card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.dash-card p {
+  color: #d1d5db;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ===== Animation ===== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
   .dashboard-content h1 {
-    font-size: 32px;
-    font-weight: 600;
+    font-size: 26px;
   }
-  
-  .subtitle {
-    color: #e0e7ff;
-    font-size: 16px;
-    margin-bottom: 40px;
-  }
-  
+
   .cards-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 25px;
-    padding: 0 40px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-  
+
   .dash-card {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 25px 30px;
-    width: 260px;
-    text-align: left;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease, background 0.3s ease;
+    width: 90%;
+    margin: 0 auto;
   }
-  
-  .dash-card:hover {
-    transform: translateY(-6px);
-    background: rgba(255, 255, 255, 0.25);
-  }
-  
-  .dash-card h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #fff;
-  }
-  
-  .dash-card p {
-    color: #dbeafe;
-    font-size: 14px;
-    line-height: 1.4;
-  }
-  
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
+}
