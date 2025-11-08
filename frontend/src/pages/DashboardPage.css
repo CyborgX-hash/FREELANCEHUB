@@ -1,11 +1,10 @@
-/* ===== Base Layout ===== */
 .dashboard-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #000000, #111827);
+  background: black;
   background-size: 400% 400%;
   animation: gradientShift 10s ease infinite;
   font-family: "Poppins", sans-serif;
@@ -15,25 +14,30 @@
   flex-direction: column;
 }
 
-/* ===== Navbar ===== */
 .navbar {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
+  height:40px;
+  background: rgba(255, 255, 255, 0.1);
   padding: 15px 40px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  backdrop-filter: blur(10px);
+  justify-content: flex-start;
+  backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
-  z-index: 10;
 }
 
 .navbar h2 {
   font-weight: 600;
-  color: #f9fafb;
-  font-size: 22px;
+  color: #fff;
+  margin-right: 1000px; 
 }
+
+.profile-container {
+  margin-left: 150px; 
+  position: relative;
+}
+
 
 .navbar button {
   padding: 8px 16px;
@@ -50,7 +54,6 @@
   background: #dc2626;
 }
 
-/* ===== Dashboard Content ===== */
 .dashboard-content {
   flex: 1;
   text-align: center;
@@ -74,7 +77,6 @@
   margin-bottom: 40px;
 }
 
-/* ===== Grid Container ===== */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -84,7 +86,6 @@
   margin: 0 auto;
 }
 
-/* ===== Card Design ===== */
 .dash-card {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 18px;
@@ -114,14 +115,176 @@
   line-height: 1.5;
 }
 
-/* ===== Animation ===== */
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+.profile-container {
+  position: relative;
+}
 
-/* ===== Responsive ===== */
+.profile-icon {
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  width: 180px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-item.logout {
+  color: #f87171;
+}
+
+body[data-theme="light"] .dashboard-container {
+  background: linear-gradient(135deg, #f9fafb, #e5e7eb);
+  color: #111;
+}
+
+body[data-theme="light"] .navbar {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .dash-card {
+  background: rgba(0, 0, 0, 0.05);
+  color: #111;
+}
+
+body[data-theme="light"] .dropdown-menu {
+  background: rgba(0, 0, 0, 0.05);
+}
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 40px 50px;
+  text-align: center;
+  width: 350px;
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-avatar {
+  font-size: 80px;
+  color: #93c5fd;
+  margin-bottom: 15px;
+}
+
+.profile-card h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.profile-card p {
+  color: #e5e7eb;
+  margin-bottom: 10px;
+}
+
+.role-badge {
+  display: inline-block;
+  background: #2563eb;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.profile-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.edit-btn,
+.close-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #2563eb;
+}
+
+.close-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.close-btn:hover {
+  background: #dc2626;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
 @media (max-width: 768px) {
   .dashboard-content h1 {
     font-size: 26px;
