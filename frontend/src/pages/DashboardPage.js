@@ -7,13 +7,26 @@ import {
   FaMoon,
   FaSignOutAlt,
   FaEdit,
+  FaSave,
+  FaTimes,
 } from "react-icons/fa";
 import "./DashboardPage.css";
 
 const DashboardPage = () => {
-  const [user, setUser] = useState({ name: "", email: "", role: "" });
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    role: "",
+    bio: "",
+    location: "",
+    skills: "",
+    hourly_rate: "",
+    company: "",
+  });
   const [showMenu, setShowMenu] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
@@ -21,11 +34,13 @@ const DashboardPage = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUser({
+        setUser((prev) => ({
+          ...prev,
+          id: decoded.id,
           name: decoded.name || "User",
           email: decoded.email || "user@example.com",
           role: decoded.role || "Freelancer",
-        });
+        }));
       } catch (error) {
         console.error("Token decode error:", error);
       }
@@ -48,6 +63,18 @@ const DashboardPage = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
+
+  const handleSave = async () => {
+    console.log("Profile data to save:", user);
+
+    alert("Profile updated successfully!");
+    setEditMode(false);
   };
 
   return (
@@ -81,51 +108,28 @@ const DashboardPage = () => {
       </nav>
 
       <div className="dashboard-content">
-        <h1>Welcome {user.name}</h1>
-        
+        <h1>👋 Welcome, {user.name}</h1>
+        {user.role === "Client" ? (
+          <p className="subtitle">Manage your freelance journey here.</p>
+) : user.role === "Freelancer" ? (
+  <p className="subtitle">Explore projects and showcase your skills.</p>
+) : null}
+
 
         {user.role === "Client" && (
           <div className="cards-container">
-            <p className="subtitle">
-        Hire Your Freelancer Here.
-        </p>
-            <div className="dash-card">
-              <h3>💼 Live Projects</h3>
-              <p>View and manage projects you’ve posted.</p>
-            </div>
-            <div className="dash-card">
-              <h3>🧑‍💻 Hire Freelancers</h3>
-              <p>Find and hire top-rated freelance professionals.</p>
-            </div>
-            <div className="dash-card">
-              <h3>💬 Messages</h3>
-              <p>Chat with freelancers you’ve hired or shortlisted.</p>
-            </div>
-            
+            <div className="dash-card"><h3>💼 Live Projects</h3><p>View and manage your projects.</p></div>
+            <div className="dash-card"><h3>🧑‍💻 Hire Freelancers</h3><p>Find and hire top-rated professionals.</p></div>
+            <div className="dash-card"><h3>💬 Messages</h3><p>Chat with freelancers.</p></div>
           </div>
         )}
 
         {user.role === "Freelancer" && (
-          
           <div className="cards-container">
-            
-            <div className="dash-card">
-            
-              <h3>🔍 Browse Jobs</h3>
-              <p>Find freelance projects that match your skills.</p>
-            </div>
-            <div className="dash-card">
-              <h3>📄 My Proposals</h3>
-              <p>Track your submitted bids and job applications.</p>
-            </div>
-            <div className="dash-card">
-              <h3>💼 My Projects</h3>
-              <p>Manage your active and completed client work.</p>
-            </div>
-            <div className="dash-card">
-              <h3>🏆 Earnings</h3>
-              <p>Check your earnings and performance insights.</p>
-            </div>
+            <div className="dash-card"><h3>🔍 Browse Jobs</h3><p>Find freelance projects that match your skills.</p></div>
+            <div className="dash-card"><h3>📄 My Proposals</h3><p>Track your submitted bids and job applications.</p></div>
+            <div className="dash-card"><h3>💼 My Projects</h3><p>Manage your active and completed client work.</p></div>
+            <div className="dash-card"><h3>🏆 Earnings</h3><p>Check your earnings and performance insights.</p></div>
           </div>
         )}
       </div>
@@ -134,21 +138,80 @@ const DashboardPage = () => {
         <div className="profile-modal">
           <div className="profile-card">
             <FaUserCircle className="profile-avatar" />
-            <h2>{user.name}</h2>
-            <p>{user.email}</p>
-            <span className="role-badge">{user.role}</span>
+            {!editMode ? (
+              <>
+                <h2>{user.name}</h2>
+                <p>{user.email}</p>
+                <span className="role-badge">{user.role}</span>
+                {user.bio && <p className="bio">"{user.bio}"</p>}
+                {user.location && <p>📍 {user.location}</p>}
+                {user.skills && <p>💡 Skills: {user.skills}</p>}
 
-            <div className="profile-buttons">
-              <button className="edit-btn">
-                <FaEdit /> Edit Profile
-              </button>
-              <button
-                className="close-btn"
-                onClick={() => setShowProfile(false)}
-              >
-                Close
-              </button>
-            </div>
+                <div className="profile-buttons">
+                  <button className="edit-btn" onClick={() => setEditMode(true)}>
+                    <FaEdit /> Edit Profile
+                  </button>
+                  <button className="close-btn" onClick={() => setShowProfile(false)}>
+                    Close
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  name="name"
+                  value={user.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                />
+                <input
+                  type="text"
+                  name="location"
+                  value={user.location}
+                  onChange={handleChange}
+                  placeholder="Location"
+                />
+                <textarea
+                  name="bio"
+                  value={user.bio}
+                  onChange={handleChange}
+                  placeholder="Short Bio"
+                />
+                {user.role === "Freelancer" && (
+                  <>
+                    <input
+                      type="text"
+                      name="skills"
+                      value={user.skills}
+                      onChange={handleChange}
+                      placeholder="Skills (comma separated)"
+                    />
+                    
+                  </>
+                )}
+                {user.role === "Client" && (
+                  <>
+                    <input
+                      type="text"
+                      name="company"
+                      value={user.company}
+                      onChange={handleChange}
+                      placeholder="Company Name"
+                    />
+                  </>
+                )}
+
+                <div className="profile-buttons">
+                  <button className="edit-btn" onClick={handleSave}>
+                    <FaSave /> Save
+                  </button>
+                  <button className="close-btn" onClick={() => setEditMode(false)}>
+                    <FaTimes /> Cancel
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
