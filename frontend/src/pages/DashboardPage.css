@@ -300,6 +300,147 @@ body[data-theme="light"] .dropdown-menu {
     transform: scale(1);
   }
 }
+body[data-theme="light"] .dashboard-container {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  color: #111827;
+}
+body[data-theme="light"] .dashboard-content h1 {
+  color: #1e293b; 
+}
+
+body[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+body[data-theme="light"] .navbar h2 {
+  color: #1e293b;
+}
+
+body[data-theme="light"] .profile-icon {
+  color: #1e293b;
+}
+
+body[data-theme="light"] .dropdown-menu {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .dropdown-item {
+  color: #1e293b;
+}
+
+body[data-theme="light"] .dropdown-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body[data-theme="light"] .dash-card {
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .dash-card h3 {
+  color: #111827;
+}
+
+body[data-theme="light"] .dash-card p {
+  color: #374151;
+}
+
+body[data-theme="light"] .subtitle {
+  color: #334155;
+}
+
+body[data-theme="light"] .profile-card {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111827;
+}
+
+body[data-theme="light"] .profile-avatar {
+  color: #2563eb;
+}
+
+body[data-theme="light"] .role-badge {
+  background: #3b82f6;
+}
+
+body[data-theme="light"] .edit-btn {
+  background: #2563eb;
+  color: white;
+}
+
+body[data-theme="light"] .edit-btn:hover {
+  background: #1d4ed8;
+}
+
+body[data-theme="light"] .close-btn {
+  background: #ef4444;
+  color: white;
+}
+
+body[data-theme="light"] .close-btn:hover {
+  background: #dc2626;
+}
+body[data-theme="light"] .profile-card {
+  background: #ffffff;
+  color: #1f2937; 
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+body[data-theme="light"] .profile-avatar {
+  color: #2563eb; 
+}
+
+body[data-theme="light"] .profile-card h2 {
+  color: #111827;
+}
+
+body[data-theme="light"] .profile-card p {
+  color: #334155;
+}
+
+body[data-theme="light"] .role-badge {
+  background: #3b82f6;
+  color: white;
+}
+
+body[data-theme="light"] .bio {
+  font-style: italic;
+  color: #475569;
+}
+
+body[data-theme="light"] .profile-card input,
+body[data-theme="light"] .profile-card textarea {
+  background: rgba(0, 0, 0, 0.05);
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .profile-card input::placeholder,
+body[data-theme="light"] .profile-card textarea::placeholder {
+  color: #6b7280;
+}
+
+body[data-theme="light"] .edit-btn {
+  background: #2563eb;
+  color: white;
+}
+
+body[data-theme="light"] .edit-btn:hover {
+  background: #1d4ed8;
+}
+
+body[data-theme="light"] .close-btn {
+  background: #ef4444;
+  color: white;
+}
+
+body[data-theme="light"] .close-btn:hover {
+  background: #dc2626;
+}
+
+
 
 
 @media (max-width: 768px) {
