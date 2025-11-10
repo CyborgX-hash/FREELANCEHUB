@@ -93,7 +93,7 @@ const DashboardPage = () => {
                   setShowMenu(false);
                 }}
               >
-                <FaUser /> &nbsp; View Profile
+              <FaUser /> &nbsp; View Profile
               </div>
               <div className="dropdown-item" onClick={toggleTheme}>
                 {theme === "dark" ? <FaSun /> : <FaMoon />} &nbsp;
@@ -108,7 +108,7 @@ const DashboardPage = () => {
       </nav>
 
       <div className="dashboard-content">
-        <h1>👋 Welcome, {user.name}</h1>
+        <h1>Welcome {user.name}</h1>
         {user.role === "Client" ? (
           <p className="subtitle">Manage your freelance journey here.</p>
 ) : user.role === "Freelancer" ? (

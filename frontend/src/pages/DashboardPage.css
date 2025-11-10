@@ -352,10 +352,22 @@ body[data-theme="light"] .subtitle {
   color: #334155;
 }
 
-body[data-theme="light"] .profile-card {
-  background: rgba(255, 255, 255, 0.95);
-  color: #111827;
+body[data-theme="dark"] .profile-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  color: #f1f5f9;
+  transition: all 0.3s ease;
 }
+body[data-theme="dark"] .profile-card:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.07);
+}
+
+
 
 body[data-theme="light"] .profile-avatar {
   color: #2563eb;
