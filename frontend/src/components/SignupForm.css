@@ -7,7 +7,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url("/Users/sakshamsontakke/Desktop/freelancehub/frontend/360_F_355607062_zYMS8jaz4SfoykpWz5oViRVKL32IabTP.jpg");
+    background: url("/bg.jpg");
    
   }
   
@@ -17,11 +17,8 @@
   max-width: 360px;    
   padding: 30px 32px;   
   border-radius: 12px;
-
- 
   border: 1px solid #1f1f1f;
   box-shadow: 0 0 25px rgba(0,0,0,0.5);
-
   text-align: center;
   }
   
