@@ -6,7 +6,7 @@
   align-items: center;
   padding: 20px;
 
-  background: url("/bg.jpg");
+  background-color:rgb(231, 218, 218);
 }
 
 .login-card {
