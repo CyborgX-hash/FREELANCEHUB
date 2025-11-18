@@ -7,7 +7,6 @@
     transition: all 0.3s ease;
   }
   
-  /* NAVBAR */
   .home-navbar {
     width: 100%;
     padding: 20px 40px;
@@ -53,7 +52,6 @@
     background: #2563eb;
   }
   
-  /* HERO SECTION */
   .hero {
     margin-top: 120px;
     text-align: center;
@@ -71,7 +69,6 @@
     color: var(--text-color-light);
   }
   
-  /* GET STARTED BUTTON */
   .get-started-btn {
     margin-top: 30px;
     padding: 14px 32px;
@@ -90,7 +87,6 @@
     transform: translateY(-3px);
   }
   
-  /* LIGHT MODE TEXT */
   :root {
     --bg-color: #f9fafb;
     --text-color: #111827;

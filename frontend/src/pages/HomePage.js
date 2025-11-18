@@ -16,8 +16,7 @@ const HomePage = () => {
 
   return (
     <div className="home-container">
-      {/* NAVBAR */}
-      <nav className="home-navbar">
+=      <nav className="home-navbar">
         <h2 className="logo">FreelanceHub</h2>
 
         <div className="nav-buttons">
@@ -30,7 +29,6 @@ const HomePage = () => {
         </div>
       </nav>
 
-      {/* HERO SECTION */}
       <div className="hero">
         <h1>Work Smarter. Hire Faster.</h1>
         <p>
