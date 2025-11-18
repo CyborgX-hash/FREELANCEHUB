@@ -17,7 +17,7 @@ const LoginForm = () => {
 
     if (result.token) {
       localStorage.setItem("token", result.token);
-      setMessage("✅ Login successful! Redirecting...");
+      setMessage("Login successful! Redirecting...");
       setTimeout(() => {
         window.location.href = "/dashboard";
       }, 1200);
@@ -30,7 +30,7 @@ const LoginForm = () => {
     <div className="login-container">
       <div className="login-card">
         <h2>Welcome Back</h2>
-        <p className="subtitle">Login to FreelanceHub and continue your journey 🚀</p>
+        <p className="subtitle">Login to FreelanceHub and continue your journey.</p>
 
         <form onSubmit={handleSubmit}>
           <input

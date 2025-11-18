@@ -397,6 +397,7 @@ body[data-theme="light"] .close-btn:hover {
 body[data-theme="light"] .profile-card {
   background: #ffffff;
   color: #1f2937; 
+  border: 1px solid black;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 

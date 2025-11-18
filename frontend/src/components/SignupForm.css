@@ -7,22 +7,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #0f172a, #1e293b, #2563eb, #38bdf8);
-    background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
-    font-family: "Poppins", sans-serif;
-    overflow: hidden;
+    background: url("/Users/sakshamsontakke/Desktop/freelancehub/frontend/360_F_355607062_zYMS8jaz4SfoykpWz5oViRVKL32IabTP.jpg");
+   
   }
   
   
   .signup-card {
-    background: #ffffff;
-    width: 380px;
-    padding: 40px;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    animation: fadeIn 0.8s ease-in-out;
+    width: 100%;
+  max-width: 360px;    
+  padding: 30px 32px;   
+  border-radius: 12px;
+
+  background: ;
+  border: 1px solid #1f1f1f;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+
+  text-align: center;
   }
   
   .signup-card h2 {
@@ -58,7 +58,7 @@
   }
   
   .signup-card input {
-    width: 100%;
+    width: 85%;
     padding: 12px;
     margin-bottom: 14px;
     border: 1px solid #d1d5db;
@@ -75,7 +75,7 @@
   .signup-card button {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
+    background: rgb(221, 39, 39);
     color: white;
     border: none;
     border-radius: 8px;
@@ -85,24 +85,22 @@
     transition: background 0.3s ease;
   }
   
-  .signup-card button:hover {
-    background: linear-gradient(135deg, #1e40af, #1e3a8a);
-  }
+  
   
   .signup-card .message {
     margin-top: 10px;
-    color: #22c55e;
+    color: black;
     font-weight: 500;
   }
   
   .signup-card .switch {
     margin-top: 20px;
-    color: #555;
+    color: black;
     font-size: 14px;
   }
   
   .signup-card .switch a {
-    color: #2563eb;
+    color:blue;
     text-decoration: none;
     font-weight: 500;
   }

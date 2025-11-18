@@ -21,7 +21,7 @@ const SignupForm = () => {
     const result = await signupUser(formData);
 
     if (result.message === "Signup successful") {
-      setMessage("✅ Signup successful! Redirecting...");
+      setMessage("Signup successful! Redirecting...");
       setTimeout(() => {
         window.location.href = "/login";
       }, 1200);
@@ -34,7 +34,7 @@ const SignupForm = () => {
     <div className="signup-container">
       <div className="signup-card">
         <h2>Create your account</h2>
-        <p className="subtitle">Join FreelanceHub and start your journey 🚀</p>
+        <p className="subtitle">Join FreelanceHub and start your journey.</p>
 
         <div className="role-selector">
           <label>

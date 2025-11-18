@@ -9,10 +9,14 @@ import {
   FaEdit,
   FaSave,
   FaTimes,
+  FaPlusCircle,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "./DashboardPage.css";
 
 const DashboardPage = () => {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
     id: "",
     name: "",
@@ -24,6 +28,7 @@ const DashboardPage = () => {
     hourly_rate: "",
     company: "",
   });
+
   const [showMenu, setShowMenu] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -51,6 +56,7 @@ const DashboardPage = () => {
     document.body.setAttribute("data-theme", savedTheme);
   }, []);
 
+  // Handlers
   const toggleMenu = () => setShowMenu(!showMenu);
 
   const toggleTheme = () => {
@@ -72,13 +78,13 @@ const DashboardPage = () => {
 
   const handleSave = async () => {
     console.log("Profile data to save:", user);
-
     alert("Profile updated successfully!");
     setEditMode(false);
   };
 
   return (
     <div className="dashboard-container">
+      {/* Navbar */}
       <nav className="navbar">
         <h2>FreelanceHub</h2>
 
@@ -93,12 +99,14 @@ const DashboardPage = () => {
                   setShowMenu(false);
                 }}
               >
-              <FaUser /> &nbsp; View Profile
+                <FaUser /> &nbsp; View Profile
               </div>
+
               <div className="dropdown-item" onClick={toggleTheme}>
                 {theme === "dark" ? <FaSun /> : <FaMoon />} &nbsp;
                 {theme === "dark" ? "Light Mode" : "Dark Mode"}
               </div>
+
               <div className="dropdown-item logout" onClick={handleLogout}>
                 <FaSignOutAlt /> &nbsp; Logout
               </div>
@@ -107,33 +115,70 @@ const DashboardPage = () => {
         </div>
       </nav>
 
+      {/* Dashboard content */}
       <div className="dashboard-content">
         <h1>Welcome {user.name}</h1>
         {user.role === "Client" ? (
           <p className="subtitle">Manage your freelance journey here.</p>
-) : user.role === "Freelancer" ? (
-  <p className="subtitle">Explore projects and showcase your skills.</p>
-) : null}
+        ) : user.role === "Freelancer" ? (
+          <p className="subtitle">Explore projects and showcase your skills.</p>
+        ) : null}
 
-
+        {/* CLIENT VIEW */}
         {user.role === "Client" && (
           <div className="cards-container">
-            <div className="dash-card"><h3>💼 Live Projects</h3><p>View and manage your projects.</p></div>
-            <div className="dash-card"><h3>🧑‍💻 Hire Freelancers</h3><p>Find and hire top-rated professionals.</p></div>
-            <div className="dash-card"><h3>💬 Messages</h3><p>Chat with freelancers.</p></div>
+            <div
+              className="dash-card"
+              onClick={() => navigate("/post-project")}
+              style={{ cursor: "pointer" }}
+            >
+              <h3>
+                <FaPlusCircle /> Post a Project
+              </h3>
+              <p>Publish new freelance work opportunities.</p>
+            </div>
+
+            <div className="dash-card">
+              <h3>💼 My Projects</h3>
+              <p>View and manage your posted projects.</p>
+            </div>
+
+            <div className="dash-card">
+              <h3>🧑‍💻 Hire Freelancers</h3>
+              <p>Find and hire top-rated professionals.</p>
+            </div>
+
+            <div className="dash-card">
+              <h3>💬 Messages</h3>
+              <p>Chat with freelancers you’ve connected with.</p>
+            </div>
           </div>
         )}
 
+        {/* FREELANCER VIEW */}
         {user.role === "Freelancer" && (
           <div className="cards-container">
-            <div className="dash-card"><h3>🔍 Browse Jobs</h3><p>Find freelance projects that match your skills.</p></div>
-            <div className="dash-card"><h3>📄 My Proposals</h3><p>Track your submitted bids and job applications.</p></div>
-            <div className="dash-card"><h3>💼 My Projects</h3><p>Manage your active and completed client work.</p></div>
-            <div className="dash-card"><h3>🏆 Earnings</h3><p>Check your earnings and performance insights.</p></div>
+            <div className="dash-card">
+              <h3>🔍 Browse Jobs</h3>
+              <p>Find freelance projects that match your skills.</p>
+            </div>
+            <div className="dash-card">
+              <h3>📄 My Proposals</h3>
+              <p>Track your submitted bids and job applications.</p>
+            </div>
+            <div className="dash-card">
+              <h3>💼 My Projects</h3>
+              <p>Manage your active and completed client work.</p>
+            </div>
+            <div className="dash-card">
+              <h3>🏆 Earnings</h3>
+              <p>Check your earnings and performance insights.</p>
+            </div>
           </div>
         )}
       </div>
 
+      {/* Profile Modal */}
       {showProfile && (
         <div className="profile-modal">
           <div className="profile-card">
@@ -146,12 +191,16 @@ const DashboardPage = () => {
                 {user.bio && <p className="bio">"{user.bio}"</p>}
                 {user.location && <p>📍 {user.location}</p>}
                 {user.skills && <p>💡 Skills: {user.skills}</p>}
+                {user.company && <p>🏢 Company: {user.company}</p>}
 
                 <div className="profile-buttons">
                   <button className="edit-btn" onClick={() => setEditMode(true)}>
                     <FaEdit /> Edit Profile
                   </button>
-                  <button className="close-btn" onClick={() => setShowProfile(false)}>
+                  <button
+                    className="close-btn"
+                    onClick={() => setShowProfile(false)}
+                  >
                     Close
                   </button>
                 </div>
@@ -179,34 +228,32 @@ const DashboardPage = () => {
                   placeholder="Short Bio"
                 />
                 {user.role === "Freelancer" && (
-                  <>
-                    <input
-                      type="text"
-                      name="skills"
-                      value={user.skills}
-                      onChange={handleChange}
-                      placeholder="Skills (comma separated)"
-                    />
-                    
-                  </>
+                  <input
+                    type="text"
+                    name="skills"
+                    value={user.skills}
+                    onChange={handleChange}
+                    placeholder="Skills (comma separated)"
+                  />
                 )}
                 {user.role === "Client" && (
-                  <>
-                    <input
-                      type="text"
-                      name="company"
-                      value={user.company}
-                      onChange={handleChange}
-                      placeholder="Company Name"
-                    />
-                  </>
+                  <input
+                    type="text"
+                    name="company"
+                    value={user.company}
+                    onChange={handleChange}
+                    placeholder="Company Name"
+                  />
                 )}
 
                 <div className="profile-buttons">
                   <button className="edit-btn" onClick={handleSave}>
                     <FaSave /> Save
                   </button>
-                  <button className="close-btn" onClick={() => setEditMode(false)}>
+                  <button
+                    className="close-btn"
+                    onClick={() => setEditMode(false)}
+                  >
                     <FaTimes /> Cancel
                   </button>
                 </div>
