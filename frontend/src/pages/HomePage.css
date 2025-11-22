@@ -1,105 +1,132 @@
-.home-container {
-    min-height: 100vh;
-    width: 100vw;
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-family: "Poppins", sans-serif;
-    transition: all 0.3s ease;
-  }
-  
-  .home-navbar {
-    width: 100%;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text-color);
-  }
-  
-  
-  .nav-buttons button {
-    margin-left: 12px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    border: none;
-    transition: 0.3s ease;
-    margin-right: 100px; 
-  }
-  
-  .nav-login {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-  }
-  
-  .nav-login:hover {
-    background: var(--hover-bg);
-  }
-  
-  .nav-signup {
-    background: #3b82f6;
-    color: white;
-  }
-  
-  .nav-signup:hover {
-    background: #2563eb;
-  }
-  
-  .hero {
-    margin-top: 120px;
-    text-align: center;
-    padding: 0 20px;
-  }
-  
-  .hero h1 {
-    font-size: 48px;
-    font-weight: 700;
-  }
-  
-  .hero p {
-    margin-top: 15px;
-    font-size: 18px;
-    color: var(--text-color-light);
-  }
-  
-  .get-started-btn {
-    margin-top: 30px;
-    padding: 14px 32px;
-    font-size: 18px;
-    font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #10b981;
-    color: white;
-    transition: 0.3s;
-  }
-  
-  .get-started-btn:hover {
-    background: #059669;
-    transform: translateY(-3px);
-  }
-  
-  :root {
-    --bg-color: #f9fafb;
-    --text-color: #111827;
-    --text-color-light: #4b5563;
-    --border-color: #d1d5db;
-    --hover-bg: #e5e7eb;
-  }
-  
-  [data-theme="dark"] {
-    --bg-color: #0f172a;
-    --text-color: #f1f5f9;
-    --text-color-light: #cbd5e1;
-    --border-color: #334155;
-    --hover-bg: #1e293b;
-  }
-  
+/* Full Page */
+.homepage-container {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(120deg, #3b82f6, #9333ea);
+  padding-bottom: 50px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+/* NAVBAR */
+.homepage-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 60px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* HERO SECTION */
+.hero-section {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.hero-section h1 {
+  font-size: 42px;
+  font-weight: 700;
+  max-width: 700px;
+  margin: auto;
+}
+
+.hero-subtitle {
+  margin-top: 10px;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.hero-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 12px 25px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.primary-btn {
+  background: white;
+  color: #2563eb;
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #e5e7eb;
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.get-started-btn {
+  margin-top: 25px;
+  padding: 12px 32px;
+  font-size: 17px;
+  font-weight: 600;
+  background: #111;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.get-started-btn:hover {
+  background: #222;
+}
+
+/* CATEGORIES */
+.categories-section {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.categories-grid {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.category-card {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 18px 28px;
+  border-radius: 12px;
+}

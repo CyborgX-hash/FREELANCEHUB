@@ -56,7 +56,6 @@ const DashboardPage = () => {
     document.body.setAttribute("data-theme", savedTheme);
   }, []);
 
-  // Handlers
   const toggleMenu = () => setShowMenu(!showMenu);
 
   const toggleTheme = () => {
@@ -84,7 +83,6 @@ const DashboardPage = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Navbar */}
       <nav className="navbar">
         <h2>FreelanceHub</h2>
 
@@ -115,7 +113,6 @@ const DashboardPage = () => {
         </div>
       </nav>
 
-      {/* Dashboard content */}
       <div className="dashboard-content">
         <h1>Welcome {user.name}</h1>
         {user.role === "Client" ? (
@@ -124,7 +121,6 @@ const DashboardPage = () => {
           <p className="subtitle">Explore projects and showcase your skills.</p>
         ) : null}
 
-        {/* CLIENT VIEW */}
         {user.role === "Client" && (
           <div className="cards-container">
             <div
@@ -144,18 +140,14 @@ const DashboardPage = () => {
             </div>
 
             <div className="dash-card">
-              <h3>🧑‍💻 Hire Freelancers</h3>
+              <h3>🧑‍💻 Applied Freelancers</h3>
               <p>Find and hire top-rated professionals.</p>
             </div>
 
-            <div className="dash-card">
-              <h3>💬 Messages</h3>
-              <p>Chat with freelancers you’ve connected with.</p>
-            </div>
+            
           </div>
         )}
 
-        {/* FREELANCER VIEW */}
         {user.role === "Freelancer" && (
           <div className="cards-container">
             <div className="dash-card">
@@ -178,7 +170,6 @@ const DashboardPage = () => {
         )}
       </div>
 
-      {/* Profile Modal */}
       {showProfile && (
         <div className="profile-modal">
           <div className="profile-card">
