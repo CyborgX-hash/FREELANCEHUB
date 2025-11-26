@@ -16,16 +16,18 @@ enum Role {
 enum ProjectStatus {
   Open
   InProgress
-  Completed
+  Completed  
 }
 
 model User {
   id            Int       @id @default(autoincrement())
-  name          String  
+  name          String
+  username      String    @unique
   email         String    @unique
-  password_hash String
+  password      String
   role          Role
-  created_at    DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   projects      Project[]
 }
 
