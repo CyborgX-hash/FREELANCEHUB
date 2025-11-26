@@ -1,101 +1,141 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import {
+  FaUserCircle,
+  FaUser,
+  FaSignOutAlt,
+  FaSun,
+  FaMoon,
+} from "react-icons/fa";
 import "./HomePage.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  // Check login and redirect
-  const handleProtectedNavigation = () => {
+  const [user, setUser] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [theme, setTheme] = useState("dark");
+  const [showProfile, setShowProfile] = useState(false);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      navigate("/login");
-      return;
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUser(decoded);
+      } catch (err) {
+        console.error("JWT Error:", err);
+      }
     }
 
-    // If logged in → dashboard (role handled inside dashboard)
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.body.setAttribute("data-theme", savedTheme);
+    setTheme(savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    document.body.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    navigate("/login");
+  };
+
+  const requireAuth = () => {
+    if (!user) return navigate("/login");
     navigate("/dashboard");
   };
 
   return (
     <div className="homepage-container">
-      {/* NAVBAR */}
       <nav className="homepage-navbar">
         <h2 className="logo">FreelanceHub</h2>
 
-        <div className="nav-links">
-          <button onClick={() => navigate("/login")} className="nav-btn">
-            Login
-          </button>
-          <button onClick={() => navigate("/signup")} className="nav-btn">
-            Signup
-          </button>
-        </div>
+        {!user ? (
+          <div className="nav-links">
+            <button className="nav-btn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+            <button className="nav-btn" onClick={() => navigate("/signup")}>
+              Signup
+            </button>
+          </div>
+        ) : (
+          <div className="profile-container">
+            <FaUserCircle
+              className="profile-icon"
+              onClick={() => setShowMenu(!showMenu)}
+            />
+
+            {showMenu && (
+              <div className="dropdown-menu">
+                <div
+                  className="dropdown-item"
+                  onClick={() => setShowProfile(true)}
+                >
+                  <FaUser /> View Profile
+                </div>
+
+                <div className="dropdown-item" onClick={toggleTheme}>
+                  {theme === "dark" ? <FaSun /> : <FaMoon />} &nbsp;
+                  {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                </div>
+
+                <div className="dropdown-item logout" onClick={handleLogout}>
+                  <FaSignOutAlt /> Logout
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </nav>
 
-      {/* HERO SECTION */}
       <header className="hero-section">
-        <h1>Find the Right Talent for Your Project</h1>
+        <h1>Find the Right Talent for Your Projects</h1>
         <p className="hero-subtitle">
-          Hire freelancers or get hired. Simple. Fast. Reliable.
+          A modern platform to hire freelancers or get hired instantly.
         </p>
 
         <div className="hero-buttons">
-          <button className="primary-btn" onClick={handleProtectedNavigation}>
+          <button className="primary-btn" onClick={requireAuth}>
             Find Projects
           </button>
 
-          <button className="secondary-btn" onClick={handleProtectedNavigation}>
+          <button className="secondary-btn" onClick={requireAuth}>
             Hire Freelancers
           </button>
         </div>
 
-        <button className="get-started-btn" onClick={handleProtectedNavigation}>
+        <button className="get-started-btn" onClick={requireAuth}>
           Get Started
         </button>
       </header>
 
-      {/* CATEGORIES */}
-      <section className="categories-section">
-        <h2>Trending Categories</h2>
+      {showProfile && user && (
+        <div className="home-profile-modal">
+          <div className="home-profile-box">
+            <FaUserCircle className="modal-avatar" />
 
-        <div className="categories-grid">
-          <div className="category-card">Design</div>
-          <div className="category-card">Web Development</div>
-          <div className="category-card">Artificial Intelligence</div>
-          <div className="category-card">Writing</div>
-        </div>
-      </section>
+            <h3>{user.name}</h3>
+            <p>{user.email}</p>
+            <p className="role-tag">{user.role}</p>
 
-      {/* HOW IT WORKS */}
-      <section className="how-it-works">
-        <h2>How It Works</h2>
-
-        <div className="how-grid">
-          <div className="how-card">
-            <span className="icon">📄</span>
-            <p>Post a Project</p>
-          </div>
-          <div className="how-card">
-            <span className="icon">💰</span>
-            <p>Get Bids</p>
-          </div>
-          <div className="how-card">
-            <span className="icon">🤝</span>
-            <p>Hire</p>
-          </div>
-          <div className="how-card">
-            <span className="icon">⭐</span>
-            <p>Review</p>
+            <button
+              className="close-profile-btn"
+              onClick={() => setShowProfile(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="homepage-footer">
-        <p>© 2025 FreelanceHub. All Rights Reserved.</p>
-      </footer>
+      )}
     </div>
   );
 };
