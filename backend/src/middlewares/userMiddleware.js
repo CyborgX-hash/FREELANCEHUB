@@ -1,10 +1,9 @@
 const { prisma } = require("../config/database");
 
-
 async function createUserMiddleware(req, res, next) {
-    let { name, username, email, password, confirm_password } = req.body;
+    let { name, username, email, password, confirm_password, role } = req.body;
 
-    if (!name || !password || !confirm_password || !email || !username) {
+    if (!name || !username || !email || !password || !confirm_password) {
         return res.status(400).json({ ERROR: "All fields are required" });
     }
 
@@ -12,7 +11,7 @@ async function createUserMiddleware(req, res, next) {
     email = email.trim().toLowerCase();
     username = username.trim().toLowerCase();
 
-    if (password !== confirm_password) { 
+    if (password !== confirm_password) {
         return res.status(400).json({ ERROR: "Password and Confirm Password do not match" });
     }
 
@@ -36,6 +35,8 @@ async function createUserMiddleware(req, res, next) {
         return res.status(400).json({ ERROR: "Name should contain only letters and spaces" });
     }
 
+    if (!role) role = "USER";
+
     try {
         const existingUser = await prisma.user.findFirst({
             where: {
@@ -47,17 +48,14 @@ async function createUserMiddleware(req, res, next) {
             return res.status(400).json({ ERROR: "Email or Username already exists" });
         }
 
-        req.body = { name, username, email, password, confirm_password };
+        req.body = { name, username, email, password, role };
         next();
     } 
     catch (err) {
         console.error("Error in createUserMiddleware:", err);
-        return res.status(500).json({
-            ERROR: "Something went wrong while checking user details. Please try again later.",
-        });
+        return res.status(500).json({ ERROR: "Server error while validating user." });
     }
 }
-
 
 async function loginUserMiddleware(req, res, next) {
     let { email, username, password } = req.body;
@@ -72,15 +70,11 @@ async function loginUserMiddleware(req, res, next) {
     if (username) username = username.trim().toLowerCase();
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return res.status(400).json({
-            ERROR: "Invalid email format",
-        });
+        return res.status(400).json({ ERROR: "Invalid email format" });
     }
 
     if (username && username.length < 3) {
-        return res.status(400).json({
-            ERROR: "Username must be at least 3 characters long",
-        });
+        return res.status(400).json({ ERROR: "Username must be at least 3 characters long" });
     }
 
     req.body = { email, username, password };
@@ -98,43 +92,45 @@ async function logoutUserMiddleware(req, res, next) {
     next();
 }
 
-
 async function updateUserMiddleware(req, res, next) {
-    let { name, username, gender, email, password } = req.body;
+    let { name, username, email, password, role } = req.body;
 
-    if (email || password) {
+    if (email || password || role) {
         return res.status(400).json({
-            ERROR: "Email and password updates are not allowed through this route.",
+            ERROR: "Email, password, and role cannot be updated through this route.",
         });
     }
 
-    if (!name && !username && !gender) {
+    if (!name && !username) {
         return res.status(400).json({
-            ERROR: "At least one of name, username, or gender must be provided.",
+            ERROR: "Provide at least one of name or username to update.",
         });
     }
 
-    if (username) username = username.trim().toLowerCase();
-    if (name) name = name.trim();
-
-    if (username && username.length < 3) {
-        return res.status(400).json({
-            ERROR: "Username must be at least 3 characters long",
-        });
+    if (name) {
+        name = name.trim();
+        if (!/^[a-zA-Z\s]+$/.test(name)) {
+            return res.status(400).json({ ERROR: "Name should only contain letters and spaces" });
+        }
     }
 
-    if (name && !/^[a-zA-Z\s]+$/.test(name)) {
-        return res.status(400).json({
-            ERROR: "Name should only contain letters and spaces",
-        });
+    if (username) {
+        username = username.trim().toLowerCase();
+        if (username.length < 3) {
+            return res.status(400).json({ ERROR: "Username must be at least 3 characters long" });
+        }
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            return res.status(400).json({
+                ERROR: "Username can only contain letters, numbers, and underscores",
+            });
+        }
     }
 
-    req.body = { name, username, gender };
+    req.body = { name, username };
     next();
 }
 
-
-module.exports = { 
+module.exports = {
     createUserMiddleware,
     loginUserMiddleware,
     logoutUserMiddleware,
