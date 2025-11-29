@@ -3,26 +3,32 @@ import { loginUser } from "../api";
 import "./LoginForm.css";
 
 const LoginForm = () => {
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: ""
+  });
+
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCredentials({ ...credentials, [name]: value });
+    setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const result = await loginUser(credentials);
 
     if (result.token) {
       localStorage.setItem("token", result.token);
       setMessage("Login successful! Redirecting...");
+
       setTimeout(() => {
         window.location.href = "/dashboard";
       }, 1200);
     } else {
-      setMessage(result.message || "Invalid credentials");
+      setMessage(result.ERROR || result.message || "Invalid credentials");
     }
   };
 
@@ -37,16 +43,20 @@ const LoginForm = () => {
             type="email"
             name="email"
             placeholder="Email Address"
+            value={credentials.email}
             onChange={handleChange}
             required
           />
+
           <input
             type="password"
             name="password"
             placeholder="Password"
+            value={credentials.password}
             onChange={handleChange}
             required
           />
+
           <button type="submit">Login</button>
         </form>
 

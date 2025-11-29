@@ -1,27 +1,35 @@
-const API_URL = "http://localhost:5001/api/auth";
+import axios from "axios";
+
+const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_BACKEND_SERVER_URL
+    : process.env.REACT_APP_BACKEND_LOCAL_URL;
+
+const API_URL = `${API_BASE_URL}/api/users`;
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export const signupUser = async (userData) => {
   try {
-    const response = await fetch(`${API_URL}/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
-    return response.json();
-  } catch {
-    return { message: "Network error" };
+    const res = await api.post("/register", userData);
+    return res.data;
+  } 
+  catch (err) {
+    return err.response?.data || { message: "Network error" };
   }
 };
 
 export const loginUser = async (credentials) => {
   try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
-    return response.json();
-  } catch {
-    return { message: "Network error" };
+    const res = await api.post("/login", credentials);
+    return res.data;
+  } 
+  catch (err) {
+    return err.response?.data || { message: "Network error" };
   }
 };

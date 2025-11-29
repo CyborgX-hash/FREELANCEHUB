@@ -8,7 +8,7 @@ datasource db {
 }
 
 enum Role {
-  Client
+  USER
   Freelancer
   Admin
 }

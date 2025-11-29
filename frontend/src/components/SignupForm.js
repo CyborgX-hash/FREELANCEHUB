@@ -5,28 +5,46 @@ import "./SignupForm.css";
 const SignupForm = () => {
   const [formData, setFormData] = useState({
     name: "",
+    username: "",
     email: "",
     password: "",
-    role: "Client",
+    confirm_password: "",
+    role: "USER",
   });
+
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    let formattedValue = value;
+    if (name === "role") {
+      formattedValue =
+        value === "Client"
+          ? "USER"
+          : value === "Freelancer"
+          ? "Freelancer"
+          : value;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: formattedValue,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const result = await signupUser(formData);
 
-    if (result.message === "Signup successful") {
+    if (result.message === "User registered successfully") {
       setMessage("Signup successful! Redirecting...");
       setTimeout(() => {
         window.location.href = "/login";
       }, 1200);
     } else {
-      setMessage(result.message || "Something went wrong");
+      setMessage(result.ERROR || result.message || "Something went wrong");
     }
   };
 
@@ -36,13 +54,13 @@ const SignupForm = () => {
         <h2>Create your account</h2>
         <p className="subtitle">Join FreelanceHub and start your journey.</p>
 
+        {/* USER TYPE SELECTION */}
         <div className="role-selector">
           <label>
             <input
               type="radio"
               name="role"
               value="Client"
-              checked={formData.role === "Client"}
               onChange={handleChange}
             />
             Client
@@ -52,7 +70,6 @@ const SignupForm = () => {
               type="radio"
               name="role"
               value="Freelancer"
-              checked={formData.role === "Freelancer"}
               onChange={handleChange}
             />
             Freelancer
@@ -67,6 +84,15 @@ const SignupForm = () => {
             onChange={handleChange}
             required
           />
+
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
+
           <input
             type="email"
             name="email"
@@ -74,6 +100,7 @@ const SignupForm = () => {
             onChange={handleChange}
             required
           />
+
           <input
             type="password"
             name="password"
@@ -81,6 +108,15 @@ const SignupForm = () => {
             onChange={handleChange}
             required
           />
+
+          <input
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm Password"
+            onChange={handleChange}
+            required
+          />
+
           <button type="submit">Sign Up</button>
         </form>
 
