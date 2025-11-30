@@ -17,10 +17,8 @@ export default function HomePage() {
       try {
         const decoded = jwtDecode(token);
         setUser(decoded);
-        console.log("Decoded user:", decoded); // 👀 For debugging role issues
-      } catch (err) {
-        console.error("Token decode error:", err);
-      }
+        console.log("HomePage user.role =", decoded.role);
+      } catch {}
     }
 
     const savedTheme = localStorage.getItem("theme");
@@ -37,26 +35,20 @@ export default function HomePage() {
     setUser(null);
   };
 
-  /** ✅ FIXED GET STARTED BUTTON */
+  /** FINAL GET STARTED LOGIC */
   const handleGetStarted = () => {
-    // If user is not logged in → go to signup
     if (!user) {
       navigate("/signup");
       return;
     }
 
-    // Normalize ROLE (handles uppercase/lowercase/missing)
     const role = user.role?.toLowerCase();
+    console.log("Get Started detected role:", role);
 
-    console.log("Detected role:", role);
-
-    if (role === "client") {
-      navigate("/dashboard");
-    } else if (role === "freelancer") {
+    if (role === "client" || role === "freelancer") {
       navigate("/dashboard");
     } else {
-      // unknown role fallback
-      navigate("/dashboard");
+      navigate("/signup");
     }
   };
 
@@ -76,7 +68,6 @@ export default function HomePage() {
           ) : (
             <div className="user-box">
               <FaUserCircle onClick={() => setMenu(!menu)} className="user-icon" />
-
               {menu && (
                 <div className="nav-menu">
                   <p onClick={() => navigate("/dashboard")}><FaUser /> Profile</p>
@@ -105,7 +96,11 @@ export default function HomePage() {
           </button>
         </div>
 
-        
+        <img
+          className="hero-img"
+          src="https://cdn.dribbble.com/userupload/12180582/file/original-1e8d212bdcf05efc213a0ecbb5a8531e.png?resize=1200x900"
+          alt="Freelancing illustration"
+        />
       </section>
 
       {/* FEATURES */}
@@ -114,6 +109,7 @@ export default function HomePage() {
 
         <div className="grid">
           <div className="card"><h4>⚡ Fast Hiring</h4><p>Post a project & get responses in minutes.</p></div>
+          <div className="card"><h4>🔒 Secure Payments</h4><p>Pay only when you approve the work.</p></div>
           <div className="card"><h4>🌍 Global Talent</h4><p>Hire from a pool of skilled professionals worldwide.</p></div>
           <div className="card"><h4>📈 Smart Matching</h4><p>We recommend best freelancers for your project.</p></div>
         </div>
