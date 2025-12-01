@@ -8,12 +8,12 @@ const API_URL = "http://localhost:5001/api/projects";
 
 const PostProjectPage = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    budget: "",
-    category: "",
-    visibility: "public",
+    budget_min: "",
+    skills: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,9 @@ const PostProjectPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  /* ===============================================================
+     SUBMIT — SEND NEW BACKEND-FRIENDLY FIELDS
+  =============================================================== */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -33,10 +36,23 @@ const PostProjectPage = () => {
       const decoded = jwtDecode(token);
       const client_id = decoded.id;
 
+      const payload = {
+        title: formData.title,
+        description: formData.description,
+        budget_min: Number(formData.budget_min) || null,
+        budget_max: null,
+        skills: formData.skills || "General",
+        deadline: null,
+        client_id,
+      };
+
       const response = await fetch(`${API_URL}/create`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, client_id }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,   // ✅ IMPORTANT FIX
+        },
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -45,7 +61,7 @@ const PostProjectPage = () => {
         alert("✅ Project created successfully!");
         navigate("/dashboard");
       } else {
-        alert(`❌ ${data.message || "Error creating project"}`);
+        alert(`❌ ${data.ERROR || "Error creating project"}`);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -65,11 +81,10 @@ const PostProjectPage = () => {
       </div>
 
       <div className="postproject-container">
+
         {/* LEFT — FORM */}
         <form className="postproject-form" onSubmit={handleSubmit}>
-          <label>
-            Project Title <span>*</span>
-          </label>
+          <label>Project Title <span>*</span></label>
           <input
             type="text"
             name="title"
@@ -79,51 +94,38 @@ const PostProjectPage = () => {
             required
           />
 
-          <label>
-            Description <span>*</span>
-          </label>
+          <label>Description <span>*</span></label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Describe your project requirements"
+            placeholder="Describe your project"
             required
           ></textarea>
 
-          {/* FIXED TWO-COLUMN SECTION */}
           <div className="two-column">
             <div className="form-group">
               <label>Budget (₹)</label>
               <input
                 type="number"
-                name="budget"
-                value={formData.budget}
+                name="budget_min"
+                value={formData.budget_min}
                 onChange={handleChange}
                 placeholder="e.g. 5000"
               />
             </div>
 
             <div className="form-group">
-              <label>Category</label>
+              <label>Required Skills</label>
               <input
                 type="text"
-                name="category"
-                value={formData.category}
+                name="skills"
+                value={formData.skills}
                 onChange={handleChange}
-                placeholder="e.g. Web Dev, Design, AI…"
+                placeholder="e.g. Web Dev, UI/UX, React..."
               />
             </div>
           </div>
-
-          <label>Visibility</label>
-          <select
-            name="visibility"
-            value={formData.visibility}
-            onChange={handleChange}
-          >
-            <option value="public">🌍 Public</option>
-            <option value="private">🔒 Private</option>
-          </select>
 
           <button type="submit" className="create-btn" disabled={loading}>
             {loading ? "Creating..." : "Create Project"}
@@ -133,26 +135,19 @@ const PostProjectPage = () => {
         {/* RIGHT — LIVE PREVIEW */}
         <div className="project-preview">
           <h3>🧩 Project Summary</h3>
-          <p>This project will be visible to freelancers on FreelanceHub.</p>
+          <p>This project will appear in Browse Jobs for freelancers.</p>
 
           <div className="preview-card">
             <h4>{formData.title || "Untitled Project"}</h4>
+
             <p>
               {formData.description
                 ? formData.description.slice(0, 90) + "..."
-                : "Your project description will appear here."}
+                : "Your project description preview will appear here."}
             </p>
-            <p>
-              <strong>💰 Budget:</strong>{" "}
-              {formData.budget ? `₹${formData.budget}` : "Not set"}
-            </p>
-            <p>
-              <strong>📂 Category:</strong>{" "}
-              {formData.category || "Not specified"}
-            </p>
-            <p>
-              <strong>🔒 Visibility:</strong> {formData.visibility}
-            </p>
+
+            <p><strong>💰 Budget:</strong> ₹{formData.budget_min || "Not set"}</p>
+            <p><strong>🛠 Skills:</strong> {formData.skills || "Not specified"}</p>
           </div>
         </div>
       </div>

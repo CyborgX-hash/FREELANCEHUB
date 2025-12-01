@@ -5,6 +5,7 @@ import "./DashboardPage.css";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+
   const [user, setUser] = useState({
     id: "",
     name: "",
@@ -71,7 +72,10 @@ const DashboardPage = () => {
               <p>Track your posted work.</p>
             </div>
 
-            <div className="dash-card">
+            <div
+              className="dash-card"
+              onClick={() => navigate("/applied-freelancers")}
+            >
               <h3>🧑‍💻 Applied Freelancers</h3>
               <p>See who applied for your projects.</p>
             </div>
@@ -83,16 +87,19 @@ const DashboardPage = () => {
         {role === "freelancer" && (
           <div className="cards-container">
 
-            <div className="dash-card">
+            {/* ⭐ Browse Jobs */}
+            <div className="dash-card" onClick={() => navigate("/browse")}>
               <h3>🔍 Browse Jobs</h3>
               <p>Find freelance jobs that match your skills.</p>
             </div>
 
-            <div className="dash-card">
-              <h3>📄 My Proposals</h3>
-              <p>Track your submitted proposals.</p>
+            {/* ⭐ My Applications */}
+            <div className="dash-card" onClick={() => navigate("/my-applications")}>
+              <h3>📄 My Applications</h3>
+              <p>Track your submitted job proposals.</p>
             </div>
 
+            {/* You can activate this later */}
             <div className="dash-card">
               <h3>💼 My Projects</h3>
               <p>Manage your active client work.</p>

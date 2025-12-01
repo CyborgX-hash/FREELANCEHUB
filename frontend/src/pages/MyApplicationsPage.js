@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getAppliedProjects } from "../api";
+import { getAppliedProjects, withdrawApplication } from "../api";
 import "./MyApplicationsPage.css";
 
 const MyApplicationsPage = () => {
   const [apps, setApps] = useState([]);
 
   const fetch = async () => {
-    const res = await getMyApplications();
+    const res = await getAppliedProjects();
     setApps(res.applications || []);
   };
 

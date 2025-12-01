@@ -12,15 +12,13 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import PostProjectPage from "./pages/PostProjectPage";
 import MyProjectsPage from "./pages/MyProjectsPage";
+import EditProjectPage from "./pages/EditProjectPage"; // ⭐ IMPORTANT
 
 import BrowseJobsPage from "./pages/BrowseJobsPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import AppliedFreelancersPage from "./pages/AppliedFreelancersPage";
 import MyApplicationsPage from "./pages/MyApplicationsPage";
 
-/* ========================================================
-   🔒 Private Route Component
-======================================================== */
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" replace />;
@@ -65,6 +63,16 @@ function App() {
           }
         />
 
+        {/* ⭐⭐ ADD THIS ROUTE ⭐⭐ */}
+        <Route
+          path="/edit-project/:id"
+          element={
+            <PrivateRoute>
+              <EditProjectPage />
+            </PrivateRoute>
+          }
+        />
+
         {/* FREELANCER ROUTES */}
         <Route
           path="/browse"
@@ -84,7 +92,6 @@ function App() {
           }
         />
 
-        {/* SHARED ROUTES */}
         <Route
           path="/project/:id"
           element={

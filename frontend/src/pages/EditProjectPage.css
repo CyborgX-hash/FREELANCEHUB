@@ -1,0 +1,82 @@
+.edit-project-container {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .edit-project-container h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .edit-card {
+    width: 100%;
+    max-width: 550px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  
+  .edit-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d5d5d5;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s ease-in-out;
+  }
+  
+  input:focus,
+  textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+  }
+  
+  textarea {
+    min-height: 120px;
+    resize: none;
+  }
+  
+  .two-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+  }
+  
+  .field {
+    flex: 1;
+  }
+  
+  .save-btn {
+    background: #2563eb;
+    color: white;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+  }
+  
+  .save-btn:hover {
+    background: #1e4ed8;
+  }
+  

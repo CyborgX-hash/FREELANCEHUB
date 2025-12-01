@@ -1,69 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { applyToProject } from "../api"; // ensure path
+import { applyToProject, fetchProjects } from "../api";
 import "./BrowseJobsPage.css";
-
-const API_URL = "http://localhost:5001/api/projects";
 
 const BrowseJobsPage = () => {
   const [projects, setProjects] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [skillFilter, setSkillFilter] = useState("all");
 
-  // Apply modal state
+  // Apply modal states
   const [applyOpen, setApplyOpen] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
   const [proposal, setProposal] = useState("");
   const [bid, setBid] = useState("");
 
+  // Fetch all projects from backend
   useEffect(() => {
-    fetchProjects();
+    loadProjects();
   }, []);
 
-  const fetchProjects = async () => {
+  const loadProjects = async () => {
     try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      setProjects(data.projects || []);
-      setFiltered(data.projects || []);
+      const result = await fetchProjects(); // using your api.js function
+
+      if (result.projects) {
+        setProjects(result.projects);
+        setFiltered(result.projects);
+      }
     } catch (err) {
-      console.error("Fetch projects error:", err);
+      console.error("Project fetch error:", err);
     }
   };
 
+  // Search & filter logic
   useEffect(() => {
     let result = [...projects];
+
     if (search.trim() !== "") {
       const s = search.toLowerCase();
       result = result.filter(
         (p) =>
           p.title.toLowerCase().includes(s) ||
-          p.description.toLowerCase().includes(s)
+          (p.description && p.description.toLowerCase().includes(s)) ||
+          (p.skills && p.skills.toLowerCase().includes(s))
       );
     }
-    if (categoryFilter !== "all") {
-      result = result.filter((p) =>
-        p.category?.toLowerCase().includes(categoryFilter.toLowerCase())
-      );
-    }
-    setFiltered(result);
-  }, [search, categoryFilter, projects]);
 
+    if (skillFilter !== "all") {
+      result = result.filter((p) =>
+        p.skills?.toLowerCase().includes(skillFilter.toLowerCase())
+      );
+    }
+
+    setFiltered(result);
+  }, [search, skillFilter, projects]);
+
+  // Open modal
   const openApply = (project) => {
     setActiveProject(project);
-    setApplyOpen(true);
     setProposal("");
     setBid("");
+    setApplyOpen(true);
   };
 
+  // Apply to project API
   const handleApply = async () => {
     if (!activeProject) return;
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You must login as freelancer to apply.");
-      return;
-    }
 
     const payload = {
       projectId: activeProject.id,
@@ -72,48 +75,56 @@ const BrowseJobsPage = () => {
     };
 
     const result = await applyToProject(payload);
+
     if (result.ERROR) {
-      alert(result.ERROR || "Apply failed");
+      alert(result.ERROR);
       return;
     }
 
-    alert("Applied successfully!");
+    alert("Application submitted!");
     setApplyOpen(false);
   };
 
   return (
     <div className="browse-container">
       <h2>🔍 Browse Freelance Jobs</h2>
+
+      {/* SEARCH + FILTER */}
       <div className="filters">
         <input
           type="text"
-          placeholder="Search by title or description..."
+          placeholder="Search by title, description, skills…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-        >
-          <option value="all">All Categories</option>
+
+        <select value={skillFilter} onChange={(e) => setSkillFilter(e.target.value)}>
+          <option value="all">All Skills</option>
           <option value="web">Web Development</option>
-          <option value="design">Design</option>
           <option value="app">App Development</option>
-          <option value="ai">AI / Machine Learning</option>
-          <option value="marketing">Digital Marketing</option>
+          <option value="design">UI/UX Design</option>
+          <option value="ai">AI / ML</option>
+          <option value="marketing">Marketing</option>
         </select>
       </div>
 
+      {/* PROJECT GRID */}
       <div className="projects-grid">
         {filtered.length === 0 ? (
-          <p className="no-results">No projects found.</p>
+          <p className="no-results">No projects found 😢</p>
         ) : (
           filtered.map((project) => (
             <div className="project-card" key={project.id}>
               <h3>{project.title}</h3>
-              <p className="desc">{project.description.slice(0, 120)}...</p>
-              <p><strong>💰 Budget:</strong> ₹{project.budget}</p>
-              <p><strong>📂 Category:</strong> {project.category || "N/A"}</p>
+
+              <p className="desc">
+                {project.description ? project.description.slice(0, 120) : "No description"}...
+              </p>
+
+              <p><strong>💰 Budget:</strong> ₹{project.budget_min} - ₹{project.budget_max}</p>
+
+              <p><strong>📌 Skills:</strong> {project.skills || "Not specified"}</p>
+
               <p><strong>👤 Client:</strong> {project.client?.name}</p>
 
               <button className="apply-btn" onClick={() => openApply(project)}>
@@ -131,21 +142,25 @@ const BrowseJobsPage = () => {
             <h3>Apply to: {activeProject.title}</h3>
 
             <textarea
-              placeholder="Write a short proposal..."
+              placeholder="Write a short proposal…"
               value={proposal}
               onChange={(e) => setProposal(e.target.value)}
             />
 
             <input
               type="number"
-              placeholder="Your bid (optional)"
+              placeholder="Your bid amount (optional)"
               value={bid}
               onChange={(e) => setBid(e.target.value)}
             />
 
             <div className="modal-actions">
-              <button onClick={handleApply}>Send Application</button>
-              <button onClick={() => setApplyOpen(false)} className="cancel">Cancel</button>
+              <button className="apply-send" onClick={handleApply}>
+                Send Application
+              </button>
+              <button className="cancel" onClick={() => setApplyOpen(false)}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>
