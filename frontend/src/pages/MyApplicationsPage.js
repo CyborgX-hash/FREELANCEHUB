@@ -1,28 +1,44 @@
 import React, { useEffect, useState } from "react";
-import jwtDecode from "jwt-decode";
+import { getAppliedProjects } from "../api";
+import "./MyApplicationsPage.css";
 
-const API = "http://localhost:5001/api";
-
-export default function MyApplicationsPage() {
+const MyApplicationsPage = () => {
   const [apps, setApps] = useState([]);
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    const decoded = jwtDecode(token);
-    fetch(`${API}/proposals/freelancer/${decoded.id}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => setApps(d.proposals || []));
-  }, []);
+
+  const fetch = async () => {
+    const res = await getMyApplications();
+    setApps(res.applications || []);
+  };
+
+  useEffect(() => { fetch(); }, []);
+
+  const handleWithdraw = async (id) => {
+    if (!window.confirm("Withdraw application?")) return;
+    const res = await withdrawApplication(id);
+    if (res.ERROR) return alert(res.ERROR);
+    alert("Withdrawn");
+    fetch();
+  };
+
   return (
-    <div>
+    <div className="myapps-container">
       <h2>My Applications</h2>
-      {apps.map(a => (
-        <div key={a.id}>
-          <h3>{a.project.title}</h3>
-          <p>Bid: ₹{a.bid}</p>
-          <p>Status: {a.status}</p>
-        </div>
-      ))}
+      {apps.length === 0 ? <p>No applications yet.</p> : (
+        apps.map(a => (
+          <div key={a.id} className="app-card">
+            <h3>{a.project.title}</h3>
+            <p>{a.cover_letter?.slice(0,200) || "No message"}</p>
+            <p><strong>Bid:</strong> {a.bid_amount ? `₹${a.bid_amount}` : "—"}</p>
+            <p><strong>Status:</strong> {a.status}</p>
+            <div className="app-actions">
+              <button onClick={() => window.location = `/project/${a.project.id}`}>View Project</button>
+              <button onClick={() => handleWithdraw(a.id)} className="danger">Withdraw</button>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
-}
+};
 
+export default MyApplicationsPage;

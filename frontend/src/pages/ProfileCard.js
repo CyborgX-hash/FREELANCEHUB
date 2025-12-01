@@ -4,10 +4,11 @@ import "./ProfileCard.css";
 const ProfileCard = ({ user, onClose }) => {
   const [editMode, setEditMode] = useState(false);
 
-  // Store initial fields
+  // Form state (email included only for display, NOT update)
   const [form, setForm] = useState({
     name: user?.name || "",
-    email: user?.email || "",
+    username: user?.username || "",
+    email: user?.email || "", // shown but NOT editable
     age: user?.age || "",
     gender: user?.gender || "",
     city: user?.city || "",
@@ -22,19 +23,40 @@ const ProfileCard = ({ user, onClose }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
- 
+  /* ======================================================
+        SAVE PROFILE (ONLY allowed fields sent)
+  ====================================================== */
   const handleSave = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return alert("You must be logged in.");
+    const token = localStorage.getItem("token");
+    if (!token) return alert("You must be logged in.");
 
+    // Build allowed payload
+    const allowedData = {
+      name: form.name,
+      username: form.username,
+      age: form.age,
+      gender: form.gender,
+      city: form.city,
+      experience: form.experience,
+      organization: form.organization,
+      aboutOrg: form.aboutOrg,
+      skills: form.skills,
+      portfolio_url: form.portfolio_url,
+    };
+
+    // Remove empty / undefined values
+    Object.keys(allowedData).forEach((key) => {
+      if (!allowedData[key]) delete allowedData[key];
+    });
+
+    try {
       const response = await fetch("http://localhost:5001/api/users/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(allowedData),
       });
 
       const data = await response.json();
@@ -45,8 +67,8 @@ const ProfileCard = ({ user, onClose }) => {
 
       alert("Profile updated successfully!");
 
-      // Update UI display
-      Object.assign(user, data.user);
+      // Update UI data instantly
+      Object.assign(user, allowedData);
 
       setEditMode(false);
     } catch (err) {
@@ -56,11 +78,12 @@ const ProfileCard = ({ user, onClose }) => {
   };
 
   /* ======================================================
-      CANCEL → RESTORE ORIGINAL VALUES
+        CANCEL BUTTON → Reset form
   ====================================================== */
   const handleCancel = () => {
     setForm({
       name: user?.name || "",
+      username: user?.username || "",
       email: user?.email || "",
       age: user?.age || "",
       gender: user?.gender || "",
@@ -90,9 +113,11 @@ const ProfileCard = ({ user, onClose }) => {
           <>
             <div className="profile-info">
               <p><strong>Name:</strong> {user?.name}</p>
+              <p><strong>Username:</strong> {user?.username}</p>
               <p><strong>Email:</strong> {user?.email}</p>
               <p><strong>Role:</strong> {user?.role}</p>
 
+              {/* FREELANCER VIEW */}
               {user?.role === "freelancer" && (
                 <>
                   {user.age && <p><strong>Age:</strong> {user.age}</p>}
@@ -105,12 +130,15 @@ const ProfileCard = ({ user, onClose }) => {
                   {user.portfolio_url && (
                     <p>
                       <strong>Portfolio:</strong>{" "}
-                      <a href={user.portfolio_url} target="_blank">View</a>
+                      <a href={user.portfolio_url} target="_blank" rel="noreferrer">
+                        View
+                      </a>
                     </p>
                   )}
                 </>
               )}
 
+              {/* CLIENT VIEW */}
               {user?.role === "client" && (
                 <>
                   {user.organization && (
@@ -136,8 +164,11 @@ const ProfileCard = ({ user, onClose }) => {
               <label>Name</label>
               <input name="name" value={form.name} onChange={handleChange} />
 
-              <label>Email</label>
-              <input name="email" value={form.email} onChange={handleChange} />
+              <label>Username</label>
+              <input name="username" value={form.username} onChange={handleChange} />
+
+              <label>Email (not editable)</label>
+              <input value={form.email} disabled />
 
               {/* FREELANCER FIELDS */}
               {user?.role === "freelancer" && (

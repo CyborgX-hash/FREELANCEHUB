@@ -14,6 +14,8 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use("/api/projects", projectRoutes);
 app.use("/api/proposals", proposalRoutes);
+app.use("/api/applications", require("./routes/applicationRoute"));
+
 
 
 

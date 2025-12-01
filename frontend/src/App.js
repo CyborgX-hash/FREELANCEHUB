@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
@@ -13,50 +13,97 @@ import DashboardPage from "./pages/DashboardPage";
 import PostProjectPage from "./pages/PostProjectPage";
 import MyProjectsPage from "./pages/MyProjectsPage";
 
-// NEW PAGES YOU WILL CREATE
-import BrowseProjectsPage from "./pages/BrowseProjectsPage";        // Freelancer browse
-import ProjectDetailsPage from "./pages/ProjectDetailsPage";        // Apply / view details
-import AppliedFreelancersPage from "./pages/AppliedFreelancersPage"; // Client sees applicants
-import MyApplicationsPage from "./pages/MyApplicationsPage";         // Freelancer applied list
+import BrowseJobsPage from "./pages/BrowseJobsPage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
+import AppliedFreelancersPage from "./pages/AppliedFreelancersPage";
+import MyApplicationsPage from "./pages/MyApplicationsPage";
+
+/* ========================================================
+   🔒 Private Route Component
+======================================================== */
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/login" replace />;
+};
 
 function App() {
-  const token = localStorage.getItem("token");
-
-  // Protect all pages that require login
-  const PrivateRoute = (page) => {
-    return token ? page : <Navigate to="/" />;
-  };
-
   return (
     <Router>
       <Routes>
 
-        {/* ---------- PUBLIC ROUTES ---------- */}
+        {/* PUBLIC ROUTES */}
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* ---------- PRIVATE ROUTES ---------- */}
-        <Route path="/dashboard" element={PrivateRoute(<DashboardPage />)} />
-
-        <Route path="/post-project" element={PrivateRoute(<PostProjectPage />)} />
-
-        <Route path="/my-projects" element={PrivateRoute(<MyProjectsPage />)} />
-
-        {/* FREELANCER FEATURE ROUTES */}
-        <Route path="/browse" element={PrivateRoute(<BrowseProjectsPage />)} />
-
-        <Route path="/project/:id" element={PrivateRoute(<ProjectDetailsPage />)} />
-
-        <Route path="/my-applications" element={PrivateRoute(<MyApplicationsPage />)} />
-
-        {/* CLIENT FEATURE ROUTES */}
+        {/* PROTECTED ROUTES */}
         <Route
-          path="/applied-freelancers/:projectId"
-          element={PrivateRoute(<AppliedFreelancersPage />)}
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
         />
 
-        {/* ---------- FALLBACK ---------- */}
+        {/* CLIENT ROUTES */}
+        <Route
+          path="/post-project"
+          element={
+            <PrivateRoute>
+              <PostProjectPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/my-projects"
+          element={
+            <PrivateRoute>
+              <MyProjectsPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* FREELANCER ROUTES */}
+        <Route
+          path="/browse"
+          element={
+            <PrivateRoute>
+              <BrowseJobsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/my-applications"
+          element={
+            <PrivateRoute>
+              <MyApplicationsPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* SHARED ROUTES */}
+        <Route
+          path="/project/:id"
+          element={
+            <PrivateRoute>
+              <ProjectDetailsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/applied-freelancers/:projectId"
+          element={
+            <PrivateRoute>
+              <AppliedFreelancersPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>

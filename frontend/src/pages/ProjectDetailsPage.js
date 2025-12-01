@@ -1,57 +1,132 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
+import { fetchProjectById, applyToProject } from "../api";
+import { jwtDecode } from "jwt-decode";
+import "./ProjectDetailsPage.css";
 
-const API = "http://localhost:5001/api";
-
-export default function ProjectDetailsPage() {
+const ProjectDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // apply form
-  const [cover, setCover] = useState("");
-  const [bid, setBid] = useState("");
+  const [showApplyBox, setShowApplyBox] = useState(false);
+  const [proposalText, setProposalText] = useState("");
+  const [bidAmount, setBidAmount] = useState("");
+
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch(`${API}/projects/${id}`)
-      .then(r => r.json())
-      .then(data => { setProject(data.project); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, [id]);
-
-  const handleApply = async () => {
     const token = localStorage.getItem("token");
-    if (!token) { navigate("/login"); return; }
-    const decoded = jwtDecode(token);
-    if (decoded.role !== "freelancer") { alert("Only freelancers can apply"); return; }
 
-    const body = { project_id: id, freelancer_id: decoded.id, cover_letter: cover, bid };
-    const res = await fetch(`${API}/proposals`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify(body),
-    });
-    if (res.ok) { alert("Applied successfully"); setCover(""); setBid(""); }
-    else { const data = await res.json(); alert(data.ERROR || "Error applying"); }
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUser(decoded);
+    }
+
+    loadProject();
+  }, []);
+
+  const loadProject = async () => {
+    const data = await fetchProjectById(id);
+    if (data?.project) setProject(data.project);
+    setLoading(false);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (!project) return <p>Project not found</p>;
+  const handleApply = async () => {
+    if (!proposalText.trim()) {
+      alert("Please write a proposal before applying.");
+      return;
+    }
+
+    const payload = {
+      projectId: Number(id),
+      proposal: proposalText,
+      bid_amount: bidAmount || null,
+    };
+
+    const response = await applyToProject(payload);
+
+    if (response?.message) {
+      alert("Application Submitted Successfully!");
+      setShowApplyBox(false);
+      setProposalText("");
+      setBidAmount("");
+    } else {
+      alert(response?.ERROR || "Failed to submit application");
+    }
+  };
+
+  if (loading) return <p className="loading-text">Loading project...</p>;
+  if (!project) return <p className="error-text">Project not found</p>;
 
   return (
-    <div className="project-details">
-      <h2>{project.title}</h2>
-      <p>{project.description}</p>
-      <p>Budget: ₹{project.budget}</p>
-      <p>Category: {project.category}</p>
+    <div className="project-details-page">
 
-      <hr />
-      <h3>Apply to this project</h3>
-      <textarea value={cover} onChange={e=>setCover(e.target.value)} placeholder="Cover letter" />
-      <input value={bid} onChange={e=>setBid(e.target.value)} placeholder="Your bid (₹)" />
-      <button onClick={handleApply}>Submit Proposal</button>
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+
+      <div className="project-card">
+
+        <h1>{project.title}</h1>
+
+        <p className="project-description">{project.description}</p>
+
+        <div className="details-grid">
+
+          <p><strong>Budget:</strong> ₹{project.budget_min || project.budget_max || "Not specified"}</p>
+
+          <p><strong>Category:</strong> {project.category || "General"}</p>
+
+          <p><strong>Client:</strong> {project.client?.name}</p>
+
+          <p><strong>Visibility:</strong> {project.visibility}</p>
+
+          <p><strong>Status:</strong> {project.status}</p>
+
+          <p><strong>Posted:</strong> {new Date(project.created_at).toLocaleString()}</p>
+
+        </div>
+
+        {/* ONLY SHOW APPLY BUTTON TO FREELANCERS */}
+        {user?.role === "freelancer" && (
+          <button className="apply-btn" onClick={() => setShowApplyBox(true)}>
+            Apply Now
+          </button>
+        )}
+      </div>
+
+      {/* APPLY MODAL */}
+      {showApplyBox && (
+        <div className="apply-overlay">
+          <div className="apply-box">
+
+            <h2>Submit Your Proposal</h2>
+
+            <textarea
+              placeholder="Write your proposal..."
+              value={proposalText}
+              onChange={(e) => setProposalText(e.target.value)}
+            ></textarea>
+
+            <input
+              type="number"
+              placeholder="Your Bid Amount (₹)"
+              value={bidAmount}
+              onChange={(e) => setBidAmount(e.target.value)}
+            />
+
+            <div className="apply-actions">
+              <button className="submit-btn" onClick={handleApply}>Submit</button>
+              <button className="cancel-btn" onClick={() => setShowApplyBox(false)}>Cancel</button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
-}
+};
+
+export default ProjectDetailsPage;

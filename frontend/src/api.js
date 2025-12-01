@@ -1,26 +1,42 @@
 import axios from "axios";
 
+/* ---------------------------------------------------
+   BASE URL (LOCAL + PRODUCTION)
+--------------------------------------------------- */
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_BACKEND_SERVER_URL
     : process.env.REACT_APP_BACKEND_LOCAL_URL;
 
-const API_URL = `${API_BASE_URL}/api/users`;
+/* API BASE PATHS */
+const USER_API = `${API_BASE_URL}/api/users`;
+const PROJECT_API = `${API_BASE_URL}/api/projects`;
+const APPLICATION_API = `${API_BASE_URL}/api/applications`;
 
+/* ---------------------------------------------------
+   AXIOS INSTANCE + ATTACH TOKEN
+--------------------------------------------------- */
 const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: USER_API,
+  headers: { "Content-Type": "application/json" },
 });
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+/* ===================================================
+   🔹 USER AUTH & PROFILE
+=================================================== */
 
 export const signupUser = async (userData) => {
   try {
     const res = await api.post("/register", userData);
     return res.data;
-  } 
-  catch (err) {
-    return err.response?.data || { message: "Network error" };
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
   }
 };
 
@@ -28,8 +44,126 @@ export const loginUser = async (credentials) => {
   try {
     const res = await api.post("/login", credentials);
     return res.data;
-  } 
-  catch (err) {
-    return err.response?.data || { message: "Network error" };
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+export const getProfile = async () => {
+  try {
+    const res = await api.get("/me");
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+export const updateProfile = async (data) => {
+  try {
+    const res = await api.put("/update", data);
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+/* ===================================================
+   🔹 PROJECT APIs  
+=================================================== */
+
+/* Create new project (client) */
+export const createProject = async (projectData) => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.post(`${PROJECT_API}/create`, projectData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+/* Get logged-in client's projects */
+export const getMyProjects = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`${PROJECT_API}/client/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+/* Get all public projects */
+export const fetchProjects = async () => {
+  try {
+    const res = await axios.get(`${PROJECT_API}`);
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+/* Get a single project */
+export const fetchProjectById = async (id) => {
+  try {
+    const res = await axios.get(`${PROJECT_API}/${id}`);
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+/* ===================================================
+   🔹 APPLICATION SYSTEM (Freelancers)
+=================================================== */
+
+/* Apply to a project */
+export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.post(
+      `${APPLICATION_API}/apply`,
+      { projectId, proposal, bid_amount },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+/* Get all applications of freelancer */
+export const getAppliedProjects = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(`${APPLICATION_API}/my-applications`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
+  }
+};
+
+/* Get freelancers applied to a specific project */
+export const getFreelancersForProject = async (projectId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(`${APPLICATION_API}/project/${projectId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return res.data;
+  } catch (err) {
+    return err.response?.data;
   }
 };
