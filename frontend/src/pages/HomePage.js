@@ -35,7 +35,6 @@ export default function HomePage() {
     setUser(null);
   };
 
-  /** FINAL GET STARTED LOGIC */
   const handleGetStarted = () => {
     if (!user) {
       navigate("/signup");
@@ -55,7 +54,6 @@ export default function HomePage() {
   return (
     <div className="home">
 
-      {/* NAVBAR */}
       <nav className="nav">
         <h1 className="logo">FreelanceHub</h1>
 
@@ -85,7 +83,6 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* HERO SECTION */}
       <section className="hero">
         <h2>Hire Top Freelancers. Build Faster.</h2>
         <p>Find skilled developers, designers, editors & more — start your project instantly.</p>
@@ -96,26 +93,19 @@ export default function HomePage() {
           </button>
         </div>
 
-        <img
-          className="hero-img"
-          src="https://cdn.dribbble.com/userupload/12180582/file/original-1e8d212bdcf05efc213a0ecbb5a8531e.png?resize=1200x900"
-          alt="Freelancing illustration"
-        />
+        
       </section>
 
-      {/* FEATURES */}
       <section className="features">
         <h3>What Makes Us Different?</h3>
 
         <div className="grid">
           <div className="card"><h4>⚡ Fast Hiring</h4><p>Post a project & get responses in minutes.</p></div>
-          <div className="card"><h4>🔒 Secure Payments</h4><p>Pay only when you approve the work.</p></div>
           <div className="card"><h4>🌍 Global Talent</h4><p>Hire from a pool of skilled professionals worldwide.</p></div>
           <div className="card"><h4>📈 Smart Matching</h4><p>We recommend best freelancers for your project.</p></div>
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <p>© 2025 FreelanceHub — Work from Anywhere</p>
         <div>

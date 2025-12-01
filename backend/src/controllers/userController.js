@@ -9,9 +9,9 @@ async function createUserController(req, res) {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-  
+    
     const prismaRole =
-      role?.toLowerCase() === "freelancer" ? "Freelancer" : "USER";
+      role?.toLowerCase() === "freelancer" ? "Freelancer" : "Client";
 
     const newUser = await prisma.user.create({
       data: {
@@ -71,8 +71,7 @@ async function loginUserController(req, res) {
         ? "freelancer"
         : user.role === "Admin"
         ? "admin"
-        : "client"; // USER → client
-
+        : "client"; 
     const payload = {
       id: user.id,
       name: user.name,

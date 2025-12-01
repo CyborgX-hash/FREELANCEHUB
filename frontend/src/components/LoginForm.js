@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { loginUser } from "../api";
 import "./LoginForm.css";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({
     email: "",
     password: ""
@@ -24,9 +27,11 @@ const LoginForm = () => {
       localStorage.setItem("token", result.token);
       setMessage("Login successful! Redirecting...");
 
+      // 🔥 Redirect to HOME, not dashboard
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        navigate("/");  // redirect to homepage
       }, 1200);
+
     } else {
       setMessage(result.ERROR || result.message || "Invalid credentials");
     }

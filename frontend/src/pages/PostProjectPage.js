@@ -65,7 +65,7 @@ const PostProjectPage = () => {
       </div>
 
       <div className="postproject-container">
-        {/* LEFT SIDE — FORM */}
+        {/* LEFT — FORM */}
         <form className="postproject-form" onSubmit={handleSubmit}>
           <label>
             Project Title <span>*</span>
@@ -90,9 +90,10 @@ const PostProjectPage = () => {
             required
           ></textarea>
 
-          <div className="field-row">
-            <div style={{ flex: 1 }}>
-              <label>Budget (in ₹)</label>
+          {/* FIXED TWO-COLUMN SECTION */}
+          <div className="two-column">
+            <div className="form-group">
+              <label>Budget (₹)</label>
               <input
                 type="number"
                 name="budget"
@@ -102,14 +103,14 @@ const PostProjectPage = () => {
               />
             </div>
 
-            <div style={{ flex: 1 }}>
+            <div className="form-group">
               <label>Category</label>
               <input
                 type="text"
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                placeholder="e.g. Web Development, Design, AI..."
+                placeholder="e.g. Web Dev, Design, AI…"
               />
             </div>
           </div>
@@ -129,19 +130,16 @@ const PostProjectPage = () => {
           </button>
         </form>
 
-        {/* RIGHT SIDE — LIVE PREVIEW */}
+        {/* RIGHT — LIVE PREVIEW */}
         <div className="project-preview">
           <h3>🧩 Project Summary</h3>
-          <p>
-            This project will be listed on FreelanceHub for freelancers to view
-            and apply.
-          </p>
+          <p>This project will be visible to freelancers on FreelanceHub.</p>
 
           <div className="preview-card">
             <h4>{formData.title || "Untitled Project"}</h4>
             <p>
               {formData.description
-                ? formData.description.slice(0, 100) + "..."
+                ? formData.description.slice(0, 90) + "..."
                 : "Your project description will appear here."}
             </p>
             <p>

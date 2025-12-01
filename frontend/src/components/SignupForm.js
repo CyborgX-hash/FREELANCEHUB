@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { signupUser } from "../api";
 import "./SignupForm.css";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
     confirm_password: "",
-    role: "USER",
+    role: "", // client or freelancer
   });
 
   const [message, setMessage] = useState("");
@@ -17,14 +20,16 @@ const SignupForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // 🔥 Convert UI role → backend role format
     let formattedValue = value;
+
     if (name === "role") {
       formattedValue =
         value === "Client"
-          ? "USER"
+          ? "client"
           : value === "Freelancer"
-          ? "Freelancer"
-          : value;
+          ? "freelancer"
+          : "";
     }
 
     setFormData((prev) => ({
@@ -36,12 +41,23 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (formData.password !== formData.confirm_password) {
+      setMessage("Passwords do not match");
+      return;
+    }
+
+    if (!formData.role) {
+      setMessage("Please select a role");
+      return;
+    }
+
     const result = await signupUser(formData);
 
     if (result.message === "User registered successfully") {
       setMessage("Signup successful! Redirecting...");
+
       setTimeout(() => {
-        window.location.href = "/login";
+        navigate("/"); // redirect to home page
       }, 1200);
     } else {
       setMessage(result.ERROR || result.message || "Something went wrong");
@@ -54,7 +70,7 @@ const SignupForm = () => {
         <h2>Create your account</h2>
         <p className="subtitle">Join FreelanceHub and start your journey.</p>
 
-        {/* USER TYPE SELECTION */}
+        {/* ROLE SELECTION */}
         <div className="role-selector">
           <label>
             <input
@@ -65,6 +81,7 @@ const SignupForm = () => {
             />
             Client
           </label>
+
           <label>
             <input
               type="radio"
