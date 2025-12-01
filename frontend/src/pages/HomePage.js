@@ -3,21 +3,21 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle, FaUser, FaSignOutAlt, FaSun, FaMoon } from "react-icons/fa";
 import "./HomePage.css";
+import ProfileCard from "/Users/sakshamsontakke/Desktop/freelancehub/frontend/src/pages/ProfileCard.js"; 
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [menu, setMenu] = useState(false);
   const [theme, setTheme] = useState("light");
+  const [openProfile, setOpenProfile] = useState(false); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
       try {
-        const decoded = jwtDecode(token);
-        setUser(decoded);
-        console.log("HomePage user.role =", decoded.role);
+        setUser(jwtDecode(token));
       } catch {}
     }
 
@@ -33,27 +33,22 @@ export default function HomePage() {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    setMenu(false);
   };
 
   const handleGetStarted = () => {
     if (!user) {
-      navigate("/signup");
+      navigate("/signup"); 
       return;
     }
 
-    const role = user.role?.toLowerCase();
-    console.log("Get Started detected role:", role);
-
-    if (role === "client" || role === "freelancer") {
-      navigate("/dashboard");
-    } else {
-      navigate("/signup");
-    }
+    navigate("/dashboard"); // works for both freelancer and client
   };
 
   return (
     <div className="home">
 
+      {/* NAVBAR */}
       <nav className="nav">
         <h1 className="logo">FreelanceHub</h1>
 
@@ -65,17 +60,29 @@ export default function HomePage() {
             </>
           ) : (
             <div className="user-box">
-              <FaUserCircle onClick={() => setMenu(!menu)} className="user-icon" />
+              <FaUserCircle 
+                onClick={() => setMenu(!menu)} 
+                className="user-icon" 
+              />
+
               {menu && (
                 <div className="nav-menu">
-                  <p onClick={() => navigate("/dashboard")}><FaUser /> Profile</p>
 
+                  {/* OPEN PROFILE MODAL */}
+                  <p onClick={() => { setOpenProfile(true); setMenu(false); }}>
+                    <FaUser /> Profile
+                  </p>
+
+                  {/* THEME SWITCH */}
                   <p onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
                     {theme === "light" ? <FaMoon /> : <FaSun />}
                     {theme === "light" ? " Dark Mode" : " Light Mode"}
                   </p>
 
-                  <p className="logout" onClick={logout}><FaSignOutAlt /> Logout</p>
+                  <p className="logout" onClick={logout}>
+                    <FaSignOutAlt /> Logout
+                  </p>
+
                 </div>
               )}
             </div>
@@ -83,6 +90,7 @@ export default function HomePage() {
         </div>
       </nav>
 
+      {/* HERO SECTION */}
       <section className="hero">
         <h2>Hire Top Freelancers. Build Faster.</h2>
         <p>Find skilled developers, designers, editors & more — start your project instantly.</p>
@@ -96,6 +104,7 @@ export default function HomePage() {
         
       </section>
 
+      {/* FEATURES */}
       <section className="features">
         <h3>What Makes Us Different?</h3>
 
@@ -106,6 +115,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FOOTER */}
       <footer className="footer">
         <p>© 2025 FreelanceHub — Work from Anywhere</p>
         <div>
@@ -114,6 +124,11 @@ export default function HomePage() {
           <a href="#">Support</a>
         </div>
       </footer>
+
+      {/* PROFILE MODAL */}
+      {openProfile && (
+        <ProfileCard user={user} onClose={() => setOpenProfile(false)} />
+      )}
 
     </div>
   );
