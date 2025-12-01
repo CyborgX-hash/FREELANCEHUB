@@ -4,7 +4,7 @@ import "./ProfileCard.css";
 const ProfileCard = ({ user, onClose }) => {
   const [editMode, setEditMode] = useState(false);
 
-  // Base fields
+  // Store initial fields
   const [form, setForm] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -14,23 +14,78 @@ const ProfileCard = ({ user, onClose }) => {
     experience: user?.experience || "",
     organization: user?.organization || "",
     aboutOrg: user?.aboutOrg || "",
+    skills: user?.skills || "",
+    portfolio_url: user?.portfolio_url || "",
   });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+ 
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return alert("You must be logged in.");
+
+      const response = await fetch("http://localhost:5001/api/users/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return alert(data.ERROR || "Failed to update profile");
+      }
+
+      alert("Profile updated successfully!");
+
+      // Update UI display
+      Object.assign(user, data.user);
+
+      setEditMode(false);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong while saving.");
+    }
+  };
+
+  /* ======================================================
+      CANCEL → RESTORE ORIGINAL VALUES
+  ====================================================== */
+  const handleCancel = () => {
+    setForm({
+      name: user?.name || "",
+      email: user?.email || "",
+      age: user?.age || "",
+      gender: user?.gender || "",
+      city: user?.city || "",
+      experience: user?.experience || "",
+      organization: user?.organization || "",
+      aboutOrg: user?.aboutOrg || "",
+      skills: user?.skills || "",
+      portfolio_url: user?.portfolio_url || "",
+    });
+
+    setEditMode(false);
+  };
+
   return (
     <div className="profile-overlay">
       <div className="profile-card">
-        {/* Close Button */}
-        <button className="close-btn" onClick={onClose}>
-          ✖
-        </button>
+        {/* CLOSE BUTTON */}
+        <button className="close-btn" onClick={onClose}>✖</button>
 
         <h2>My Profile</h2>
 
-        {/* VIEW MODE */}
+        {/* ======================================================
+            VIEW MODE
+        ====================================================== */}
         {!editMode ? (
           <>
             <div className="profile-info">
@@ -38,24 +93,31 @@ const ProfileCard = ({ user, onClose }) => {
               <p><strong>Email:</strong> {user?.email}</p>
               <p><strong>Role:</strong> {user?.role}</p>
 
-              {/* FREELANCER EXTRA INFO */}
               {user?.role === "freelancer" && (
                 <>
-                  {form.age && <p><strong>Age:</strong> {form.age}</p>}
-                  {form.gender && <p><strong>Gender:</strong> {form.gender}</p>}
-                  {form.city && <p><strong>City:</strong> {form.city}</p>}
-                  {form.experience && <p><strong>Experience:</strong> {form.experience} years</p>}
+                  {user.age && <p><strong>Age:</strong> {user.age}</p>}
+                  {user.gender && <p><strong>Gender:</strong> {user.gender}</p>}
+                  {user.city && <p><strong>City:</strong> {user.city}</p>}
+                  {user.experience && (
+                    <p><strong>Experience:</strong> {user.experience} years</p>
+                  )}
+                  {user.skills && <p><strong>Skills:</strong> {user.skills}</p>}
+                  {user.portfolio_url && (
+                    <p>
+                      <strong>Portfolio:</strong>{" "}
+                      <a href={user.portfolio_url} target="_blank">View</a>
+                    </p>
+                  )}
                 </>
               )}
 
-              {/* CLIENT EXTRA INFO */}
               {user?.role === "client" && (
                 <>
-                  {form.organization && (
-                    <p><strong>Organization:</strong> {form.organization}</p>
+                  {user.organization && (
+                    <p><strong>Organization:</strong> {user.organization}</p>
                   )}
-                  {form.aboutOrg && (
-                    <p><strong>About Org:</strong> {form.aboutOrg}</p>
+                  {user.aboutOrg && (
+                    <p><strong>About Org:</strong> {user.aboutOrg}</p>
                   )}
                 </>
               )}
@@ -66,8 +128,10 @@ const ProfileCard = ({ user, onClose }) => {
             </button>
           </>
         ) : (
-          /* EDIT MODE */
           <>
+            {/* ======================================================
+                EDIT MODE
+            ====================================================== */}
             <div className="edit-section">
               <label>Name</label>
               <input name="name" value={form.name} onChange={handleChange} />
@@ -95,17 +159,27 @@ const ProfileCard = ({ user, onClose }) => {
                   </select>
 
                   <label>City</label>
-                  <input
-                    name="city"
-                    value={form.city}
-                    onChange={handleChange}
-                  />
+                  <input name="city" value={form.city} onChange={handleChange} />
 
                   <label>Experience (years)</label>
                   <input
                     type="number"
                     name="experience"
                     value={form.experience}
+                    onChange={handleChange}
+                  />
+
+                  <label>Skills (comma separated)</label>
+                  <input
+                    name="skills"
+                    value={form.skills}
+                    onChange={handleChange}
+                  />
+
+                  <label>Portfolio URL</label>
+                  <input
+                    name="portfolio_url"
+                    value={form.portfolio_url}
                     onChange={handleChange}
                   />
                 </>
@@ -121,7 +195,7 @@ const ProfileCard = ({ user, onClose }) => {
                     onChange={handleChange}
                   />
 
-                  <label>What does your organization do?</label>
+                  <label>About Organization</label>
                   <textarea
                     name="aboutOrg"
                     value={form.aboutOrg}
@@ -131,40 +205,15 @@ const ProfileCard = ({ user, onClose }) => {
               )}
             </div>
 
+            {/* ACTION BUTTONS */}
             <div className="edit-actions">
-            <button
-    className="save-btn"
-    onClick={() => {
-      // Update displayed user data
-      user.name = form.name;
-      user.email = form.email;
+              <button className="save-btn" onClick={handleSave}>
+                Save
+              </button>
 
-      if (user.role === "freelancer") {
-        user.age = form.age;
-        user.gender = form.gender;
-        user.city = form.city;
-        user.experience = form.experience;
-      }
-
-      if (user.role === "client") {
-        user.organization = form.organization;
-        user.aboutOrg = form.aboutOrg;
-      }
-
-      setEditMode(false); // exit edit mode
-    }}
-  >
-    Save
-  </button>
-
-  <button
-    className="cancel-btn"
-    onClick={() => {
-      setEditMode(false);
-    }}
-  >
-    Cancel
-  </button>
+              <button className="cancel-btn" onClick={handleCancel}>
+                Cancel
+              </button>
             </div>
           </>
         )}

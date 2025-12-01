@@ -3,6 +3,8 @@ const corsMiddleware = require("./config/cors.js");
 const usersRouter = require("./routes/userRoute.js");
 require("dotenv").config();
 const projectRoutes = require("./routes/projectRoute");
+const proposalRoutes = require("./routes/proposalRoute");
+
 
 
 const app = express();
@@ -11,6 +13,8 @@ const PORT = process.env.SERVER_PORT;
 app.use(corsMiddleware);
 app.use(express.json());
 app.use("/api/projects", projectRoutes);
+app.use("/api/proposals", proposalRoutes);
+
 
 
 app.use("/api/users", usersRouter)
