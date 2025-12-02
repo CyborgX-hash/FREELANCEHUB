@@ -106,9 +106,7 @@ const ProfileCard = ({ user, onClose }) => {
 
         <h2>My Profile</h2>
 
-        {/* ======================================================
-            VIEW MODE
-        ====================================================== */}
+        
         {!editMode ? (
           <>
             <div className="profile-info">
