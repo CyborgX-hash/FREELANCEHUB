@@ -29,7 +29,7 @@ router.get(
    Example: GET /api/applications/my
 ============================================================ */
 router.get(
-  "/my",
+  "/me",
   authMiddleware,
   applicationController.getApplicationsByFreelancerController
 );
@@ -39,7 +39,7 @@ router.get(
    Example: DELETE /api/applications/withdraw/5
 ============================================================ */
 router.delete(
-  "/withdraw/:id",
+  "/:id",
   authMiddleware,
   applicationController.withdrawApplicationController
 );

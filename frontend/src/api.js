@@ -75,22 +75,24 @@ export const updateProfile = async (data) => {
 export const createProject = async (projectData) => {
   try {
     const token = localStorage.getItem("token");
+
     const res = await axios.post(`${PROJECT_API}/create`, projectData, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     return res.data;
   } catch (err) {
     return err.response?.data;
   }
 };
 
-/* Get logged-in client's projects */
-export const getMyProjects = async () => {
+/* Get logged-in client's projects  
+   (FE FETCHES /client/:id — NO /client/me ROUTE!) */
+export const getMyProjects = async (clientId) => {
   try {
     const token = localStorage.getItem("token");
 
-    // Correct backend path: GET /api/projects/client/:clientId
-    const res = await axios.get(`${PROJECT_API}/client/me`, {
+    const res = await axios.get(`${PROJECT_API}/client/${clientId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -141,12 +143,12 @@ export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   }
 };
 
-/* Get all applications by logged-in freelancer */
+/* Get all applications by logged-in freelancer  
+   (Backend route is GET /api/applications/me) */
 export const getAppliedProjects = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    // Correct backend route → GET /api/applications/me
     const res = await axios.get(`${APPLICATION_API}/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
