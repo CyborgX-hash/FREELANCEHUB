@@ -100,10 +100,7 @@ const DashboardPage = () => {
             </div>
 
             {/* You can activate this later */}
-            <div className="dash-card">
-              <h3>💼 My Projects</h3>
-              <p>Manage your active client work.</p>
-            </div>
+            
 
             <div className="dash-card">
               <h3>🏆 Earnings</h3>

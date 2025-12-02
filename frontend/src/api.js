@@ -1,20 +1,20 @@
 import axios from "axios";
 
 /* ---------------------------------------------------
-   BASE URL (LOCAL + PRODUCTION)
+   BASE URL
 --------------------------------------------------- */
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_BACKEND_SERVER_URL
     : process.env.REACT_APP_BACKEND_LOCAL_URL;
 
-/* API BASE PATHS */
+/* API PATHS */
 const USER_API = `${API_BASE_URL}/api/users`;
 const PROJECT_API = `${API_BASE_URL}/api/projects`;
 const APPLICATION_API = `${API_BASE_URL}/api/applications`;
 
 /* ---------------------------------------------------
-   AXIOS INSTANCE + AUTO TOKEN
+   AXIOS INSTANCE + TOKEN
 --------------------------------------------------- */
 const api = axios.create({
   baseURL: USER_API,
@@ -28,7 +28,7 @@ api.interceptors.request.use((config) => {
 });
 
 /* ===================================================
-   🔹 USER AUTH & PROFILE
+   USER AUTH
 =================================================== */
 
 export const signupUser = async (userData) => {
@@ -49,60 +49,11 @@ export const loginUser = async (credentials) => {
   }
 };
 
-export const getProfile = async () => {
-  try {
-    const res = await api.get("/me");
-    return res.data;
-  } catch (err) {
-    return err.response?.data;
-  }
-};
-
-export const updateProfile = async (data) => {
-  try {
-    const res = await api.put("/update", data);
-    return res.data;
-  } catch (err) {
-    return err.response?.data;
-  }
-};
-
 /* ===================================================
-   🔹 PROJECT APIs  
+   PROJECTS
 =================================================== */
 
-/* Create project */
-export const createProject = async (projectData) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const res = await axios.post(`${PROJECT_API}/create`, projectData, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    return res.data;
-  } catch (err) {
-    return err.response?.data;
-  }
-};
-
-/* Get logged-in client's projects  
-   (FE FETCHES /client/:id — NO /client/me ROUTE!) */
-export const getMyProjects = async (clientId) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const res = await axios.get(`${PROJECT_API}/client/${clientId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    return res.data;
-  } catch (err) {
-    return err.response?.data;
-  }
-};
-
-/* Get all public projects */
+/** ✔ Get all browse projects */
 export const fetchProjects = async () => {
   try {
     const res = await axios.get(`${PROJECT_API}`);
@@ -112,7 +63,7 @@ export const fetchProjects = async () => {
   }
 };
 
-/* Get project by ID */
+/** ✔ Get project by ID (DETAILS PAGE) */
 export const fetchProjectById = async (id) => {
   try {
     const res = await axios.get(`${PROJECT_API}/${id}`);
@@ -123,10 +74,10 @@ export const fetchProjectById = async (id) => {
 };
 
 /* ===================================================
-   🔹 APPLICATION APIs (Freelancers)
+   APPLICATIONS (Freelancers)
 =================================================== */
 
-/* Apply to a project */
+/** ✔ Apply to a project */
 export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   try {
     const token = localStorage.getItem("token");
@@ -134,7 +85,11 @@ export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
     const res = await axios.post(
       `${APPLICATION_API}/apply`,
       { projectId, proposal, bid_amount },
-      { headers: { Authorization: `Bearer ${token}` } }
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     return res.data;
@@ -143,8 +98,7 @@ export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   }
 };
 
-/* Get all applications by logged-in freelancer  
-   (Backend route is GET /api/applications/me) */
+/** ✔ Get all applied projects of freelancer */
 export const getAppliedProjects = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -159,29 +113,12 @@ export const getAppliedProjects = async () => {
   }
 };
 
-/* Withdraw application */
+/** ✔ Withdraw an application */
 export const withdrawApplication = async (applicationId) => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await axios.delete(
-      `${APPLICATION_API}/withdraw/${applicationId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    return res.data;
-  } catch (err) {
-    return err.response?.data;
-  }
-};
-
-
-/* Get freelancers applied for a project (client) */
-export const getFreelancersForProject = async (projectId) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const res = await axios.get(`${APPLICATION_API}/project/${projectId}`, {
+    const res = await axios.delete(`${APPLICATION_API}/${applicationId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
