@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle, FaUser, FaSignOutAlt, FaSun, FaMoon } from "react-icons/fa";
 import "./HomePage.css";
-import ProfileCard from "/Users/sakshamsontakke/Desktop/freelancehub/frontend/src/pages/ProfileCard.js"; 
+import ProfileCard from "./ProfileCard.js"; 
 
 export default function HomePage() {
   const navigate = useNavigate();
