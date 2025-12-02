@@ -25,6 +25,7 @@
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
+  height: 70px;
 }
 
 .navbar h2 {

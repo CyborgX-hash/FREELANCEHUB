@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,7 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import PostProjectPage from "./pages/PostProjectPage";
 import MyProjectsPage from "./pages/MyProjectsPage";
-import EditProjectPage from "./pages/EditProjectPage"; // ⭐ IMPORTANT
+import EditProjectPage from "./pages/EditProjectPage";
 
 import BrowseJobsPage from "./pages/BrowseJobsPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
@@ -25,6 +25,13 @@ const PrivateRoute = ({ children }) => {
 };
 
 function App() {
+
+  // listen to theme changes globally
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -37,80 +44,46 @@ function App() {
         {/* PROTECTED ROUTES */}
         <Route
           path="/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><DashboardPage /></PrivateRoute>}
         />
 
         {/* CLIENT ROUTES */}
         <Route
           path="/post-project"
-          element={
-            <PrivateRoute>
-              <PostProjectPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><PostProjectPage /></PrivateRoute>}
         />
 
         <Route
           path="/my-projects"
-          element={
-            <PrivateRoute>
-              <MyProjectsPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><MyProjectsPage /></PrivateRoute>}
         />
 
-        {/* ⭐⭐ ADD THIS ROUTE ⭐⭐ */}
         <Route
           path="/edit-project/:id"
-          element={
-            <PrivateRoute>
-              <EditProjectPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><EditProjectPage /></PrivateRoute>}
         />
 
         {/* FREELANCER ROUTES */}
         <Route
           path="/browse"
-          element={
-            <PrivateRoute>
-              <BrowseJobsPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><BrowseJobsPage /></PrivateRoute>}
         />
 
         <Route
           path="/my-applications"
-          element={
-            <PrivateRoute>
-              <MyApplicationsPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><MyApplicationsPage /></PrivateRoute>}
         />
 
         <Route
           path="/project/:id"
-          element={
-            <PrivateRoute>
-              <ProjectDetailsPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><ProjectDetailsPage /></PrivateRoute>}
         />
 
         <Route
           path="/applied-freelancers/:projectId"
-          element={
-            <PrivateRoute>
-              <AppliedFreelancersPage />
-            </PrivateRoute>
-          }
+          element={<PrivateRoute><AppliedFreelancersPage /></PrivateRoute>}
         />
 
-        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>

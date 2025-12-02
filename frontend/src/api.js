@@ -164,15 +164,17 @@ export const withdrawApplication = async (applicationId) => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await axios.delete(`${APPLICATION_API}/${applicationId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.delete(
+      `${APPLICATION_API}/withdraw/${applicationId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
     return res.data;
   } catch (err) {
     return err.response?.data;
   }
 };
+
 
 /* Get freelancers applied for a project (client) */
 export const getFreelancersForProject = async (projectId) => {

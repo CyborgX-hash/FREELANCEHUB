@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const { authMiddleware } = require("../middlewares/userMiddleware");
-
 const applicationController = require("../controllers/applicationController");
 
 /* ============================================================
@@ -16,7 +15,7 @@ router.post(
 
 /* ============================================================
    GET ALL APPLICATIONS FOR A PROJECT (Client)
-   Example: GET /api/applications/project/10
+   GET /api/applications/project/:projectId
 ============================================================ */
 router.get(
   "/project/:projectId",
@@ -26,7 +25,7 @@ router.get(
 
 /* ============================================================
    GET ALL APPLICATIONS OF LOGGED-IN FREELANCER
-   Example: GET /api/applications/my
+   GET /api/applications/me
 ============================================================ */
 router.get(
   "/me",
@@ -35,8 +34,8 @@ router.get(
 );
 
 /* ============================================================
-   WITHDRAW APPLICATION (Freelancer)
-   Example: DELETE /api/applications/withdraw/5
+   WITHDRAW an Application
+   DELETE /api/applications/:id
 ============================================================ */
 router.delete(
   "/:id",

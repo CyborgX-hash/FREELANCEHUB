@@ -1,23 +1,42 @@
-/* Reset + Root */
-html,
-body,
-#root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+/* ================================
+   🌙 DARK THEME (default)
+================================ */
+:root {
+  --bg-color: #0f1115;
+  --text-color: #e8e8e8;
+  --subtext-color: #9a9fa8;
+
+  --card-bg: #181b20;
+  --border-color: #2a2f36;
+
+  --primary: #3d7eff;
+
+  --danger: #ff4d4d;
+  --danger-hover: #d93636;
 }
 
-/* Remove CRA default styles */
-.App {
-  width: 100%;
-  min-height: 100vh;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ================================
+   ☀ LIGHT THEME
+================================ */
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --subtext-color: #555555;
+
+  --card-bg: #f5f7fa;
+  --border-color: #d8dce2;
+
+  --primary: #005eff;
+
+  --danger: #ff4d4d;
+  --danger-hover: #d93636;
 }
 
-/* Prevent logo animation leftovers */
-.App-logo {
-  display: none;
+/* SCROLLBAR OPTIONAL */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 6px;
 }

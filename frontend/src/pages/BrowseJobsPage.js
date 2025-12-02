@@ -1,77 +1,84 @@
 import React, { useEffect, useState } from "react";
-import { applyToProject, fetchProjects } from "../api";
+import { applyToProject, getAppliedProjects } from "../api";
 import "./BrowseJobsPage.css";
+
+const API_URL = "http://localhost:5001/api/projects";
 
 const BrowseJobsPage = () => {
   const [projects, setProjects] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
   const [search, setSearch] = useState("");
-  const [skillFilter, setSkillFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
-  // Apply modal states
   const [applyOpen, setApplyOpen] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
   const [proposal, setProposal] = useState("");
-  const [bid, setBid] = useState("");
+  const [appliedIds, setAppliedIds] = useState([]);
 
-  // Fetch all projects from backend
+  /* Load theme on mount (IMPORTANT FIX) */
   useEffect(() => {
-    loadProjects();
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  const loadProjects = async () => {
+  /* Fetch projects */
+  const fetchProjects = async () => {
     try {
-      const result = await fetchProjects(); // using your api.js function
-
-      if (result.projects) {
-        setProjects(result.projects);
-        setFiltered(result.projects);
-      }
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setProjects(data.projects || []);
+      setFiltered(data.projects || []);
     } catch (err) {
-      console.error("Project fetch error:", err);
+      console.error("Fetch projects error:", err);
     }
   };
 
-  // Search & filter logic
+  /* Fetch applied */
+  const fetchApplied = async () => {
+    const res = await getAppliedProjects();
+    const ids = (res.applications || []).map(a => a.project_id);
+    setAppliedIds(ids);
+  };
+
+  useEffect(() => {
+    fetchProjects();
+    fetchApplied();
+  }, []);
+
+  /* Search + category filter */
   useEffect(() => {
     let result = [...projects];
 
-    if (search.trim() !== "") {
+    if (search.trim()) {
       const s = search.toLowerCase();
       result = result.filter(
         (p) =>
           p.title.toLowerCase().includes(s) ||
-          (p.description && p.description.toLowerCase().includes(s)) ||
-          (p.skills && p.skills.toLowerCase().includes(s))
+          p.description.toLowerCase().includes(s)
       );
     }
 
-    if (skillFilter !== "all") {
+    if (categoryFilter !== "all") {
       result = result.filter((p) =>
-        p.skills?.toLowerCase().includes(skillFilter.toLowerCase())
+        p.skills?.toLowerCase().includes(categoryFilter.toLowerCase())
       );
     }
 
     setFiltered(result);
-  }, [search, skillFilter, projects]);
+  }, [search, categoryFilter, projects]);
 
-  // Open modal
+  /* APPLY POPUP */
   const openApply = (project) => {
     setActiveProject(project);
-    setProposal("");
-    setBid("");
     setApplyOpen(true);
+    setProposal("");
   };
 
-  // Apply to project API
   const handleApply = async () => {
-    if (!activeProject) return;
-
     const payload = {
       projectId: activeProject.id,
       proposal,
-      bid_amount: bid ? Number(bid) : undefined,
     };
 
     const result = await applyToProject(payload);
@@ -81,28 +88,32 @@ const BrowseJobsPage = () => {
       return;
     }
 
-    alert("Application submitted!");
+    alert("Applied successfully!");
+    setAppliedIds((prev) => [...prev, activeProject.id]);
     setApplyOpen(false);
   };
 
   return (
     <div className="browse-container">
+
       <h2>🔍 Browse Freelance Jobs</h2>
 
-      {/* SEARCH + FILTER */}
+      {/* FILTERS */}
       <div className="filters">
         <input
           type="text"
-          placeholder="Search by title, description, skills…"
+          placeholder="Search projects..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <select value={skillFilter} onChange={(e) => setSkillFilter(e.target.value)}>
-          <option value="all">All Skills</option>
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="all">All Categories</option>
           <option value="web">Web Development</option>
-          <option value="app">App Development</option>
-          <option value="design">UI/UX Design</option>
+          <option value="design">Design</option>
           <option value="ai">AI / ML</option>
           <option value="marketing">Marketing</option>
         </select>
@@ -111,60 +122,50 @@ const BrowseJobsPage = () => {
       {/* PROJECT GRID */}
       <div className="projects-grid">
         {filtered.length === 0 ? (
-          <p className="no-results">No projects found 😢</p>
+          <p>No projects found.</p>
         ) : (
-          filtered.map((project) => (
-            <div className="project-card" key={project.id}>
-              <h3>{project.title}</h3>
+          filtered.map((p) => (
+            <div className="project-card" key={p.id}>
+              <h3>{p.title}</h3>
 
-              <p className="desc">
-                {project.description ? project.description.slice(0, 120) : "No description"}...
-              </p>
+              <p className="desc">{p.description.slice(0, 120)}...</p>
 
-              <p><strong>💰 Budget:</strong> ₹{project.budget_min} - ₹{project.budget_max}</p>
+              <p><strong>Budget:</strong> ₹{p.budget_min || "N/A"}</p>
+              <p><strong>Skills:</strong> {p.skills}</p>
+              <p><strong>Client:</strong> {p.client?.name}</p>
 
-              <p><strong>📌 Skills:</strong> {project.skills || "Not specified"}</p>
-
-              <p><strong>👤 Client:</strong> {project.client?.name}</p>
-
-              <button className="apply-btn" onClick={() => openApply(project)}>
-                Apply Now
-              </button>
+              {appliedIds.includes(p.id) ? (
+                <button className="applied-btn">Applied ✔</button>
+              ) : (
+                <button className="apply-btn" onClick={() => openApply(p)}>
+                  Apply Now
+                </button>
+              )}
             </div>
           ))
         )}
       </div>
 
-      {/* APPLY MODAL */}
+      {/* APPLY POPUP */}
       {applyOpen && (
         <div className="modal-overlay">
           <div className="modal-card">
             <h3>Apply to: {activeProject.title}</h3>
 
             <textarea
-              placeholder="Write a short proposal…"
+              placeholder="Write your proposal..."
               value={proposal}
               onChange={(e) => setProposal(e.target.value)}
             />
 
-            <input
-              type="number"
-              placeholder="Your bid amount (optional)"
-              value={bid}
-              onChange={(e) => setBid(e.target.value)}
-            />
-
             <div className="modal-actions">
-              <button className="apply-send" onClick={handleApply}>
-                Send Application
-              </button>
-              <button className="cancel" onClick={() => setApplyOpen(false)}>
-                Cancel
-              </button>
+              <button onClick={handleApply}>Submit</button>
+              <button className="cancel" onClick={() => setApplyOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 };

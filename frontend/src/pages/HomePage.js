@@ -26,9 +26,10 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    document.body.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
+  
 
   const logout = () => {
     localStorage.removeItem("token");
