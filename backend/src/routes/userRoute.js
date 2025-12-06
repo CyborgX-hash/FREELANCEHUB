@@ -27,6 +27,7 @@ usersRouter.post('/logout',logoutUserMiddleware,logoutUserController)
 usersRouter.get("/me",authenticate,getMeController)
 usersRouter.put("/update", authenticate, updateUserMiddleware, updateUserController);
 
+
 // Future addition ROUTES :-
 // /refresh
 // /change-password

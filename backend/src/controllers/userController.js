@@ -11,9 +11,13 @@ async function createUserController(req, res) {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Normalize role to match Prisma ENUM
+    // Map frontend role → Prisma ENUM
     const prismaRole =
-      role?.toLowerCase() === "freelancer" ? "Freelancer" : "Client";
+      role?.toLowerCase() === "freelancer"
+        ? "Freelancer"
+        : role?.toLowerCase() === "admin"
+        ? "Admin"
+        : "Client";
 
     const newUser = await prisma.user.create({
       data: {
@@ -70,8 +74,8 @@ async function loginUserController(req, res) {
       return res.status(401).json({ ERROR: "Invalid credentials" });
     }
 
-    // Normalize role for frontend
-    let normalizedRole =
+    // Normalize ENUM → frontend role
+    const normalizedRole =
       user.role === "Freelancer"
         ? "freelancer"
         : user.role === "Admin"
@@ -102,8 +106,9 @@ async function loginUserController(req, res) {
 /* =========================================================
    LOGOUT
 ========================================================= */
-async function logoutUserController(req, res) {
+async function logoutUserController(_req, res) {
   try {
+    // JWT logout is usually handled on client by deleting token
     return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     console.error("Logout error:", error);
@@ -144,9 +149,20 @@ async function getMeController(req, res) {
 
     if (!user) return res.status(404).json({ ERROR: "User not found" });
 
+    // Normalize Prisma ENUM → lowercase role for frontend
+    const normalizedRole =
+      user.role === "Freelancer"
+        ? "freelancer"
+        : user.role === "Admin"
+        ? "admin"
+        : "client";
+
     return res.status(200).json({
       message: "User fetched successfully",
-      user,
+      user: {
+        ...user,
+        role: normalizedRole,
+      },
     });
   } catch (error) {
     console.error("GetMe error:", error);
@@ -155,7 +171,8 @@ async function getMeController(req, res) {
 }
 
 /* =========================================================
-   UPDATE PROFILE (FULL VERSION)
+   UPDATE PROFILE
+   (Email / password / role are NOT updatable here)
 ========================================================= */
 async function updateUserController(req, res) {
   try {
@@ -176,23 +193,34 @@ async function updateUserController(req, res) {
 
     const updateData = {};
 
-    // BASIC
-    if (name) updateData.name = name.trim();
-    if (username) updateData.username = username.trim().toLowerCase();
+    // BASIC (email/password/role are intentionally NOT included)
+    if (name !== undefined) updateData.name = name.trim();
+    if (username !== undefined) updateData.username = username.trim().toLowerCase();
 
     // EXTENDED FIELDS
-    if (age) updateData.age = Number(age);
-    if (gender) updateData.gender = gender;
-    if (city) updateData.city = city;
-    if (experience) updateData.experience = Number(experience);
-    if (organization) updateData.organization = organization;
-    if (aboutOrg) updateData.aboutOrg = aboutOrg;
-    if (skills) updateData.skills = skills;
-    if (portfolio_url) updateData.portfolio_url = portfolio_url;
+    if (age !== undefined)
+      updateData.age = age === "" || age === null ? null : Number(age);
+
+    if (gender !== undefined) updateData.gender = gender || null;
+    if (city !== undefined) updateData.city = city || null;
+
+    if (experience !== undefined)
+      updateData.experience =
+        experience === "" || experience === null ? null : Number(experience);
+
+    if (organization !== undefined)
+      updateData.organization = organization || null;
+
+    if (aboutOrg !== undefined) updateData.aboutOrg = aboutOrg || null;
+    if (skills !== undefined) updateData.skills = skills || null;
+    if (portfolio_url !== undefined)
+      updateData.portfolio_url = portfolio_url || null;
 
     // No fields provided
     if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ ERROR: "No valid fields provided for update" });
+      return res
+        .status(400)
+        .json({ ERROR: "No valid fields provided for update" });
     }
 
     // Username unique check
@@ -211,7 +239,6 @@ async function updateUserController(req, res) {
       }
     }
 
-    // Update user
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: updateData,
@@ -235,9 +262,20 @@ async function updateUserController(req, res) {
       },
     });
 
+    // Normalize role back to lowercase for frontend
+    const normalizedRole =
+      updatedUser.role === "Freelancer"
+        ? "freelancer"
+        : updatedUser.role === "Admin"
+        ? "admin"
+        : "client";
+
     return res.status(200).json({
       message: "Profile updated successfully",
-      user: updatedUser,
+      user: {
+        ...updatedUser,
+        role: normalizedRole,
+      },
     });
   } catch (err) {
     console.error("UpdateUser error:", err);
@@ -250,7 +288,7 @@ async function updateUserController(req, res) {
 module.exports = {
   createUserController,
   loginUserController,
-  logoutUserController,
+  logoutUserController,   // ✅ added back here
   getMeController,
   updateUserController,
 };

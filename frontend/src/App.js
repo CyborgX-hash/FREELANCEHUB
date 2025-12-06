@@ -18,6 +18,7 @@ import BrowseJobsPage from "./pages/BrowseJobsPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import AppliedFreelancersPage from "./pages/AppliedFreelancersPage";
 import MyApplicationsPage from "./pages/MyApplicationsPage";
+import ProfilePage from "./pages/ProfilePage";  // ⭐ IMPORTANT
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -26,7 +27,6 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
 
-  // listen to theme changes globally
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
@@ -42,48 +42,46 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* PROTECTED ROUTES */}
-        <Route
-          path="/dashboard"
-          element={<PrivateRoute><DashboardPage /></PrivateRoute>}
-        />
+        <Route path="/dashboard" element={
+          <PrivateRoute><DashboardPage /></PrivateRoute>
+        }/>
 
-        {/* CLIENT ROUTES */}
-        <Route
-          path="/post-project"
-          element={<PrivateRoute><PostProjectPage /></PrivateRoute>}
-        />
+        {/* CLIENT */}
+        <Route path="/post-project" element={
+          <PrivateRoute><PostProjectPage /></PrivateRoute>
+        }/>
 
-        <Route
-          path="/my-projects"
-          element={<PrivateRoute><MyProjectsPage /></PrivateRoute>}
-        />
+        <Route path="/my-projects" element={
+          <PrivateRoute><MyProjectsPage /></PrivateRoute>
+        }/>
 
-        <Route
-          path="/edit-project/:id"
-          element={<PrivateRoute><EditProjectPage /></PrivateRoute>}
-        />
+        <Route path="/edit-project/:id" element={
+          <PrivateRoute><EditProjectPage /></PrivateRoute>
+        }/>
 
-        {/* FREELANCER ROUTES */}
-        <Route
-          path="/browse"
-          element={<PrivateRoute><BrowseJobsPage /></PrivateRoute>}
-        />
+        {/* FREELANCER */}
+        <Route path="/browse" element={
+          <PrivateRoute><BrowseJobsPage /></PrivateRoute>
+        }/>
 
-        <Route
-          path="/my-applications"
-          element={<PrivateRoute><MyApplicationsPage /></PrivateRoute>}
-        />
+        <Route path="/my-applications" element={
+          <PrivateRoute><MyApplicationsPage /></PrivateRoute>
+        }/>
 
-        <Route
-          path="/project/:id"
-          element={<PrivateRoute><ProjectDetailsPage /></PrivateRoute>}
-        />
+        <Route path="/project/:id" element={
+          <PrivateRoute><ProjectDetailsPage /></PrivateRoute>
+        }/>
 
-        <Route
-          path="/applied-freelancers/:projectId"
-          element={<PrivateRoute><AppliedFreelancersPage /></PrivateRoute>}
-        />
+        <Route path="/applied-freelancers/:projectId" element={
+          <PrivateRoute><AppliedFreelancersPage /></PrivateRoute>
+        }/>
 
+        {/* PROFILE PAGE */}
+        <Route path="/profile" element={
+          <PrivateRoute><ProfilePage /></PrivateRoute>
+        }/>
+
+        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>

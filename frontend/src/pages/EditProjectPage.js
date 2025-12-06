@@ -12,9 +12,7 @@ export default function EditProjectPage() {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* ======================================================
-     FETCH PROJECT BY ID
-  ====================================================== */
+  
   useEffect(() => {
     fetch(`${API_URL}/${id}`)
       .then((res) => res.json())
@@ -25,16 +23,12 @@ export default function EditProjectPage() {
       .catch(() => setLoading(false));
   }, [id]);
 
-  /* ======================================================
-     HANDLE FORM CHANGE
-  ====================================================== */
+
   const handleChange = (e) => {
     setProject({ ...project, [e.target.name]: e.target.value });
   };
 
-  /* ======================================================
-     UPDATE PROJECT
-  ====================================================== */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -1,0 +1,226 @@
+/* ==============================
+   WRAPPER
+================================*/
+.profile-wrapper {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+  padding-bottom: 40px;
+}
+
+/* ==============================
+   TOP BANNER
+================================*/
+.profile-header-banner {
+  width: 100%;
+  height: 180px;
+  border-radius: 0 0 40px 40px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+/* ==============================
+   AVATAR SECTION
+================================*/
+.profile-avatar-section {
+  text-align: center;
+  margin-top: -70px;
+}
+
+.profile-photo,
+.profile-avatar-icon {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 6px solid var(--background);
+  background: var(--card-bg);
+  object-fit: cover;
+}
+
+.profile-avatar-icon {
+  font-size: 120px;
+  color: var(--primary);
+}
+
+.profile-name {
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 12px;
+  color: var(--text);
+}
+
+.profile-username {
+  font-size: 15px;
+  color: var(--subtext);
+}
+
+.role-pill {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(79, 109, 245, 0.2);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ==============================
+   MAIN CARD
+================================*/
+.profile-main-card {
+  width: 900px;
+  margin: 35px auto;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--light); /** LIGHT MODE BACKGROUND **/
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .profile-main-card {
+  background: var(--card-bg);   /** DARK MODE BACKGROUND **/
+  border-color: var(--border-color);
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* ==============================
+   GRID FORM
+================================*/
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 26px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: var(--subtext);
+}
+
+/* ==============================
+   INPUTS
+================================*/
+.profile-main-card input,
+.profile-main-card select,
+.profile-main-card textarea {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  font-size: 15px;
+  background: var(--card-light);
+  color: var(--text-light);
+  transition: 0.2s;
+}
+
+/* 🔥 DARK THEME FIX — input backgrounds */
+[data-theme="dark"] .profile-main-card input,
+[data-theme="dark"] .profile-main-card select,
+[data-theme="dark"] .profile-main-card textarea {
+  background: #11141c;               /* TRUE DARK INPUT COLOR */
+  border-color: var(--border-dark);
+  color: var(--text-dark);
+}
+
+/* 🔥 LIGHT THEME FIX — no black inputs */
+[data-theme="light"] .profile-main-card input,
+[data-theme="light"] .profile-main-card select,
+[data-theme="light"] .profile-main-card textarea {
+  background: var(--card-light);
+  color: var(--text-light);
+  border-color: var(--border-light);
+}
+
+.profile-main-card input:focus,
+.profile-main-card select:focus,
+.profile-main-card textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(79, 109, 245, 0.25);
+}
+
+/* TEXTAREA */
+.profile-main-card textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* ==============================
+   BUTTONS
+================================*/
+.profile-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 26px;
+  gap: 14px;
+}
+
+.edit-btn,
+.save-btn {
+  background: var(--primary);
+  color: white;
+  border-radius: 10px;
+  padding: 12px 20px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+}
+
+.edit-btn:hover,
+.save-btn:hover {
+  background: var(--primary-light);
+}
+
+.cancel-btn {
+  background: transparent;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 12px 20px;
+  border: 1px solid var(--border-light);
+}
+
+[data-theme="dark"] .cancel-btn {
+  color: var(--text-dark);
+  border-color: var(--border-dark);
+}
+
+.cancel-btn:hover {
+  background: rgba(150, 150, 150, 0.15);
+}
+
+/* ==============================
+   LOADING STATE
+================================*/
+.profile-loading {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
+}
+
+/* ==============================
+   RESPONSIVE
+================================*/
+@media (max-width: 900px) {
+  .profile-main-card {
+    width: 92%;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
