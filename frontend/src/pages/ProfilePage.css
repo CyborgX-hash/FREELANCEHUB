@@ -1,12 +1,11 @@
 /* ==============================
-   WRAPPER
+   PAGE WRAPPER
 ================================*/
 .profile-wrapper {
   min-height: 100vh;
   background: var(--background);
   color: var(--text);
   font-family: "Poppins", sans-serif;
-  padding-bottom: 40px;
 }
 
 /* ==============================
@@ -16,11 +15,10 @@
   width: 100%;
   height: 180px;
   border-radius: 0 0 40px 40px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
 }
 
 /* ==============================
-   AVATAR SECTION
+   AVATAR + BASIC INFO
 ================================*/
 .profile-avatar-section {
   text-align: center;
@@ -32,13 +30,12 @@
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  border: 6px solid var(--background);
-  background: var(--card-bg);
+  border: 5px solid var(--background);
+  background: var(--light);
   object-fit: cover;
 }
 
 .profile-avatar-icon {
-  font-size: 120px;
   color: var(--primary);
 }
 
@@ -46,7 +43,6 @@
   font-size: 30px;
   font-weight: 700;
   margin-top: 12px;
-  color: var(--text);
 }
 
 .profile-username {
@@ -57,30 +53,30 @@
 .role-pill {
   display: inline-block;
   margin-top: 10px;
-  padding: 5px 14px;
+  padding: 6px 16px;
   border-radius: 999px;
-  background: rgba(79, 109, 245, 0.2);
+  background: rgba(79, 109, 245, 0.18);
   color: var(--primary);
   font-size: 13px;
   font-weight: 500;
 }
 
 /* ==============================
-   MAIN CARD
+   MAIN PROFILE CARD
 ================================*/
 .profile-main-card {
   width: 900px;
   margin: 35px auto;
+  background: var(--light);
   padding: 28px;
   border-radius: 20px;
-  background: var(--light); /** LIGHT MODE BACKGROUND **/
   box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="dark"] .profile-main-card {
-  background: var(--card-bg);   /** DARK MODE BACKGROUND **/
-  border-color: var(--border-color);
+  background: #161921;
+  border-color: #2b2f3b;
 }
 
 .card-title {
@@ -95,7 +91,7 @@
 .profile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 22px 26px;
+  gap: 18px 22px;
 }
 
 .field {
@@ -109,54 +105,33 @@
 
 .field label {
   font-size: 13px;
-  margin-bottom: 4px;
   color: var(--subtext);
 }
 
-/* ==============================
-   INPUTS
-================================*/
+/* INPUTS */
 .profile-main-card input,
 .profile-main-card select,
 .profile-main-card textarea {
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid var(--border-light);
+  border: 1px solid rgba(150, 150, 150, 0.3);
   font-size: 15px;
-  background: var(--card-light);
-  color: var(--text-light);
-  transition: 0.2s;
+  background: var(--card-bg);
+  color: var(--text);
 }
 
-/* 🔥 DARK THEME FIX — input backgrounds */
 [data-theme="dark"] .profile-main-card input,
 [data-theme="dark"] .profile-main-card select,
 [data-theme="dark"] .profile-main-card textarea {
-  background: #11141c;               /* TRUE DARK INPUT COLOR */
-  border-color: var(--border-dark);
-  color: var(--text-dark);
-}
-
-/* 🔥 LIGHT THEME FIX — no black inputs */
-[data-theme="light"] .profile-main-card input,
-[data-theme="light"] .profile-main-card select,
-[data-theme="light"] .profile-main-card textarea {
-  background: var(--card-light);
-  color: var(--text-light);
-  border-color: var(--border-light);
+  background: #0b0f19;
+  border-color: #34394a;
 }
 
 .profile-main-card input:focus,
 .profile-main-card select:focus,
 .profile-main-card textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(79, 109, 245, 0.25);
-}
-
-/* TEXTAREA */
-.profile-main-card textarea {
-  resize: vertical;
-  min-height: 90px;
+  box-shadow: 0 0 0 2px rgba(79, 109, 245, 0.3);
 }
 
 /* ==============================
@@ -165,19 +140,20 @@
 .profile-buttons {
   display: flex;
   justify-content: flex-end;
-  margin-top: 26px;
-  gap: 14px;
+  margin-top: 25px;
+  gap: 12px;
 }
 
 .edit-btn,
 .save-btn {
   background: var(--primary);
   color: white;
-  border-radius: 10px;
   padding: 12px 20px;
+  border-radius: 10px;
   cursor: pointer;
   border: none;
   font-weight: 600;
+  transition: 0.2s;
 }
 
 .edit-btn:hover,
@@ -188,29 +164,13 @@
 .cancel-btn {
   background: transparent;
   color: var(--text);
-  border-radius: 10px;
+  border: 1px solid rgba(150, 150, 150, 0.5);
   padding: 12px 20px;
-  border: 1px solid var(--border-light);
-}
-
-[data-theme="dark"] .cancel-btn {
-  color: var(--text-dark);
-  border-color: var(--border-dark);
+  border-radius: 10px;
 }
 
 .cancel-btn:hover {
-  background: rgba(150, 150, 150, 0.15);
-}
-
-/* ==============================
-   LOADING STATE
-================================*/
-.profile-loading {
-  min-height: 60vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--text);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ==============================
@@ -218,7 +178,7 @@
 ================================*/
 @media (max-width: 900px) {
   .profile-main-card {
-    width: 92%;
+    width: 95%;
   }
   .profile-grid {
     grid-template-columns: 1fr;

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle, FaUser, FaSignOutAlt, FaSun, FaMoon } from "react-icons/fa";
-import ProfileCard from "./ProfilePage";
+import heroVideo from "../Assets/vdo.webm";
+import logo from "../Assets/logo.png";
 import "./HomePage.css";
 
 export default function HomePage() {
@@ -10,166 +11,142 @@ export default function HomePage() {
 
   const [user, setUser] = useState(null);
   const [menu, setMenu] = useState(false);
-  const [openProfile, setOpenProfile] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  // THEME (default from localStorage)
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("theme") || "light";
-  });
+  const aboutRef = useRef(null);
+  const servicesRef = useRef(null);
 
-  /* ============================================================
-      ON MOUNT → Load User + Set Theme
-  ============================================================ */
+  /* ================= SPLASH LOGO TIMER ================= */
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 2500); // 2.5 sec
+    return () => clearTimeout(timer);
+  }, []);
+
+  /* ================= LOAD USER & THEME ON MOUNT ================= */
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token) {
-      try {
-        setUser(jwtDecode(token));
-      } catch (err) {
-        console.error("Token decode failed:", err);
-      }
+      try { setUser(jwtDecode(token)); } catch {}
     }
-
-    // Apply theme to <html>
     document.documentElement.setAttribute("data-theme", theme);
+  }, []);
 
-  }, []); // run once on page load
-
-  /* ============================================================
-      UPDATE THEME WHEN CHANGED
-  ============================================================ */
+  /* ================= APPLY THEME ON CHANGE ================= */
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  /* ============================================================
-      LOGOUT
-  ============================================================ */
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    setMenu(false);
     navigate("/");
   };
 
-  /* ============================================================
-      START BUTTON
-  ============================================================ */
-  const handleGetStarted = () => {
-    if (!user) {
-      navigate("/signup");
-      return;
-    }
-    navigate("/dashboard");
+  const scrollToSection = (ref) => {
+    if (ref.current) ref.current.scrollIntoView({ behavior: "smooth" });
+    setMenu(false);
   };
 
   return (
     <div className="home">
 
-      {/* ========== NAVBAR ========== */}
-      <nav className="nav">
-        <h1 className="logo">FreelanceHub</h1>
+      {/* ===================== SPLASH SCREEN ===================== */}
+      {showSplash && (
+        <div className="splash-screen">
+          <div className="glow-circle"></div>
+          <img src={logo} alt="Logo" className="splash-logo" />
+        </div>
+      )}
 
-        <div className="nav-right">
-          {!user ? (
-            <>
-              <button className="nav-btn" onClick={() => navigate("/login")}>
-                Login
-              </button>
-              <button className="nav-btn filled" onClick={() => navigate("/signup")}>
-                Sign Up
-              </button>
-            </>
-          ) : (
-            <div className="user-box">
-              <FaUserCircle
-                className="user-icon"
-                onClick={() => setMenu((prev) => !prev)}
-              />
+      {/* ===================== MAIN PAGE ===================== */}
+      {!showSplash && (
+        <>
+          {/* NAVBAR */}
+          <nav className="nav">
+            <h1 className="logo" onClick={() => navigate("/")}>FreelanceHub</h1>
 
-              {menu && (
-                <div className="nav-menu">
+            <div className="nav-center">
+              <p onClick={() => navigate("/")}>Home</p>
+              <p onClick={() => scrollToSection(aboutRef)}>About Us</p>
+              <p onClick={() => scrollToSection(servicesRef)}>Our Services</p>
+            </div>
 
-                  {/* Profile */}
-                  <p
-  onClick={() => {
-    navigate("/profile");
-    setMenu(false);
-  }}
->
-  <FaUser /> Profile
-</p>
+            <div className="nav-right">
+              {!user ? (
+                <>
+                  <button className="nav-btn" onClick={() => navigate("/login")}>Login</button>
+                  <button className="nav-btn filled" onClick={() => navigate("/signup")}>Sign Up</button>
+                </>
+              ) : (
+                <div className="user-box">
+                  <FaUserCircle className="user-icon" onClick={() => setMenu(!menu)} />
 
-                  {/* Theme Switch */}
-                  <p
-                    onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  >
-                    {theme === "light" ? <FaMoon /> : <FaSun />}
-                    {theme === "light" ? " Dark Mode" : " Light Mode"}
-                  </p>
+                  {menu && (
+                    <div className="nav-menu">
+                      <p onClick={() => { navigate("/profile"); setMenu(false); }}>
+                        <FaUser /> Profile
+                      </p>
 
-                  {/* Logout */}
-                  <p className="logout" onClick={logout}>
-                    <FaSignOutAlt /> Logout
-                  </p>
+                      <p onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+                        {theme === "light" ? <FaMoon /> : <FaSun />}
+                        {theme === "light" ? " Dark Mode" : " Light Mode"}
+                      </p>
+
+                      <p className="logout" onClick={logout}>
+                        <FaSignOutAlt /> Logout
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
-        </div>
-      </nav>
+          </nav>
 
-      {/* ========== HERO SECTION ========== */}
-      <section className="hero">
-        <h2>Hire Top Freelancers. Build Faster.</h2>
-        <p>
-          Find skilled developers, designers, editors & more — start your project instantly.
-        </p>
+          {/* HERO SECTION */}
+          <section className="hero">
+            <video autoPlay muted loop className="hero-video">
+              <source src={heroVideo} type="video/mp4" />
+            </video>
 
-        <div className="hero-buttons">
-          <button className="btn primary" onClick={handleGetStarted}>
-            Get Started
-          </button>
-        </div>
-      </section>
+            <div className="hero-content">
+              <h2>Our freelancers will take it from here</h2>
+              <p>Search, hire & collaborate with industry-leading professionals worldwide.</p>
 
-      {/* ========== FEATURES ========== */}
-      <section className="features">
-        <h3>What Makes Us Different?</h3>
+              <button className="btn primary" onClick={() => navigate("/dashboard")}>
+                Get Started
+              </button>
+            </div>
+          </section>
 
-        <div className="grid">
-          <div className="card">
-            <h4>⚡ Fast Hiring</h4>
-            <p>Post a project & get responses in minutes.</p>
-          </div>
+          {/* ABOUT SECTION */}
+          <section ref={aboutRef} className="about-section">
+            <h2>About Us</h2>
+            <p>
+              FreelanceHub connects businesses with verified, skilled freelancers.
+              Our mission is to make hiring simple, fast, and transparent.
+            </p>
+          </section>
 
-          <div className="card">
-            <h4>🌍 Global Talent</h4>
-            <p>Hire from a pool of skilled professionals worldwide.</p>
-          </div>
+          {/* SERVICES SECTION */}
+          <section ref={servicesRef} className="services-section">
+            <h2>Our Services</h2>
 
-          <div className="card">
-            <h4>📈 Smart Matching</h4>
-            <p>We recommend best freelancers for your project.</p>
-          </div>
-        </div>
-      </section>
+            <div className="services-grid">
+              <div className="service-box"><h3>💻 Web Development</h3><p>Full stack, frontend & backend experts.</p></div>
+              <div className="service-box"><h3>🎨 UI/UX Design</h3><p>Beautiful interfaces for apps & websites.</p></div>
+              <div className="service-box"><h3>🤖 AI & Automation</h3><p>Smart automation tools for business.</p></div>
+              <div className="service-box"><h3>📣 Marketing</h3><p>SEO, branding & targeted campaigns.</p></div>
+            </div>
+          </section>
 
-      {/* ========== FOOTER ========== */}
-      <footer className="footer">
-        <p>© 2025 FreelanceHub — Work from Anywhere</p>
-        <div>
-          <a href="#">Terms</a>
-          <a href="#">Privacy</a>
-          <a href="#">Support</a>
-        </div>
-      </footer>
-
-      {/* ========== PROFILE MODAL ========== */}
-      {openProfile && (
-        <ProfileCard user={user} onClose={() => setOpenProfile(false)} />
+          {/* FOOTER */}
+          <footer className="footer">
+            <p>© 2025 FreelanceHub — Work from Anywhere</p>
+            <p>Made by Saksham</p>
+          </footer>
+        </>
       )}
     </div>
   );
