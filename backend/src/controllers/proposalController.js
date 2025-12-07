@@ -1,8 +1,6 @@
 const { prisma } = require("../config/database");
 
-/* =====================================================
-   CREATE APPLICATION
-===================================================== */
+
 async function createProposalController(req, res) {
   try {
     const { project_id, freelancer_id, cover_letter, portfolio_url } = req.body;
@@ -29,9 +27,7 @@ async function createProposalController(req, res) {
   }
 }
 
-/* =====================================================
-   GET APPLICATIONS BY PROJECT ID
-===================================================== */
+
 async function getProposalsByProjectController(req, res) {
   try {
     const { projectId } = req.params;
@@ -60,9 +56,7 @@ async function getProposalsByProjectController(req, res) {
   }
 }
 
-/* =====================================================
-   EXPORT FUNCTIONS CORRECTLY
-===================================================== */
+
 module.exports = {
   createProposalController,
   getProposalsByProjectController,

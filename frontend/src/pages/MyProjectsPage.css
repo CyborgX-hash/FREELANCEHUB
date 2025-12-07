@@ -1,33 +1,49 @@
-/* ROOT THEME COLORS */
-:root {
-  --bg-color: #0d1117;
-  --card-bg: #161b22;
-  --card-hover: #1b222c;
-  --border: #242a33;
-  --text: #e6edf3;
-  --subtext: #9ba3af;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --danger: #f87171;
-  --danger-hover: #ef4444;
-}
-
-/* PAGE */
+/* ============================================================
+   PAGE WRAPPER
+============================================================ */
 .myprojects-page {
   min-height: 100vh;
   padding: 32px;
-  background: var(--bg-color);
+  background: var(--background);
   font-family: "Inter", "Poppins", sans-serif;
   color: var(--text);
 }
 
+/* PAGE TITLE */
 .myprojects-page h2 {
   font-size: 34px;
   font-weight: 700;
   margin-bottom: 25px;
 }
 
-/* FILTER BAR */
+/* ============================================================
+   BACK BUTTON
+============================================================ */
+.back-btn {
+  background: transparent;
+  border: 1px solid var(--subtext);
+  color: var(--text);
+  padding: 8px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.25s ease;
+}
+
+.back-btn:hover {
+  background: rgba(79, 109, 245, 0.12);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   CONTROLS (SEARCH / FILTER / SORT)
+============================================================ */
 .project-controls {
   display: flex;
   flex-wrap: wrap;
@@ -37,24 +53,26 @@
 
 .project-controls input,
 .project-controls select {
-  background: var(--card-bg);
+  background: var(--surface);
   padding: 12px 15px;
   border-radius: 10px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--subtext);
   color: var(--text);
   font-size: 15px;
   flex: 1;
   min-width: 200px;
-  transition: 0.25s;
+  transition: 0.25s ease;
 }
 
 .project-controls input:focus,
 .project-controls select:focus {
-  border-color: var(--accent);
+  border-color: var(--primary);
   outline: none;
 }
 
-/* GRID */
+/* ============================================================
+   PROJECT GRID
+============================================================ */
 .project-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -62,24 +80,26 @@
   margin-top: 10px;
 }
 
-/* CARD */
+/* ============================================================
+   PROJECT CARD
+============================================================ */
 .project-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--subtext);
   padding: 22px;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  box-shadow: var(--shadow-soft);
   transition: 0.25s ease;
-  min-height: 330px; /* ⭐ FIXED HEIGHT BALANCE */
+  min-height: 330px;
 }
 
 .project-card:hover {
-  background: var(--card-hover);
-  border-color: var(--accent);
+  background: var(--surface);
+  border-color: var(--primary);
   transform: translateY(-5px);
-  box-shadow: 0 12px 34px rgba(59,130,246,0.22);
+  box-shadow: var(--shadow-hover);
 }
 
 /* TITLE */
@@ -87,24 +107,27 @@
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 6px;
-  color: var(--accent);
+  color: var(--primary);
 }
 
-/* DESCRIPTION WITH 2-LINE CLAMP */
+/* DESCRIPTION (line clamp) */
 .description {
   font-size: 14px;
   color: var(--subtext);
   margin-bottom: 12px;
   line-height: 1.5;
   display: -webkit-box;
+  /* -webkit-line-clamp: 3; */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* INFO BOX (smaller for clean look) */
+/* ============================================================
+   INFO BOX
+============================================================ */
 .info {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
+  background: var(--background);
+  border: 1px solid var(--subtext);
   padding: 10px 12px;
   border-radius: 12px;
   margin-bottom: 12px;
@@ -113,16 +136,19 @@
 .info p {
   font-size: 14px;
   margin: 5px 0;
+  color: var(--text);
 }
 
 /* DATE */
 .date {
   font-size: 13px;
   color: var(--subtext);
-  margin-top: auto; /* ⭐ pushes it above buttons */
+  margin-top: auto;
 }
 
-/* ACTION BUTTONS (LOCKED TO BOTTOM) */
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
 .action-buttons {
   display: flex;
   gap: 12px;
@@ -143,20 +169,20 @@
 }
 
 .edit-btn {
-  background: var(--accent);
+  background: var(--primary);
 }
 
 .edit-btn:hover {
-  background: var(--accent-hover);
+  background: var(--primary-light);
   transform: translateY(-2px);
 }
 
 .delete-btn {
-  background: var(--danger);
+  background: #ef4444;
 }
 
 .delete-btn:hover {
-  background: var(--danger-hover);
+  background: #dc2626;
   transform: translateY(-2px);
 }
 
@@ -168,7 +194,9 @@
   color: var(--subtext);
 }
 
-/* PAGINATION (NOW CLEAN + CENTERED) */
+/* ============================================================
+   PAGINATION
+============================================================ */
 .pagination {
   display: flex;
   justify-content: center;
@@ -180,21 +208,21 @@
 .pagination button {
   padding: 10px 20px;
   border-radius: 10px;
-  background: var(--accent);
+  background: var(--primary);
   color: white;
   border: none;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.25s;
+  transition: 0.25s ease;
 }
 
 .pagination button:hover {
-  background: var(--accent-hover);
+  background: var(--primary-light);
   transform: translateY(-3px);
 }
 
 .pagination button:disabled {
-  background: #3f4754;
+  background: rgba(100, 100, 100, 0.4);
   cursor: not-allowed;
 }
 
@@ -202,26 +230,42 @@
   font-size: 15px;
   color: var(--subtext);
 }
-/* BACK BUTTON */
-.back-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 8px 16px;
-  font-size: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 18px;
-  display: inline-flex;
+
+/* ============================================================
+   LOADER
+============================================================ */
+.loading-wrapper {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  justify-content: center;
   align-items: center;
-  gap: 6px;
-  transition: 0.25s ease;
+  color: var(--subtext);
+  font-size: 16px;
+  animation: fadeIn 0.4s ease;
 }
 
-.back-btn:hover {
-  background: var(--card-hover);
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-2px);
+.loader-ring {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(255,255,255,0.05);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite, glow 1.4s ease-in-out infinite;
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 0px var(--primary); }
+  50% { box-shadow: 0 0 12px var(--primary); }
+  100% { box-shadow: 0 0 0px var(--primary); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

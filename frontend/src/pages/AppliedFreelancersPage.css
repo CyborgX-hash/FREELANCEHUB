@@ -1,34 +1,27 @@
-/* ROOT THEME COLORS */
-:root {
-    --bg-color: #0d1117;
-    --card-bg: #161b22;
-    --card-hover: #1b222c;
-    --border: #242a33;
-    --text: #e6edf3;
-    --subtext: #9ba3af;
-    --accent: #3b82f6;
-    --accent-hover: #2563eb;
-  }
-  
-  /* PAGE */
-  .af-container {
+/* ============================================================
+   PAGE WRAPPER
+============================================================ */
+.af-container {
     padding: 40px;
-    background: var(--bg-color);
+    background: var(--background);
     min-height: 100vh;
     font-family: "Inter", "Poppins", sans-serif;
     color: var(--text);
   }
   
+  /* PAGE TITLE */
   .af-container h2 {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 20px;
   }
   
-  /* BACK BUTTON */
+  /* ============================================================
+     BACK BUTTON
+  ============================================================ */
   .back-btn {
     background: transparent;
-    border: 1px solid var(--border);
+    border: 1px solid var(--subtext);
     color: var(--text);
     padding: 8px 16px;
     font-size: 15px;
@@ -38,92 +31,94 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: 0.25s;
+    transition: 0.25s ease;
   }
   
   .back-btn:hover {
-    background: var(--card-hover);
-    border-color: var(--accent);
-    color: var(--accent);
+    background: rgba(79, 109, 245, 0.12);
+    border-color: var(--primary);
+    color: var(--primary);
     transform: translateY(-2px);
   }
   
-  /* SEARCH BOX */
+  /* ============================================================
+     SEARCH BOX
+  ============================================================ */
   .search-box {
     padding: 12px 15px;
     width: 300px;
     border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--card-bg);
+    border: 1px solid var(--subtext);
+    background: var(--surface);
     color: var(--text);
     margin-bottom: 25px;
     transition: 0.25s;
   }
   
   .search-box:focus {
-    border-color: var(--accent);
+    border-color: var(--primary);
     outline: none;
   }
   
-  /* PROJECT GRID (EXACTLY 4 CARDS PER ROW) */
+  /* ============================================================
+     PROJECT GRID (4 PER ROW)
+  ============================================================ */
   .af-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* ⭐ FIXED → 4 CARDS ONLY */
+    grid-template-columns: repeat(4, 1fr);
     gap: 28px;
   }
   
   @media (max-width: 1200px) {
-    .af-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .af-grid { grid-template-columns: repeat(3, 1fr); }
   }
-  
   @media (max-width: 900px) {
-    .af-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    .af-grid { grid-template-columns: repeat(2, 1fr); }
   }
-  
   @media (max-width: 600px) {
-    .af-grid {
-      grid-template-columns: 1fr;
-    }
+    .af-grid { grid-template-columns: 1fr; }
   }
   
-  /* CARD STYLE (MATCHES MY PROJECTS PAGE) */
+  /* ============================================================
+     PROJECT CARD
+  ============================================================ */
   .af-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: var(--surface);
+    border: 1px solid var(--subtext);
     padding: 22px;
     border-radius: 16px;
     transition: 0.25s ease;
     cursor: pointer;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    box-shadow: var(--shadow-soft);
     display: flex;
     flex-direction: column;
   }
   
   .af-card:hover {
-    background: var(--card-hover);
-    border-color: var(--accent);
+    background: var(--surface);
+    border-color: var(--primary);
     transform: translateY(-5px);
-    box-shadow: 0 12px 34px rgba(59,130,246,0.22);
+    box-shadow: var(--shadow-hover);
   }
   
+  /* TITLE */
   .af-card h3 {
-    color: var(--accent);
+    color: var(--primary);
     font-size: 20px;
     margin-bottom: 8px;
     font-weight: 600;
   }
   
+  /* DESCRIPTION */
   .af-card p {
     font-size: 14px;
     color: var(--subtext);
     margin: 6px 0;
   }
   
-  /* PAGINATION */
+  /* ============================================================
+     PAGINATION
+  ============================================================ */
   .pagination {
     display: flex;
     justify-content: center;
@@ -135,7 +130,7 @@
   .pagination button {
     padding: 10px 18px;
     border-radius: 10px;
-    background: var(--accent);
+    background: var(--primary);
     color: white;
     border: none;
     cursor: pointer;
@@ -144,17 +139,69 @@
   }
   
   .pagination button:hover {
-    background: var(--accent-hover);
+    background: var(--primary-light);
     transform: translateY(-3px);
   }
   
   .pagination button:disabled {
-    background: #555;
+    background: rgba(100, 100, 100, 0.4);
     cursor: not-allowed;
   }
   
   .pagination span {
     font-size: 15px;
     color: var(--subtext);
+  }
+  
+  /* ============================================================
+     TABLE STRUCTURE (Applied List Inside)
+  ============================================================ */
+  .table-header {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 2fr 1fr;
+    background: var(--surface);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text);
+    border: 1px solid var(--subtext);
+  }
+  
+  .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 2fr 1fr;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--subtext);
+    align-items: center;
+    color: var(--subtext);
+    transition: 0.25s ease;
+  }
+  
+  .table-row:hover {
+    background: rgba(79, 109, 245, 0.08);
+  }
+  
+  .table-row span,
+  .table-header span {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Wrap long proposal text */
+  .table-row span:nth-child(3) {
+    white-space: normal;
+    line-height: 1.4;
+  }
+  
+  /* Portfolio link */
+  .table-row a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+  
+  .table-row a:hover {
+    color: var(--primary-light);
   }
   

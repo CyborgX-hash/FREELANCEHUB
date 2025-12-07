@@ -20,27 +20,34 @@ enum ProjectStatus {
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  name          String
-  username      String          @unique
-  email         String          @unique
-  password      String
-  role          Role
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id              Int       @id @default(autoincrement())
+  name            String
+  username        String     @unique
+  email           String     @unique
+  password        String
+  role            Role
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 
-  projects      Project[]
-  applications  Application[]
+  projects        Project[]
+  applications    Application[]
 
-  age           Int?
-  gender        String?
-  city          String?
-  experience    Int?
-  organization  String?
-  aboutOrg      String?
-  skills        String?
-  portfolio_url String?
+  age             Int?
+  gender          String?
+  city            String?
+  state           String?      
+  experience      Int?
+  skills          String?
+  portfolio_url   String?
+
+  organization    String?
+  aboutOrg        String?
+
+  department      String?      
+  designation     String?     
+  about           String?      
 }
+
 
 model Project {
   id          Int            @id @default(autoincrement())

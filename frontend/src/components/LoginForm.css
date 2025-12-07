@@ -1,3 +1,4 @@
+/* ========= LOGIN PAGE WRAPPER ========= */
 .login-container {
   height: 100vh;
   width: 100%;
@@ -6,93 +7,129 @@
   align-items: center;
   padding: 20px;
 
-  background-color:rgb(231, 218, 218);
+  background: linear-gradient(135deg, #3d7eff33, #90a8ff22, #ffffff);
+  backdrop-filter: blur(4px);
 }
 
+/* ========= LOGIN CARD ========= */
 .login-card {
   width: 100%;
-  max-width: 360px;   
-  padding: 30px 32px;   
-  border-radius: 12px;
-  border: 1px solid #1f1f1f;
-  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+  max-width: 380px;
+  padding: 38px 36px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 
   text-align: center;
+  animation: fadeIn 0.6s ease;
 }
 
+/* Dark Mode */
+[data-theme="dark"] .login-card {
+  background: rgba(24, 24, 32, 0.65);
+  border: 1px solid #333;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
 
+/* ========= HEADINGS ========= */
 .login-card h2 {
-  font-size: 24px;      
+  font-size: 26px;
   font-weight: 700;
-  color: black;
-  margin-bottom: 6px;
+  color: var(--text);
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  font-size: 13px;
-  color: black !important;  
-  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--subtext);
+  margin-bottom: 22px;
 }
 
+/* ========= INPUT FIELDS ========= */
 .login-card input {
-  width: 90%;           
-  padding: 10px 12px;   
-  font-size: 14px;
-  margin-bottom: 14px;
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  margin-bottom: 16px;
 
-  border-radius: 6px;
-  background:white;
-  border: 1px solid #333;
+  border-radius: 10px;
+  border: 1px solid rgba(120,120,120,0.35);
+  background: rgba(255,255,255,0.35);
+  color: #000;
+
+  transition: 0.3s ease;
+}
+
+[data-theme="dark"] .login-card input {
+  background: rgba(0,0,0,0.35);
   color: #fff;
-
-  transition: 0.25s ease;
 }
 
 .login-card input:focus {
-  background: #1c1c1c;
-  border-color: #e50914;
+  border-color: var(--primary);
+  box-shadow: 0 0 8px var(--primary-light);
   outline: none;
-  box-shadow: 0 0 6px rgba(229, 9, 20, 0.3);
 }
 
+/* ========= LOGIN BUTTON ========= */
 .login-card button {
-  width: 90%;              
-  padding: 10px;
-  font-size: 15px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
   font-weight: 600;
-  background: #e50914;
-  color: #fff;
+
+  background: var(--primary);
+  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
 
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: 0.3s ease;
 }
 
 .login-card button:hover {
-  background: #b20710;
+  background: var(--primary-light);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
+/* ========= MESSAGE ========= */
 .message {
-  margin-top: 12px;
-  font-size: 13px;
+  margin-top: 14px;
+  font-size: 14px;
   font-weight: 600;
-  color: #fa4f57;
+  color: #ff4e4e;
 }
 
+/* ========= SWITCH TEXT ========= */
 .switch {
-  margin-top: 15px;
-  font-size: 13px;
-  color: black;
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--text);
 }
 
 .switch a {
-  color: black;
+  color: var(--primary);
   font-weight: 600;
   text-decoration: none;
 }
 
 .switch a:hover {
   text-decoration: underline;
+}
+
+/* ========= ANIMATION ========= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

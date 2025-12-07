@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { applyToProject, getAppliedProjects } from "../api";
+import { useNavigate } from "react-router-dom";
 import "./BrowseJobsPage.css";
 
 const API_URL = "http://localhost:5001/api/projects";
 
 const BrowseJobsPage = () => {
+  const navigate = useNavigate();
+
   const [projects, setProjects] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
@@ -22,11 +25,13 @@ const BrowseJobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 8;
 
+  /* Load Theme */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
+  /* Fetch Projects */
   const fetchProjects = async () => {
     try {
       const res = await fetch(API_URL);
@@ -38,6 +43,7 @@ const BrowseJobsPage = () => {
     }
   };
 
+  /* Fetch Applied */
   const fetchApplied = async () => {
     const res = await getAppliedProjects();
     const ids = (res.applications || []).map((a) => a.project_id);
@@ -49,6 +55,7 @@ const BrowseJobsPage = () => {
     fetchApplied();
   }, []);
 
+  /* Filtering + Sort */
   useEffect(() => {
     let result = [...projects];
 
@@ -81,15 +88,16 @@ const BrowseJobsPage = () => {
     setCurrentPage(1);
   }, [search, categoryFilter, sortBy, projects]);
 
+  /* Pagination Logic */
   const indexOfLast = currentPage * cardsPerPage;
   const indexOfFirst = indexOfLast - cardsPerPage;
   const currentCards = filtered.slice(indexOfFirst, indexOfLast);
-
   const totalPages = Math.ceil(filtered.length / cardsPerPage);
 
-  const nextPage = () => currentPage < totalPages && setCurrentPage(p => p + 1);
-  const prevPage = () => currentPage > 1 && setCurrentPage(p => p - 1);
+  const nextPage = () => currentPage < totalPages && setCurrentPage((p) => p + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage((p) => p - 1);
 
+  /* Apply Popup */
   const openApply = (project) => {
     setActiveProject(project);
     setProposal("");
@@ -111,13 +119,18 @@ const BrowseJobsPage = () => {
     if (res.ERROR) return alert(res.ERROR);
 
     alert("Applied successfully!");
-
-    setAppliedIds(prev => [...prev, activeProject.id]);
+    setAppliedIds((prev) => [...prev, activeProject.id]);
     setApplyOpen(false);
   };
 
   return (
     <div className="browse-container">
+
+      {/* BACK BUTTON */}
+      <button className="back-btn" onClick={() => navigate("/dashboard")}>
+        ← Back
+      </button>
+
       <h2>🔍 Browse Freelance Jobs</h2>
 
       {/* FILTER BAR */}
@@ -129,13 +142,32 @@ const BrowseJobsPage = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-          <option value="all">All Categories</option>
-          <option value="web">Web Dev</option>
-          <option value="design">Design</option>
-          <option value="ai">AI / ML</option>
-          <option value="marketing">Marketing</option>
-        </select>
+<select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+  <option value="all">All Categories</option>
+
+  {/* DEVELOPMENT */}
+  <option value="web">Web Development</option>
+  <option value="mobile">Mobile App</option>
+  <option value="ai">AI / Machine Learning</option>
+
+  {/* DESIGN */}
+  <option value="uiux">UI / UX Design</option>
+  <option value="graphics">Graphic Design</option>
+  <option value="video">Video Editing</option>
+
+  {/* WRITING */}
+  <option value="content">Content Writing</option>
+  <option value="copywriting">Copywriting</option>
+
+  {/* MARKETING */}
+  <option value="marketing">Digital Marketing</option>
+  <option value="seo">SEO / SEM</option>
+
+  {/* BUSINESS / OTHER */}
+  <option value="finance">Finance & Accounting</option>
+  <option value="general">General</option>
+</select>
+
 
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
           <option value="latest">Latest First</option>
@@ -151,6 +183,7 @@ const BrowseJobsPage = () => {
           <div className="project-card" key={p.id}>
             <h3>{p.title}</h3>
             <p className="desc">{p.description.slice(0, 120)}...</p>
+
             <p><strong>Budget:</strong> ₹{p.budget_min || "N/A"}</p>
             <p><strong>Skills:</strong> {p.skills}</p>
             <p><strong>Client:</strong> {p.client?.name}</p>
@@ -158,7 +191,9 @@ const BrowseJobsPage = () => {
             {appliedIds.includes(p.id) ? (
               <button className="applied-btn">Applied ✔</button>
             ) : (
-              <button className="apply-btn" onClick={() => openApply(p)}>Apply Now</button>
+              <button className="apply-btn" onClick={() => openApply(p)}>
+                Apply Now
+              </button>
             )}
           </div>
         ))}
@@ -194,7 +229,9 @@ const BrowseJobsPage = () => {
 
             <div className="modal-actions">
               <button onClick={handleApply}>Submit</button>
-              <button className="cancel" onClick={() => setApplyOpen(false)}>Cancel</button>
+              <button className="cancel" onClick={() => setApplyOpen(false)}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>

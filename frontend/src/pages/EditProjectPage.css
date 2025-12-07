@@ -1,18 +1,10 @@
-:root {
-  --bg-color: #0f1115;
-  --card-bg: #181b20;
-  --border: #262a31;
-  --text: #e8e8e8;
-  --subtext: #a8b0b9;
-  --accent: #3d7eff;
-  --accent-hover: #2a6eff;
-}
-
-/* MAIN WRAPPER */
+/* ============================================================
+   PAGE WRAPPER
+============================================================ */
 .edit-project-container {
   min-height: 100vh;
   padding: 40px 20px;
-  background: var(--bg-color);
+  background: var(--background);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,15 +20,17 @@
   color: var(--text);
 }
 
-/* CARD */
+/* ============================================================
+   CARD
+============================================================ */
 .edit-card {
   width: 100%;
   max-width: 600px;
-  background: var(--card-bg);
+  background: var(--surface);
   padding: 28px;
   border-radius: 14px;
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  border: 1px solid var(--subtext);
+  box-shadow: var(--shadow-soft);
   animation: fadeIn 0.3s ease;
 }
 
@@ -54,14 +48,16 @@
   color: var(--subtext);
 }
 
-/* INPUTS */
+/* ============================================================
+   INPUTS
+============================================================ */
 .edit-card input,
 .edit-card textarea {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #111318;
+  border: 1px solid var(--subtext);
+  background: var(--background);
   color: var(--text);
   font-size: 15px;
   outline: none;
@@ -70,8 +66,8 @@
 
 .edit-card input:focus,
 .edit-card textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(61,126,255,0.25);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(79,109,245,0.25);
 }
 
 textarea {
@@ -89,16 +85,45 @@ textarea {
   flex: 1;
 }
 
-/* RESPONSIVE FIX */
 @media (max-width: 600px) {
   .two-row {
     flex-direction: column;
   }
 }
 
-/* SAVE BUTTON */
+/* ============================================================
+   SELECT DROPDOWN
+============================================================ */
+.edit-card select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--subtext);
+  background: var(--background);
+  color: var(--text);
+  font-size: 15px;
+  appearance: none;
+  outline: none;
+  transition: 0.25s;
+  cursor: pointer;
+
+  /* Dropdown arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23a8b0b9' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548L10 12.032l4.484-4.484L16 8.064 10 14.064 4 8.064z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 15px;
+}
+
+.edit-card select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(79,109,245,0.25);
+}
+
+/* ============================================================
+   SAVE BUTTON
+============================================================ */
 .save-btn {
-  background: var(--accent);
+  background: var(--primary);
   padding: 12px;
   border-radius: 10px;
   color: white;
@@ -111,11 +136,13 @@ textarea {
 }
 
 .save-btn:hover {
-  background: var(--accent-hover);
+  background: var(--primary-light);
   transform: translateY(-2px);
 }
 
-/* LOADER */
+/* ============================================================
+   LOADER
+============================================================ */
 .loader {
   font-size: 20px;
   margin-top: 80px;
@@ -123,48 +150,10 @@ textarea {
   text-align: center;
 }
 
-/* ANIMATION */
+/* ============================================================
+   FADE ANIMATION
+============================================================ */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
-}
-/* CATEGORY DROPDOWN */
-.edit-card select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #111318;
-  color: var(--text);
-  font-size: 15px;
-  outline: none;
-  transition: 0.25s;
-  appearance: none; /* remove browser default arrow */
-  cursor: pointer;
-}
-
-/* When focused */
-.edit-card select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(61,126,255,0.25);
-}
-
-/* Add a dropdown arrow icon */
-.edit-card select {
-  background-image: url("data:image/svg+xml;utf8,<svg fill='%23a8b0b9' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548L10 12.032l4.484-4.484L16 8.064 10 14.064 4 8.064z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 15px;
-}
-
-/* Light theme support */
-[data-theme="light"] .edit-card select {
-  background: #f2f3f5;
-  color: #111827;
-  border: 1px solid #d1d5db;
-}
-
-[data-theme="light"] .edit-card select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
 }

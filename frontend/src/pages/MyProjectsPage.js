@@ -87,8 +87,14 @@ export default function MyProjectsPage() {
   const nextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
   const prevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
 
-  if (loading) return <div className="loader">Loading...</div>;
-
+  if (loading)
+    return (
+      <div className="loading-wrapper">
+        <div className="loader-ring"></div>
+        <p>Loading your projects...</p>
+      </div>
+    );
+  
   return (
     <div className="myprojects-page">
       <button className="back-btn" onClick={() => navigate("/dashboard")}>

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getAppliedProjects, withdrawApplication } from "../api";
 import "./MyApplicationsPage.css";
+import { useNavigate } from "react-router-dom";
+
 
 const MyApplicationsPage = () => {
+  const navigate = useNavigate();
+
   const [apps, setApps] = useState([]);
 
   /* Pagination State */
@@ -37,6 +41,9 @@ const MyApplicationsPage = () => {
 
   return (
     <div className="myapps-container">
+      <button className="back-btn" onClick={() => navigate("/dashboard")}>
+      ← Back
+    </button>
       <h2>My Applications</h2>
 
       {apps.length === 0 ? (

@@ -35,23 +35,27 @@ const DashboardPage = () => {
     }
 
     const savedTheme = localStorage.getItem("theme") || "dark";
-    document.body.setAttribute("data-theme", savedTheme);
+    document.documentElement.setAttribute("data-theme", savedTheme);
   }, [navigate]);
 
   const role = user.role?.toLowerCase();
 
   return (
     <div className="dashboard-container">
-      
+
       {/* NAVBAR */}
       <nav className="navbar">
         <h2>FreelanceHub</h2>
       </nav>
 
+      {/* BACK BUTTON */}
+      <button className="back-btn" onClick={() => navigate("/")}>
+        ← Back to Home
+      </button>
+
       {/* CONTENT */}
       <div className="dashboard-content">
         <h1>Welcome {user.name}</h1>
-        
 
         {role === "client" ? (
           <p className="subtitle">Manage your freelance journey here.</p>
@@ -73,10 +77,7 @@ const DashboardPage = () => {
               <p>Track your posted work.</p>
             </div>
 
-            <div
-              className="dash-card"
-              onClick={() => navigate("/applied-freelancers")}
-            >
+            <div className="dash-card" onClick={() => navigate("/applied-freelancers")}>
               <h3>🧑‍💻 Applied Freelancers</h3>
               <p>See who applied for your projects.</p>
             </div>
@@ -88,22 +89,15 @@ const DashboardPage = () => {
         {role === "freelancer" && (
           <div className="cards-container">
 
-            {/* ⭐ Browse Jobs */}
             <div className="dash-card" onClick={() => navigate("/browse")}>
               <h3>🔍 Browse Jobs</h3>
               <p>Find freelance jobs that match your skills.</p>
             </div>
 
-            {/* ⭐ My Applications */}
             <div className="dash-card" onClick={() => navigate("/my-applications")}>
               <h3>📄 My Applications</h3>
               <p>Track your submitted job proposals.</p>
             </div>
-
-            {/* You can activate this later */}
-            
-
-            
 
           </div>
         )}

@@ -1,44 +1,42 @@
-/* ==============================
-   PAGE WRAPPER
-================================*/
+/* =====================================================
+      PROFILE PAGE — THEME-COMPATIBLE VERSION
+===================================================== */
+
+/* PAGE WRAPPER */
 .profile-wrapper {
   min-height: 100vh;
   background: var(--background);
   color: var(--text);
   font-family: "Poppins", sans-serif;
+  transition: 0.25s ease;
 }
 
-/* ==============================
-   TOP BANNER
-================================*/
+/* TOP BANNER */
 .profile-header-banner {
   width: 100%;
   height: 180px;
   border-radius: 0 0 40px 40px;
+  background: var(--primary);
 }
 
-/* ==============================
-   AVATAR + BASIC INFO
-================================*/
+/* AVATAR + BASIC INFO */
 .profile-avatar-section {
   text-align: center;
   margin-top: -70px;
 }
 
-.profile-photo,
-.profile-avatar-icon {
+.profile-avatar-icon,
+.profile-photo {
   width: 130px;
   height: 130px;
   border-radius: 50%;
   border: 5px solid var(--background);
-  background: var(--light);
+  background: var(--surface);
+  color: var(--primary);
   object-fit: cover;
 }
 
-.profile-avatar-icon {
-  color: var(--primary);
-}
-
+/* NAME */
 .profile-name {
   font-size: 30px;
   font-weight: 700;
@@ -50,6 +48,7 @@
   color: var(--subtext);
 }
 
+/* ROLE PILL */
 .role-pill {
   display: inline-block;
   margin-top: 10px;
@@ -61,22 +60,15 @@
   font-weight: 500;
 }
 
-/* ==============================
-   MAIN PROFILE CARD
-================================*/
+/* MAIN PROFILE CARD */
 .profile-main-card {
   width: 900px;
   margin: 35px auto;
-  background: var(--light);
+  background: var(--surface);
   padding: 28px;
   border-radius: 20px;
   box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="dark"] .profile-main-card {
-  background: #161921;
-  border-color: #2b2f3b;
+  border: 1px solid var(--subtext);
 }
 
 .card-title {
@@ -85,9 +77,7 @@
   margin-bottom: 18px;
 }
 
-/* ==============================
-   GRID FORM
-================================*/
+/* GRID */
 .profile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -108,35 +98,34 @@
   color: var(--subtext);
 }
 
-/* INPUTS */
+/* INPUTS + SELECT + TEXTAREA */
 .profile-main-card input,
 .profile-main-card select,
 .profile-main-card textarea {
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(150, 150, 150, 0.3);
+  border: 1px solid var(--subtext);
   font-size: 15px;
-  background: var(--card-bg);
+  background: var(--background);
   color: var(--text);
+  transition: 0.25s;
 }
 
-[data-theme="dark"] .profile-main-card input,
-[data-theme="dark"] .profile-main-card select,
-[data-theme="dark"] .profile-main-card textarea {
-  background: #0b0f19;
-  border-color: #34394a;
+.profile-main-card input:disabled,
+.profile-main-card select:disabled,
+.profile-main-card textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .profile-main-card input:focus,
 .profile-main-card select:focus,
 .profile-main-card textarea:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(79, 109, 245, 0.3);
+  box-shadow: 0 0 0 2px rgba(79,109,245,0.25);
 }
 
-/* ==============================
-   BUTTONS
-================================*/
+/* BUTTONS */
 .profile-buttons {
   display: flex;
   justify-content: flex-end;
@@ -153,7 +142,7 @@
   cursor: pointer;
   border: none;
   font-weight: 600;
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 
 .edit-btn:hover,
@@ -164,18 +153,16 @@
 .cancel-btn {
   background: transparent;
   color: var(--text);
-  border: 1px solid rgba(150, 150, 150, 0.5);
+  border: 1px solid var(--subtext);
   padding: 12px 20px;
   border-radius: 10px;
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* ==============================
-   RESPONSIVE
-================================*/
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .profile-main-card {
     width: 95%;
@@ -183,4 +170,41 @@
   .profile-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* LOADING UI */
+.loading-wrapper {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  color: var(--subtext);
+  font-size: 16px;
+  animation: fadeIn 0.4s ease;
+}
+
+.loader-ring {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(255,255,255,0.05);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite, glow 1.4s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 0px var(--primary); }
+  50% { box-shadow: 0 0 12px var(--primary); }
+  100% { box-shadow: 0 0 0px var(--primary); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }

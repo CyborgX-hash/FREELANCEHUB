@@ -1,8 +1,6 @@
 const { prisma } = require("../config/database");
 
-/* ============================================================
-   FREELANCER → APPLY TO PROJECT
-============================================================ */
+
 async function applyToProjectController(req, res) {
   try {
     const freelancer = req.user;
@@ -24,7 +22,6 @@ async function applyToProjectController(req, res) {
     if (project.client_id === freelancer.id)
       return res.status(403).json({ ERROR: "Cannot apply to your own project" });
 
-    // prevent duplicate
     const existing = await prisma.application.findFirst({
       where: {
         project_id: Number(projectId),
@@ -56,9 +53,7 @@ async function applyToProjectController(req, res) {
   }
 }
 
-/* ============================================================
-   CLIENT → SEE APPLICANTS (FIXED)
-============================================================ */
+
 async function getApplicationsByProjectController(req, res) {
   try {
     const user = req.user;
@@ -83,9 +78,9 @@ async function getApplicationsByProjectController(req, res) {
           select: {
             id: true,
             name: true,
-            email: true,           // ⭐ ADDED EMAIL
+            email: true,           
             username: true,
-            portfolio_url: true,   // ⭐ ADDED PORTFOLIO URL
+            portfolio_url: true,   
           },
         },
       },
@@ -100,9 +95,7 @@ async function getApplicationsByProjectController(req, res) {
   }
 }
 
-/* ============================================================
-   FREELANCER → VIEW OWN APPLICATIONS
-============================================================ */
+
 async function getApplicationsByFreelancerController(req, res) {
   try {
     const freelancer = req.user;
@@ -128,9 +121,7 @@ async function getApplicationsByFreelancerController(req, res) {
   }
 }
 
-/* ============================================================
-   FREELANCER → WITHDRAW APPLICATION
-============================================================ */
+
 async function withdrawApplicationController(req, res) {
   try {
     const freelancer = req.user;

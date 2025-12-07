@@ -26,8 +26,14 @@ const ProfilePage = () => {
       .catch(() => navigate("/login"));
   }, []);
 
-  if (!user) return <div className="profile-loading">Loading...</div>;
-
+  if (!user)
+    return (
+      <div className="loading-wrapper">
+        <div className="loader-ring"></div>
+        <p>Loading your profile...</p>
+      </div>
+    );
+  
   /* ---------------- Handle edits ---------------- */
   const handleChange = (e) =>
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -43,12 +49,15 @@ const ProfilePage = () => {
       "age",
       "gender",
       "city",
-      "state",
+      "state",            // ADD THIS
       "experience",
       "skills",
       "portfolio_url",
       "organization",
       "aboutOrg",
+      "department",        // ADD THIS (admin)
+      "designation",       // ADD THIS (admin)
+      "about",             // ADD THIS (admin)
     ];
 
     allowedFields.forEach((field) => {

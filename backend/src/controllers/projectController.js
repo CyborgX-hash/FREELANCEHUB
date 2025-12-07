@@ -1,8 +1,6 @@
 const { prisma } = require("../config/database");
 
-/* ============================================
-   CREATE PROJECT (Client)
-============================================ */
+
 async function createProjectController(req, res) {
   try {
     const {
@@ -43,9 +41,7 @@ async function createProjectController(req, res) {
   }
 }
 
-/* ============================================
-   GET ALL PROJECTS OF A CLIENT
-============================================ */
+
 async function getClientProjectsController(req, res) {
   try {
     const { clientId } = req.params;
@@ -62,9 +58,7 @@ async function getClientProjectsController(req, res) {
   }
 }
 
-/* ============================================
-   GET ALL PUBLIC PROJECTS (BROWSE JOBS)
-============================================ */
+
 async function getAllProjectsController(req, res) {
   try {
     const projects = await prisma.project.findMany({
@@ -76,7 +70,6 @@ async function getAllProjectsController(req, res) {
       }
     });
 
-    // Format for frontend
     const formatted = projects.map((p) => ({
       ...p,
       budget:
@@ -88,7 +81,7 @@ async function getAllProjectsController(req, res) {
           ? `₹${p.budget_max}`
           : null,
 
-      category: p.category || "General"   // ⭐ FIXED (was using skills incorrectly)
+      category: p.category || "General"  
     }));
 
     return res.json({ projects: formatted });
@@ -98,9 +91,7 @@ async function getAllProjectsController(req, res) {
   }
 }
 
-/* ============================================
-   GET SINGLE PROJECT BY ID
-============================================ */
+
 async function getProjectByIdController(req, res) {
   try {
     const { id } = req.params;
@@ -122,9 +113,7 @@ async function getProjectByIdController(req, res) {
   }
 }
 
-/* ============================================
-   UPDATE PROJECT
-============================================ */
+
 async function updateProjectController(req, res) {
   try {
     const { id } = req.params;
@@ -148,7 +137,7 @@ async function updateProjectController(req, res) {
       skills,
       deadline,
       status,
-      category  // ⭐ ADD CATEGORY HERE
+      category  
     } = req.body;
 
     const updated = await prisma.project.update({
@@ -159,7 +148,7 @@ async function updateProjectController(req, res) {
         budget_min: budget_min ? Number(budget_min) : null,
         budget_max: budget_max ? Number(budget_max) : null,
         skills,
-        category: category || "General",  // ⭐ UPDATE CATEGORY
+        category: category || "General",  
         deadline: deadline ? new Date(deadline) : null,
         status
       }
@@ -172,9 +161,7 @@ async function updateProjectController(req, res) {
   }
 }
 
-/* ============================================
-   DELETE PROJECT
-============================================ */
+
 async function deleteProjectController(req, res) {
   try {
     const { id } = req.params;

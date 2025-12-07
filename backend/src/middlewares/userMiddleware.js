@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { prisma } = require("../config/database");
 
-/* ============================================================
-   CREATE USER VALIDATION
-============================================================ */
+
 async function createUserMiddleware(req, res, next) {
     let { name, username, email, password, confirm_password, role } = req.body;
 
@@ -58,9 +56,7 @@ async function createUserMiddleware(req, res, next) {
     }
 }
 
-/* ============================================================
-   LOGIN VALIDATION
-============================================================ */
+
 async function loginUserMiddleware(req, res, next) {
     let { email, username, password } = req.body;
 
@@ -77,9 +73,7 @@ async function loginUserMiddleware(req, res, next) {
     next();
 }
 
-/* ============================================================
-   LOGOUT VALIDATION  (RESTORED)
-============================================================ */
+
 async function logoutUserMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
 
@@ -90,9 +84,7 @@ async function logoutUserMiddleware(req, res, next) {
     next();
 }
 
-/* ============================================================
-   AUTH MIDDLEWARE (CRITICAL)
-============================================================ */
+
 async function authMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
 
@@ -120,91 +112,135 @@ async function authMiddleware(req, res, next) {
     }
 }
 
-/* ============================================================
-   UPDATE USER PROFILE VALIDATION
-============================================================ */
+
 async function updateUserMiddleware(req, res, next) {
     let {
-        name,
-        username,
-        age,
-        gender,
-        city,
-        experience,
-        organization,
-        aboutOrg,
-        skills,
-        portfolio_url,
-        email,
-        password,
-        role,
+      name,
+      username,
+      age,
+      gender,
+      city,
+      state,
+      experience,
+      organization,
+      aboutOrg,
+      skills,
+      portfolio_url,
+      department,
+      designation,
+      about,
+      email,
+      password,
+      role,
     } = req.body;
-
+  
     if (email || password || role) {
-        return res.status(400).json({
-            ERROR: "Email, password, and role cannot be updated.",
-        });
+      return res.status(400).json({
+        ERROR: "Email, password, and role cannot be updated.",
+      });
     }
-
+  
     if (
-        !name &&
-        !username &&
-        !age &&
-        !gender &&
-        !city &&
-        !experience &&
-        !organization &&
-        !aboutOrg &&
-        !skills &&
-        !portfolio_url
+      !name &&
+      !username &&
+      !age &&
+      !gender &&
+      !city &&
+      !state &&
+      !experience &&
+      !organization &&
+      !aboutOrg &&
+      !skills &&
+      !portfolio_url &&
+      !department &&
+      !designation &&
+      !about
     ) {
-        return res.status(400).json({
-            ERROR: "Provide at least one field to update.",
-        });
+      return res.status(400).json({
+        ERROR: "Provide at least one field to update.",
+      });
     }
-
+  
+  
+  
     if (name) {
-        name = name.trim();
-        if (!/^[a-zA-Z\s]+$/.test(name)) {
-            return res.status(400).json({ ERROR: "Name must contain only letters & spaces" });
-        }
+      name = name.trim();
+      if (!/^[a-zA-Z\s]+$/.test(name)) {
+        return res.status(400).json({
+          ERROR: "Name must contain only letters & spaces",
+        });
+      }
     }
-
+  
     if (username) {
-        username = username.trim().toLowerCase();
-        if (username.length < 3) {
-            return res.status(400).json({ ERROR: "Username must be at least 3 characters long" });
-        }
-        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-            return res.status(400).json({
-                ERROR: "Username may only contain letters, numbers, underscores",
-            });
-        }
+      username = username.trim().toLowerCase();
+      if (username.length < 3) {
+        return res.status(400).json({
+          ERROR: "Username must be at least 3 characters",
+        });
+      }
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        return res.status(400).json({
+          ERROR: "Username can only contain letters, numbers, underscores",
+        });
+      }
     }
-
-    if (age && isNaN(Number(age))) {
+  
+    if (age) {
+      if (isNaN(Number(age))) {
         return res.status(400).json({ ERROR: "Age must be a number" });
+      }
+      age = Number(age);
     }
-
-    if (experience && isNaN(Number(experience))) {
+  
+    if (experience) {
+      if (isNaN(Number(experience))) {
         return res.status(400).json({ ERROR: "Experience must be a number" });
+      }
+      experience = Number(experience);
     }
-
-    req.body = {
-        name,
-        username,
-        age,
-        gender,
-        city,
-        experience,
-        organization,
-        aboutOrg,
-        skills,
-        portfolio_url,
+  
+    if (gender) {
+      const validGenders = ["Male", "Female", "Other"];
+      if (!validGenders.includes(gender)) {
+        return res.status(400).json({ ERROR: "Invalid gender value" });
+      }
+    }
+  
+    if (portfolio_url) {
+      if (!/^https?:\/\/.+/i.test(portfolio_url)) {
+        return res.status(400).json({
+          ERROR: "Portfolio must be a valid URL starting with http or https",
+        });
+      }
+    }
+  
+    
+    const updateData = {
+      name: name || undefined,
+      username: username || undefined,
+      age: age || undefined,
+      gender: gender || undefined,
+      city: city || undefined,
+      state: state || undefined,
+      experience: experience || undefined,
+      organization: organization || undefined,
+      aboutOrg: aboutOrg || undefined,
+      skills: skills || undefined,
+      portfolio_url: portfolio_url || undefined,
+      department: department || undefined,
+      designation: designation || undefined,
+      about: about || undefined,
     };
-
+  
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] === "") updateData[key] = null;
+    });
+  
+    req.body = updateData;
+  
     next();
-}
+  }
 
 module.exports = {
     createUserMiddleware,

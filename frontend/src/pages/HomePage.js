@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserCircle, FaUser, FaSignOutAlt, FaSun, FaMoon } from "react-icons/fa";
 import heroVideo from "../Assets/vdo.webm";
 import logo from "../Assets/logo.png";
@@ -8,13 +8,15 @@ import "./HomePage.css";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [user, setUser] = useState(null);
   const [menu, setMenu] = useState(false);
 
-  // 🌟 SPLASH LOGIC — SHOW ONLY FIRST TIME
+  // ⭐ SHOW SPLASH ONLY FIRST TIME EVER
   const [showSplash, setShowSplash] = useState(() => {
-    const hasSeen = localStorage.getItem("seenSplash");
-    return hasSeen ? false : true;
+    const seen = localStorage.getItem("seenSplash");
+    return !seen; // show only if NOT seen before
   });
 
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
@@ -23,62 +25,71 @@ export default function HomePage() {
   const servicesRef = useRef(null);
   const menuRef = useRef(null);
 
-  /* ---------------- SPLASH SCREEN CONTROL ---------------- */
+  /* ⭐ SPLASH SCREEN TIMER (ONLY FIRST TIME) */
   useEffect(() => {
     if (showSplash) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-        localStorage.setItem("seenSplash", "true");
-      }, 2200); // splash visible time
+        localStorage.setItem("seenSplash", "true"); // mark splash as seen
+      }, 2200);
 
       return () => clearTimeout(timer);
     }
   }, [showSplash]);
 
-  /* ---------------- LOAD USER + THEME ---------------- */
+  /* ⭐ LOAD USER WHENEVER TOKEN CHANGES */
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        setUser(jwtDecode(token));
-      } catch {}
-    }
+    const loadUser = () => {
+      const token = localStorage.getItem("token");
 
-    document.documentElement.setAttribute("data-theme", theme);
-  }, []);
+      if (token) {
+        try { setUser(jwtDecode(token)); }
+        catch { setUser(null); }
+      } else {
+        setUser(null);
+      }
+    };
 
+    loadUser(); // run on mount AND whenever route changes
+
+    // Listen for token changes from login/signup/logout
+    window.addEventListener("tokenChanged", loadUser);
+
+    return () => window.removeEventListener("tokenChanged", loadUser);
+  }, [location.key]);
+
+  /* ⭐ APPLY THEME */
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  /* ---------------- CLOSE DROPDOWN ON OUTSIDE CLICK ---------------- */
+  /* ⭐ CLOSE MENU IF CLICKED OUTSIDE */
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenu(false);
-      }
+    const close = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenu(false);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  /* ---------------- LOGOUT ---------------- */
+  /* ⭐ LOGOUT */
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
     navigate("/");
+    window.dispatchEvent(new Event("tokenChanged"));
   };
 
   const scrollToSection = (ref) => {
-    if (ref.current) ref.current.scrollIntoView({ behavior: "smooth" });
+    ref.current?.scrollIntoView({ behavior: "smooth" });
     setMenu(false);
   };
 
   return (
     <div className="home">
 
-      {/* =================== SPLASH LOGO =================== */}
+      {/* ⭐ SPLASH SCREEN (ONLY FIRST PAGE LOAD) */}
       {showSplash && (
         <div className="logo-overlay">
           <div className="logo-fullscreen">
@@ -87,9 +98,10 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* =================== MAIN HOME PAGE =================== */}
+      {/* ⭐ MAIN HOME UI */}
       {!showSplash && (
         <>
+          {/* NAVBAR */}
           <nav className="nav">
             <h1 className="logo" onClick={() => navigate("/")}>FreelanceHub</h1>
 
@@ -113,10 +125,12 @@ export default function HomePage() {
                       <p onClick={() => { navigate("/profile"); setMenu(false); }}>
                         <FaUser /> Profile
                       </p>
+
                       <p onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
                         {theme === "light" ? <FaMoon /> : <FaSun />} 
                         {theme === "light" ? " Dark Mode" : " Light Mode"}
                       </p>
+
                       <p className="logout" onClick={logout}>
                         <FaSignOutAlt /> Logout
                       </p>
@@ -127,7 +141,7 @@ export default function HomePage() {
             </div>
           </nav>
 
-          {/* =================== HERO SECTION =================== */}
+          {/* HERO SECTION */}
           <section className="hero">
             <video autoPlay muted loop className="hero-video">
               <source src={heroVideo} type="video/mp4" />
@@ -136,21 +150,20 @@ export default function HomePage() {
             <div className="hero-content">
               <h2>Our freelancers will take it from here</h2>
               <p>Search, hire & collaborate with industry-leading professionals worldwide.</p>
+
               <button className="btn primary" onClick={() => navigate("/dashboard")}>
                 Get Started
               </button>
             </div>
           </section>
 
-          {/* =================== ABOUT US =================== */}
+          {/* ABOUT */}
           <section ref={aboutRef} className="about-section">
             <h2>About Us</h2>
-            <p>
-            FreelanceHub connects businesses with verified freelancers worldwide, making hiring faster, simpler, and more reliable. From small tasks to full-scale projects, we help clients collaborate with trusted talent while empowering freelancers to grow their careers with confidence.
-            </p>
+            <p>FreelanceHub connects businesses with verified freelancers worldwide.</p>
           </section>
 
-          {/* =================== SERVICES =================== */}
+          {/* SERVICES */}
           <section ref={servicesRef} className="services-section">
             <h2>Popular Services</h2>
 
@@ -162,7 +175,30 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* =================== FOOTER =================== */}
+          {/* TESTIMONIALS */}
+          <section className="testimonials-section">
+            <h2 className="section-title">TESTIMONIAL</h2>
+
+            <div className="testimonials-wrapper">
+              {[
+                { name: "Aman Sharma", text: "Amazing platform! I found a skilled developer within hours.", role: "Startup Founder" },
+                { name: "Priya Verma", text: "Top-level work. Smooth and reliable process.", role: "Marketing Manager" },
+                { name: "Rahul Singh", text: "Excellent quality delivered on time.", role: "Entrepreneur" },
+                { name: "Sneha Patel", text: "Beautiful UI/UX work!", role: "Product Owner" },
+                { name: "Karan Mehta", text: "Great communication and fast delivery.", role: "Client" },
+                { name: "Drishti Kapoor", text: "Amazing video editors here!", role: "Content Creator" },
+                { name: "Vivek Rao", text: "Very smooth experience overall.", role: "Business Owner" },
+              ].map((t, i) => (
+                <div className="testimonial-card" key={i}>
+                  <p className="testimonial-text">“{t.text}”</p>
+                  <h4 className="testimonial-name">{t.name}</h4>
+                  <p className="testimonial-role">{t.role}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FOOTER */}
           <footer className="footer">
             <p>© 2025 FreelanceHub — Work from Anywhere</p>
             <p>Made by Saksham</p>

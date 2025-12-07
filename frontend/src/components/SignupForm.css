@@ -1,119 +1,169 @@
+/* =========================================================
+   SIGNUP PAGE WRAPPER
+========================================================= */
 .signup-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    min-height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(236, 227, 227);
-   
-  }
-  
-  
-  .signup-card {
+  height: 100vh;
   width: 100%;
-  max-width: 360px;    
-  padding: 30px 32px;   
-  border-radius: 12px;
-  border: 1px solid #1f1f1f;
-  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+  padding: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(135deg, #4f6df533, #6f85ff22, #ffffff);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* =========================================================
+   SIGNUP CARD (Modern UI)
+========================================================= */
+.signup-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 35px 32px;
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.12);
+
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
   text-align: center;
-  }
-  
-  .signup-card h2 {
-    color: #1f2937;
-    margin-bottom: 8px;
-    font-size: 26px;
-    font-weight: 600;
-  }
-  
-  .signup-card .subtitle {
-    color: #6b7280;
-    margin-bottom: 25px;
-    font-size: 14px;
-  }
-  
-  .role-selector {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-bottom: 25px;
-  }
-  
-  .role-selector label {
-    font-weight: 500;
-    color: #1f2937;
-    cursor: pointer;
-  }
-  
-  .role-selector input[type="radio"] {
-    accent-color: #2563eb;
-    margin-right: 6px;
-    transform: scale(1.2);
-  }
-  
-  .signup-card input {
-    width: 85%;
-    padding: 12px;
-    margin-bottom: 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    transition: border 0.2s;
-  }
-  
-  .signup-card input:focus {
-    border-color: #2563eb;
-  }
-  
-  .signup-card button {
-    width: 100%;
-    padding: 12px;
-    background: rgb(221, 39, 39);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  
-  
-  .signup-card .message {
-    margin-top: 10px;
-    color: black;
-    font-weight: 500;
-  }
-  
-  .signup-card .switch {
-    margin-top: 20px;
-    color: black;
-    font-size: 14px;
-  }
-  
-  .signup-card .switch a {
-    color:blue;
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .signup-card .switch a:hover {
-    text-decoration: underline;
-  }
-  
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* DARK MODE */
+[data-theme="dark"] .signup-card {
+  background: rgba(24, 24, 32, 0.55);
+  border: 1px solid #222;
+  color: #fff;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+}
+
+/* =========================================================
+   HEADINGS
+========================================================= */
+.signup-card h2 {
+  color: var(--text);
+  font-size: 26px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.signup-card .subtitle {
+  color: var(--subtext);
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+/* =========================================================
+   ROLE SELECTOR (KEEPING YOUR ORIGINAL RADIO BUTTONS)
+========================================================= */
+.role-selector {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.role-selector label {
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ⭐ YOUR ORIGINAL RADIO STYLE (UNTOUCHED) */
+.role-selector input[type="radio"] {
+  accent-color: #2563eb;
+  margin-right: 6px;
+  transform: scale(1.2);
+}
+
+/* =========================================================
+   INPUT FIELDS (Upgraded)
+========================================================= */
+.signup-card input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(120,120,120,0.4);
+  border-radius: 10px;
+
+  font-size: 15px;
+  transition: 0.25s ease;
+  color: #000;
+}
+
+[data-theme="dark"] .signup-card input {
+  background: rgba(0,0,0,0.35);
+  border-color: #444;
+  color: #fff;
+}
+
+.signup-card input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  outline: none;
+}
+
+/* =========================================================
+   SIGNUP BUTTON (Matches Login Button)
+========================================================= */
+.signup-card button {
+  width: 100%;
+  padding: 12px;
+
+  background: var(--primary);
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.signup-card button:hover {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+
+/* =========================================================
+   MESSAGE + SWITCH
+========================================================= */
+.signup-card .message {
+  margin-top: 10px;
+  color: #ff4d4d;
+  font-weight: 600;
+}
+
+.signup-card .switch {
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.signup-card .switch a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-card .switch a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

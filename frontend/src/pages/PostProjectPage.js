@@ -130,19 +130,28 @@ const PostProjectPage = () => {
           {/* ⭐ NEW CATEGORY FIELD */}
           <label>Project Category</label>
           <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-          >
-            <option value="General">General</option>
-            <option value="Web Development">Web Development</option>
-            <option value="Design">Design</option>
-            <option value="AI / Machine Learning">AI / Machine Learning</option>
-            <option value="Mobile App">Mobile App</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Writing">Writing</option>
-            <option value="Video Editing">Video Editing</option>
-          </select>
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              <option value="General">General</option>
+
+              {/* DEVELOPMENT */}
+              <option value="Web Development">Web Development</option>
+              <option value="Mobile App">Mobile App</option>
+              <option value="AI / Machine Learning">AI / Machine Learning</option>
+
+              {/* DESIGN */}
+              <option value="UI/UX Design">UI/UX Design</option>
+              <option value="Graphic Design">Graphic Design</option>
+              <option value="Video Editing">Video Editing</option>
+
+              {/* WRITING */}
+              <option value="Content Writing">Content Writing</option>
+
+              {/* MARKETING */}
+              <option value="Digital Marketing">Digital Marketing</option>
+            </select>
 
           <button type="submit" className="create-btn" disabled={loading}>
             {loading ? "Creating..." : "Create Project"}

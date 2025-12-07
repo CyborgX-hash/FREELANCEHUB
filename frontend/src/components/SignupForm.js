@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signupUser } from "../api";
+import { signupUser, loginUser } from "../api";
 import "./SignupForm.css";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ const SignupForm = () => {
     email: "",
     password: "",
     confirm_password: "",
-    role: "", // client or freelancer
+    role: "",
   });
 
   const [message, setMessage] = useState("");
@@ -20,47 +20,50 @@ const SignupForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // 🔥 Convert UI role → backend role format
     let formattedValue = value;
-
     if (name === "role") {
-      formattedValue =
-        value === "Client"
-          ? "client"
-          : value === "Freelancer"
-          ? "freelancer"
-          : "";
+      formattedValue = value === "Client" ? "client" : "freelancer";
     }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: formattedValue,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirm_password) {
-      setMessage("Passwords do not match");
-      return;
-    }
+    if (formData.password !== formData.confirm_password)
+      return setMessage("Passwords do not match");
 
-    if (!formData.role) {
-      setMessage("Please select a role");
-      return;
-    }
+    if (!formData.role)
+      return setMessage("Please select a role");
 
     const result = await signupUser(formData);
 
-    if (result.message === "User registered successfully") {
-      setMessage("Signup successful! Redirecting...");
+    // ⭐ CHECK FOR TOKEN (Backend now returns token)
+    if (result.token) {
+      localStorage.setItem("token", result.token);
 
-      setTimeout(() => {
-        navigate("/"); // redirect to home page
-      }, 1200);
+      // Notify homepage that token changed
+      window.dispatchEvent(new Event("tokenChanged"));
+
+      setMessage("Signup successful! Redirecting...");
+      setTimeout(() => navigate("/"), 800);
+      return;
+    }
+
+    // If backend didn't return token (fallback auto-login)
+    const loginRes = await loginUser({
+      email: formData.email,
+      password: formData.password
+    });
+
+    if (loginRes.token) {
+      localStorage.setItem("token", loginRes.token);
+      window.dispatchEvent(new Event("tokenChanged"));
+      setMessage("Signup successful! Redirecting...");
+      setTimeout(() => navigate("/"), 800);
     } else {
-      setMessage(result.ERROR || result.message || "Something went wrong");
+      setMessage(result.ERROR || "Something went wrong");
     }
   };
 
@@ -70,69 +73,22 @@ const SignupForm = () => {
         <h2>Create your account</h2>
         <p className="subtitle">Join FreelanceHub and start your journey.</p>
 
-        {/* ROLE SELECTION */}
         <div className="role-selector">
           <label>
-            <input
-              type="radio"
-              name="role"
-              value="Client"
-              onChange={handleChange}
-            />
-            Client
+            <input type="radio" name="role" value="Client" onChange={handleChange}/> Client
           </label>
 
           <label>
-            <input
-              type="radio"
-              name="role"
-              value="Freelancer"
-              onChange={handleChange}
-            />
-            Freelancer
+            <input type="radio" name="role" value="Freelancer" onChange={handleChange}/> Freelancer
           </label>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            type="password"
-            name="confirm_password"
-            placeholder="Confirm Password"
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="name" placeholder="Full Name" onChange={handleChange} required />
+          <input type="text" name="username" placeholder="Username" onChange={handleChange} required />
+          <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
+          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+          <input type="password" name="confirm_password" placeholder="Confirm Password" onChange={handleChange} required />
 
           <button type="submit">Sign Up</button>
         </form>

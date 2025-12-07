@@ -1,18 +1,21 @@
-/* ---------- BASE PAGE ---------- */
+/* ============================================================
+   BASE PAGE
+============================================================ */
 .postproject-page {
   min-height: 100vh;
   width: 100vw;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: var(--background);
+  color: var(--text);
   padding: 40px;
   display: flex;
   flex-direction: column;
   font-family: "Poppins", sans-serif;
-  box-sizing: border-box;
   transition: 0.3s ease;
 }
 
-/* ---------- HEADER ---------- */
+/* ============================================================
+   HEADER
+============================================================ */
 .postproject-header {
   display: flex;
   align-items: center;
@@ -22,8 +25,8 @@
 
 .back-btn {
   background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
+  border: 1px solid var(--subtext);
+  color: var(--text);
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
@@ -34,11 +37,15 @@
 }
 
 .back-btn:hover {
-  background: var(--hover-bg);
+  background: rgba(79, 109, 245, 0.12);
+  border-color: var(--primary);
+  color: var(--primary);
   transform: translateY(-1px);
 }
 
-/* ---------- GRID LAYOUT ---------- */
+/* ============================================================
+   GRID LAYOUT
+============================================================ */
 .postproject-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -51,24 +58,26 @@
   }
 }
 
-/* ---------- FORM CARD ---------- */
+/* ============================================================
+   FORM CARD
+============================================================ */
 .postproject-form {
-  background: var(--card-bg);
+  background: var(--surface);
   padding: 35px;
   border-radius: 14px;
-
-  /* FIXED: Better border for light theme */
-  border: 1px solid var(--border-color);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: 0.3s;
+  border: 1px solid var(--subtext);
+  box-shadow: var(--shadow-soft);
+  transition: 0.3s ease;
 }
 
-/* ---------- INPUTS ---------- */
+/* ============================================================
+   INPUTS
+============================================================ */
 .postproject-form label {
   font-weight: 600;
   margin-top: 18px;
   display: block;
-  color: var(--text-color);
+  color: var(--text);
 }
 
 .postproject-form input,
@@ -78,13 +87,11 @@
   padding: 12px;
   margin-top: 6px;
   border-radius: 10px;
-  border: 1px solid var(--border-color);
-  background: var(--input-bg);
-
-  /* FIX: Increase text contrast */
-  color: var(--text-color);
+  border: 1px solid var(--subtext);
+  background: var(--background);
+  color: var(--text);
   font-size: 15px;
-  transition: 0.25s;
+  transition: 0.25s ease;
 }
 
 textarea {
@@ -95,11 +102,13 @@ textarea {
 .postproject-form input:hover,
 .postproject-form textarea:hover,
 .postproject-form select:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 0 8px rgba(79, 109, 245, 0.2);
 }
 
-/* ---------- TWO COLUMN FIELDS ---------- */
+/* ============================================================
+   TWO COLUMN FIELDS
+============================================================ */
 .two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -113,7 +122,9 @@ textarea {
   }
 }
 
-/* ---------- CREATE BUTTON ---------- */
+/* ============================================================
+   CREATE BUTTON
+============================================================ */
 .create-btn {
   margin-top: 25px;
   background: #10b981;
@@ -123,7 +134,7 @@ textarea {
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.25s;
+  transition: 0.25s ease;
 }
 
 .create-btn:hover {
@@ -131,54 +142,33 @@ textarea {
   transform: translateY(-2px);
 }
 
-/* ---------- PREVIEW SECTION ---------- */
+/* ============================================================
+   PREVIEW SECTION
+============================================================ */
 .project-preview {
-  background: var(--card-bg);
+  background: var(--surface);
   padding: 30px;
   border-radius: 14px;
-
-  /* FIXED: Border + shadow for clarity in light mode */
-  border: 1px solid var(--border-color);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--subtext);
+  box-shadow: var(--shadow-soft);
 }
 
 .preview-card {
   margin-top: 20px;
-  background: var(--input-bg);
+  background: var(--background);
   padding: 18px;
   border-radius: 12px;
-
-  /* FIX: Higher contrast for text inside preview box */
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
+  border: 1px solid var(--subtext);
+  color: var(--text);
   transition: 0.25s ease;
 }
 
 .preview-card p,
 .preview-card h4 {
-  color: var(--text-color); /* FIX: Always visible */
+  color: var(--text);
 }
 
 .preview-card:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 3px 12px rgba(59, 130, 246, 0.18);
-}
-
-/* ---------- THEME VARIABLES ---------- */
-:root {
-  --bg-color: #f5f7fa; /* FIXED light background */
-  --text-color: #111827; /* strong readable text */
-  --card-bg: #ffffff; /* pure white card */
-  --input-bg: #f2f3f5; /* light grey, good contrast */
-  --border-color: #cbd5e1; /* slightly darker border */
-  --hover-bg: #e5e7eb;
-}
-
-[data-theme="dark"] {
-  --bg-color: #0f172a;
-  --text-color: #f1f5f9;
-  --card-bg: #1e293b;
-  --input-bg: #334155;
-  --border-color: #475569;
-  --hover-bg: #334155;
+  border-color: var(--primary);
+  box-shadow: var(--shadow-hover);
 }
