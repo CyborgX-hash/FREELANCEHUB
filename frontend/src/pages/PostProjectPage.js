@@ -14,6 +14,7 @@ const PostProjectPage = () => {
     description: "",
     budget_min: "",
     skills: "",
+    category: "General",  // ⭐ NEW
   });
 
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,6 @@ const PostProjectPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  /* ===============================================================
-     SUBMIT — SEND NEW BACKEND-FRIENDLY FIELDS
-  =============================================================== */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -42,6 +40,7 @@ const PostProjectPage = () => {
         budget_min: Number(formData.budget_min) || null,
         budget_max: null,
         skills: formData.skills || "General",
+        category: formData.category,     // ⭐ ADDING CATEGORY
         deadline: null,
         client_id,
       };
@@ -50,7 +49,7 @@ const PostProjectPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,   // ✅ IMPORTANT FIX
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -58,14 +57,14 @@ const PostProjectPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("✅ Project created successfully!");
+        alert("Project created successfully!");
         navigate("/dashboard");
       } else {
-        alert(`❌ ${data.ERROR || "Error creating project"}`);
+        alert(data.ERROR || "Error creating project.");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("⚠️ Something went wrong while creating the project.");
+      alert("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -81,9 +80,10 @@ const PostProjectPage = () => {
       </div>
 
       <div className="postproject-container">
-
-        {/* LEFT — FORM */}
+        
+        {/* LEFT FORM */}
         <form className="postproject-form" onSubmit={handleSubmit}>
+          
           <label>Project Title <span>*</span></label>
           <input
             type="text"
@@ -127,12 +127,29 @@ const PostProjectPage = () => {
             </div>
           </div>
 
+          {/* ⭐ NEW CATEGORY FIELD */}
+          <label>Project Category</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+          >
+            <option value="General">General</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Design">Design</option>
+            <option value="AI / Machine Learning">AI / Machine Learning</option>
+            <option value="Mobile App">Mobile App</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Writing">Writing</option>
+            <option value="Video Editing">Video Editing</option>
+          </select>
+
           <button type="submit" className="create-btn" disabled={loading}>
             {loading ? "Creating..." : "Create Project"}
           </button>
         </form>
 
-        {/* RIGHT — LIVE PREVIEW */}
+        {/* RIGHT PREVIEW */}
         <div className="project-preview">
           <h3>🧩 Project Summary</h3>
           <p>This project will appear in Browse Jobs for freelancers.</p>
@@ -143,13 +160,17 @@ const PostProjectPage = () => {
             <p>
               {formData.description
                 ? formData.description.slice(0, 90) + "..."
-                : "Your project description preview will appear here."}
+                : "Your project description will appear here."}
             </p>
 
             <p><strong>💰 Budget:</strong> ₹{formData.budget_min || "Not set"}</p>
             <p><strong>🛠 Skills:</strong> {formData.skills || "Not specified"}</p>
+
+            {/* ⭐ SHOW CATEGORY IN PREVIEW */}
+            <p><strong>📁 Category:</strong> {formData.category}</p>
           </div>
         </div>
+
       </div>
     </div>
   );

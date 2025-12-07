@@ -12,7 +12,8 @@ async function createProjectController(req, res) {
       budget_max,
       skills,
       deadline,
-      client_id
+      client_id,
+      category
     } = req.body;
 
     if (!title || !description || !client_id) {
@@ -26,6 +27,7 @@ async function createProjectController(req, res) {
         budget_min: budget_min ? Number(budget_min) : null,
         budget_max: budget_max ? Number(budget_max) : null,
         skills: skills || null,
+        category: category || "General",   // ⭐ SAVE CATEGORY
         deadline: deadline ? new Date(deadline) : null,
         client_id: Number(client_id)
       }
@@ -86,7 +88,7 @@ async function getAllProjectsController(req, res) {
           ? `₹${p.budget_max}`
           : null,
 
-      category: p.skills || "General"
+      category: p.category || "General"   // ⭐ FIXED (was using skills incorrectly)
     }));
 
     return res.json({ projects: formatted });
@@ -145,7 +147,8 @@ async function updateProjectController(req, res) {
       budget_max,
       skills,
       deadline,
-      status
+      status,
+      category  // ⭐ ADD CATEGORY HERE
     } = req.body;
 
     const updated = await prisma.project.update({
@@ -156,6 +159,7 @@ async function updateProjectController(req, res) {
         budget_min: budget_min ? Number(budget_min) : null,
         budget_max: budget_max ? Number(budget_max) : null,
         skills,
+        category: category || "General",  // ⭐ UPDATE CATEGORY
         deadline: deadline ? new Date(deadline) : null,
         status
       }

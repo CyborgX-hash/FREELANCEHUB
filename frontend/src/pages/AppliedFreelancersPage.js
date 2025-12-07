@@ -61,6 +61,9 @@ export default function AppliedFreelancersPage() {
 
   return (
     <div className="af-container">
+      <button className="back-btn" onClick={() => navigate("/dashboard")}>
+      ← Back
+    </button>
 
       <h2>Your Posted Projects</h2>
 

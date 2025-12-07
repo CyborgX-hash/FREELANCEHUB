@@ -12,7 +12,6 @@ export default function EditProjectPage() {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     fetch(`${API_URL}/${id}`)
       .then((res) => res.json())
@@ -23,11 +22,9 @@ export default function EditProjectPage() {
       .catch(() => setLoading(false));
   }, [id]);
 
-
   const handleChange = (e) => {
     setProject({ ...project, [e.target.name]: e.target.value });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,15 +33,13 @@ export default function EditProjectPage() {
       const token = localStorage.getItem("token");
       if (!token) return alert("Unauthorized");
 
-      const decoded = jwtDecode(token);
-
       const response = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(project),
+        body: JSON.stringify(project), // includes category now
       });
 
       const data = await response.json();
@@ -89,7 +84,6 @@ export default function EditProjectPage() {
           />
 
           <div className="two-row">
-
             <div className="field">
               <label>Budget (₹)</label>
               <input
@@ -110,6 +104,23 @@ export default function EditProjectPage() {
               />
             </div>
           </div>
+
+          {/* ⭐ NEW CATEGORY FIELD */}
+          <label>Category</label>
+          <select
+            name="category"
+            value={project.category || "General"}
+            onChange={handleChange}
+          >
+            <option value="General">General</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Design">Design</option>
+            <option value="AI / Machine Learning">AI / ML</option>
+            <option value="Mobile App">Mobile App</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Writing">Writing</option>
+            <option value="Video Editing">Video Editing</option>
+          </select>
 
           <button type="submit" className="save-btn">Save Changes</button>
         </form>

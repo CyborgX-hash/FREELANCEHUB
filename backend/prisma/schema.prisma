@@ -53,6 +53,8 @@ model Project {
   deadline    DateTime?
   status      ProjectStatus  @default(Open)
   created_at  DateTime       @default(now())
+  category     String?   @default("General")
+
 
   client      User           @relation(fields: [client_id], references: [id], onDelete: Cascade)
 

@@ -51,6 +51,7 @@ const DashboardPage = () => {
       {/* CONTENT */}
       <div className="dashboard-content">
         <h1>Welcome {user.name}</h1>
+        
 
         {role === "client" ? (
           <p className="subtitle">Manage your freelance journey here.</p>

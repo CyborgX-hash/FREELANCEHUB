@@ -1,82 +1,170 @@
+:root {
+  --bg-color: #0f1115;
+  --card-bg: #181b20;
+  --border: #262a31;
+  --text: #e8e8e8;
+  --subtext: #a8b0b9;
+  --accent: #3d7eff;
+  --accent-hover: #2a6eff;
+}
+
+/* MAIN WRAPPER */
 .edit-project-container {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .edit-project-container h2 {
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 20px;
-  }
-  
-  .edit-card {
-    width: 100%;
-    max-width: 550px;
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  
-  .edit-card form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  label {
-    font-weight: 600;
-    margin-bottom: 4px;
-    font-size: 14px;
-  }
-  
-  input,
-  textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #d5d5d5;
-    font-size: 15px;
-    outline: none;
-    transition: 0.2s ease-in-out;
-  }
-  
-  input:focus,
-  textarea:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
-  }
-  
-  textarea {
-    min-height: 120px;
-    resize: none;
-  }
-  
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+}
+
+/* TITLE */
+.edit-project-container h2 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: var(--text);
+}
+
+/* CARD */
+.edit-card {
+  width: 100%;
+  max-width: 600px;
+  background: var(--card-bg);
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  animation: fadeIn 0.3s ease;
+}
+
+/* FORM */
+.edit-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.edit-card label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--subtext);
+}
+
+/* INPUTS */
+.edit-card input,
+.edit-card textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #111318;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  transition: 0.25s;
+}
+
+.edit-card input:focus,
+.edit-card textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(61,126,255,0.25);
+}
+
+textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+/* TWO-ROW */
+.two-row {
+  display: flex;
+  gap: 18px;
+}
+
+.two-row .field {
+  flex: 1;
+}
+
+/* RESPONSIVE FIX */
+@media (max-width: 600px) {
   .two-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
+    flex-direction: column;
   }
-  
-  .field {
-    flex: 1;
-  }
-  
-  .save-btn {
-    background: #2563eb;
-    color: white;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    transition: 0.2s;
-  }
-  
-  .save-btn:hover {
-    background: #1e4ed8;
-  }
-  
+}
+
+/* SAVE BUTTON */
+.save-btn {
+  background: var(--accent);
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+  margin-top: 8px;
+}
+
+.save-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* LOADER */
+.loader {
+  font-size: 20px;
+  margin-top: 80px;
+  color: var(--subtext);
+  text-align: center;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* CATEGORY DROPDOWN */
+.edit-card select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #111318;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  transition: 0.25s;
+  appearance: none; /* remove browser default arrow */
+  cursor: pointer;
+}
+
+/* When focused */
+.edit-card select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(61,126,255,0.25);
+}
+
+/* Add a dropdown arrow icon */
+.edit-card select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23a8b0b9' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548L10 12.032l4.484-4.484L16 8.064 10 14.064 4 8.064z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 15px;
+}
+
+/* Light theme support */
+[data-theme="light"] .edit-card select {
+  background: #f2f3f5;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+[data-theme="light"] .edit-card select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
+}

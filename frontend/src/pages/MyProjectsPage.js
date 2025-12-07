@@ -11,7 +11,6 @@ export default function MyProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // NEW → Search, filter, sort, pagination states
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -19,9 +18,7 @@ export default function MyProjectsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  /* =============================================
-     FETCH USER PROJECTS
-  ============================================= */
+  /* FETCH PROJECTS */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -38,12 +35,9 @@ export default function MyProjectsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  /* =============================================
-     DELETE PROJECT
-  ============================================= */
+  /* DELETE PROJECT */
   const deleteProject = async (projectId) => {
-    const confirmDelete = window.confirm("Are you sure? This cannot be undone!");
-    if (!confirmDelete) return;
+    if (!window.confirm("Are you sure? This cannot be undone!")) return;
 
     try {
       const token = localStorage.getItem("token");
@@ -62,24 +56,20 @@ export default function MyProjectsPage() {
         alert(data.ERROR || "Failed to delete project");
       }
     } catch (err) {
-      console.error("Error:", err);
+      console.error(err);
       alert("Something went wrong.");
     }
   };
 
   const editProject = (project) => navigate(`/edit-project/${project.id}`);
 
-  /* =============================================
-     APPLY SEARCH, CATEGORY FILTER & SORT
-  ============================================= */
+  /* SEARCH + CATEGORY FILTER + SORT */
   const filteredProjects = projects
-    .filter((p) =>
-      p.title.toLowerCase().includes(search.toLowerCase())
-    )
+    .filter((p) => p.title.toLowerCase().includes(search.toLowerCase()))
     .filter((p) =>
       category === "all"
         ? true
-        : (p.skills || "").toLowerCase().includes(category.toLowerCase())
+        : (p.category || "").toLowerCase().includes(category.toLowerCase())
     )
     .sort((a, b) => {
       if (sortBy === "newest") return new Date(b.created_at) - new Date(a.created_at);
@@ -89,9 +79,7 @@ export default function MyProjectsPage() {
       return 0;
     });
 
-  /* =============================================
-     PAGINATION LOGIC
-  ============================================= */
+  /* PAGINATION LOGIC */
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedProjects = filteredProjects.slice(startIndex, startIndex + itemsPerPage);
@@ -103,9 +91,12 @@ export default function MyProjectsPage() {
 
   return (
     <div className="myprojects-page">
+      <button className="back-btn" onClick={() => navigate("/dashboard")}>
+      ← Back
+    </button>
       <h2>My Projects</h2>
 
-      {/* ===== SEARCH + FILTER + SORT MENU ===== */}
+      {/* SEARCH + FILTERS + SORT */}
       <div className="project-controls">
         <input
           type="text"
@@ -116,10 +107,14 @@ export default function MyProjectsPage() {
 
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="all">All Categories</option>
-          <option value="web">Web Dev</option>
-          <option value="design">Design</option>
-          <option value="ai">AI/ML</option>
-          <option value="marketing">Marketing</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Design">Design</option>
+          <option value="AI / Machine Learning">AI / Machine Learning</option>
+          <option value="Mobile App">Mobile App</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Writing">Writing</option>
+          <option value="Video Editing">Video Editing</option>
+          <option value="General">General</option>
         </select>
 
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -130,36 +125,48 @@ export default function MyProjectsPage() {
         </select>
       </div>
 
-      {/* ===== PROJECT LIST ===== */}
+      {/* PROJECT LIST */}
       {paginatedProjects.length === 0 ? (
         <p className="empty-msg">No matching projects found.</p>
       ) : (
         <div className="project-list">
           {paginatedProjects.map((project) => (
             <div className="project-card" key={project.id}>
+              {/* TITLE */}
               <h3>{project.title}</h3>
 
-              <p>{project.description || "No description added"}</p>
+              {/* DESCRIPTION */}
+              <p className="description">
+                {project.description?.slice(0, 140)}...
+              </p>
 
+              {/* INFO SECTION */}
               <div className="info">
                 <p><strong>💰 Budget:</strong> ₹{project.budget_min || "Not set"}</p>
-                <p><strong>📂 Category:</strong> {project.skills || "General"}</p>
+                <p><strong>📂 Category:</strong> {project.category || "General"}</p>
+                <p><strong>🛠 Skills:</strong> {project.skills || "Not specified"}</p>
               </div>
 
+              {/* POSTED DATE */}
               <p className="date">
                 Posted on {new Date(project.created_at).toLocaleDateString()}
               </p>
 
+              {/* ACTION BUTTONS */}
               <div className="action-buttons">
-                <button className="edit-btn" onClick={() => editProject(project)}>Edit</button>
-                <button className="delete-btn" onClick={() => deleteProject(project.id)}>Delete</button>
+                <button className="edit-btn" onClick={() => editProject(project)}>
+                  Edit
+                </button>
+                <button className="delete-btn" onClick={() => deleteProject(project.id)}>
+                  Delete
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* ===== PAGINATION BUTTONS ===== */}
+      {/* PAGINATION */}
       <div className="pagination">
         <button onClick={prevPage} disabled={currentPage === 1}>
           ⬅ Previous
