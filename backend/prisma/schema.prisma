@@ -30,7 +30,6 @@ model User {
   updatedAt     DateTime        @updatedAt
 
   projects      Project[]
-
   applications  Application[]
 
   age           Int?
@@ -64,10 +63,14 @@ model Application {
   id            Int       @id @default(autoincrement())
   project_id    Int
   freelancer_id Int
+
   cover_letter  String?
-  bid_amount    Decimal?  @db.Decimal(12, 2)
-  status        String    @default("pending")
-  created_at    DateTime  @default(now())
+  bid_amount    Decimal?   @db.Decimal(12, 2)
+
+  portfolio_url String?     // ⭐ REQUIRED FIX
+
+  status        String      @default("pending")
+  created_at    DateTime    @default(now())
 
   project     Project   @relation(fields: [project_id], references: [id], onDelete: Cascade)
   freelancer  User      @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)

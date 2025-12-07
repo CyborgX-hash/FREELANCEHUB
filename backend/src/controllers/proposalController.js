@@ -1,61 +1,69 @@
 const { prisma } = require("../config/database");
 
+/* =====================================================
+   CREATE APPLICATION
+===================================================== */
 async function createProposalController(req, res) {
   try {
-    const { project_id, freelancer_id, cover_letter, bid } = req.body;
-    if (!project_id || !freelancer_id) return res.status(400).json({ ERROR: "Missing fields" });
+    const { project_id, freelancer_id, cover_letter, portfolio_url } = req.body;
 
-    // ensure project exists and is open
-    const project = await prisma.project.findUnique({ where: { id: Number(project_id) } });
-    if (!project) return res.status(404).json({ ERROR: "Project not found" });
+    if (!project_id || !freelancer_id)
+      return res.status(400).json({ ERROR: "Missing required fields" });
 
-    const proposal = await prisma.proposal.create({
+    const application = await prisma.application.create({
       data: {
         project_id: Number(project_id),
         freelancer_id: Number(freelancer_id),
-        cover_letter: cover_letter || null,
-        bid: bid ? Number(bid) : null,
+        cover_letter,
+        portfolio_url: portfolio_url || null,
       },
     });
-    return res.status(201).json({ message: "Proposal submitted", proposal });
+
+    return res.status(201).json({
+      message: "Application submitted successfully",
+      application,
+    });
   } catch (err) {
-    console.error("Create proposal error:", err);
+    console.error("Create Application Error:", err);
     return res.status(500).json({ ERROR: err.message });
   }
 }
 
+/* =====================================================
+   GET APPLICATIONS BY PROJECT ID
+===================================================== */
 async function getProposalsByProjectController(req, res) {
   try {
     const { projectId } = req.params;
-    const proposals = await prisma.proposal.findMany({
+
+    const applications = await prisma.application.findMany({
       where: { project_id: Number(projectId) },
       orderBy: { created_at: "desc" },
-      include: { freelancer: { select: { id: true, name: true, username: true, skills: true, portfolio_url: true } } },
+      include: {
+        freelancer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            portfolio_url: true,
+          },
+        },
+      },
     });
-    return res.json({ proposals });
+
+    console.log("DEBUG: APPLICATIONS RETURNED = ", applications);
+
+    return res.json({ applications });
   } catch (err) {
-    console.error(err);
+    console.error("Fetch Applications Error:", err);
     return res.status(500).json({ ERROR: err.message });
   }
 }
 
-async function getProposalsByFreelancerController(req, res) {
-  try {
-    const { freelancerId } = req.params;
-    const proposals = await prisma.proposal.findMany({
-      where: { freelancer_id: Number(freelancerId) },
-      orderBy: { created_at: "desc" },
-      include: { project: true },
-    });
-    return res.json({ proposals });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ ERROR: err.message });
-  }
-}
-
+/* =====================================================
+   EXPORT FUNCTIONS CORRECTLY
+===================================================== */
 module.exports = {
   createProposalController,
   getProposalsByProjectController,
-  getProposalsByFreelancerController,
 };

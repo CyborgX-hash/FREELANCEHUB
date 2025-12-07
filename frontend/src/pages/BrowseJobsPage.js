@@ -10,19 +10,23 @@ const BrowseJobsPage = () => {
 
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("latest");
 
   const [applyOpen, setApplyOpen] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
   const [proposal, setProposal] = useState("");
+  const [portfolio, setPortfolio] = useState("");
+
   const [appliedIds, setAppliedIds] = useState([]);
 
-  /* Load theme on mount (IMPORTANT FIX) */
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 8;
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  /* Fetch projects */
   const fetchProjects = async () => {
     try {
       const res = await fetch(API_URL);
@@ -30,14 +34,13 @@ const BrowseJobsPage = () => {
       setProjects(data.projects || []);
       setFiltered(data.projects || []);
     } catch (err) {
-      console.error("Fetch projects error:", err);
+      console.error("Fetch error:", err);
     }
   };
 
-  /* Fetch applied */
   const fetchApplied = async () => {
     const res = await getAppliedProjects();
-    const ids = (res.applications || []).map(a => a.project_id);
+    const ids = (res.applications || []).map((a) => a.project_id);
     setAppliedIds(ids);
   };
 
@@ -46,7 +49,6 @@ const BrowseJobsPage = () => {
     fetchApplied();
   }, []);
 
-  /* Search + category filter */
   useEffect(() => {
     let result = [...projects];
 
@@ -65,40 +67,60 @@ const BrowseJobsPage = () => {
       );
     }
 
-    setFiltered(result);
-  }, [search, categoryFilter, projects]);
+    if (sortBy === "latest") {
+      result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } else if (sortBy === "oldest") {
+      result.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } else if (sortBy === "budget-low") {
+      result.sort((a, b) => (a.budget_min || 0) - (b.budget_min || 0));
+    } else if (sortBy === "budget-high") {
+      result.sort((a, b) => (b.budget_min || 0) - (a.budget_min || 0));
+    }
 
-  /* APPLY POPUP */
+    setFiltered(result);
+    setCurrentPage(1);
+  }, [search, categoryFilter, sortBy, projects]);
+
+  const indexOfLast = currentPage * cardsPerPage;
+  const indexOfFirst = indexOfLast - cardsPerPage;
+  const currentCards = filtered.slice(indexOfFirst, indexOfLast);
+
+  const totalPages = Math.ceil(filtered.length / cardsPerPage);
+
+  const nextPage = () => currentPage < totalPages && setCurrentPage(p => p + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage(p => p - 1);
+
   const openApply = (project) => {
     setActiveProject(project);
-    setApplyOpen(true);
     setProposal("");
+    setPortfolio("");
+    setApplyOpen(true);
   };
 
   const handleApply = async () => {
+    if (!proposal.trim()) return alert("Please write a short proposal.");
+    if (!portfolio.trim()) return alert("Portfolio URL is required.");
+
     const payload = {
       projectId: activeProject.id,
       proposal,
+      portfolio_url: portfolio,
     };
 
-    const result = await applyToProject(payload);
-
-    if (result.ERROR) {
-      alert(result.ERROR);
-      return;
-    }
+    const res = await applyToProject(payload);
+    if (res.ERROR) return alert(res.ERROR);
 
     alert("Applied successfully!");
-    setAppliedIds((prev) => [...prev, activeProject.id]);
+
+    setAppliedIds(prev => [...prev, activeProject.id]);
     setApplyOpen(false);
   };
 
   return (
     <div className="browse-container">
-
       <h2>🔍 Browse Freelance Jobs</h2>
 
-      {/* FILTERS */}
+      {/* FILTER BAR */}
       <div className="filters">
         <input
           type="text"
@@ -107,43 +129,46 @@ const BrowseJobsPage = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-        >
+        <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
           <option value="all">All Categories</option>
-          <option value="web">Web Development</option>
+          <option value="web">Web Dev</option>
           <option value="design">Design</option>
           <option value="ai">AI / ML</option>
           <option value="marketing">Marketing</option>
         </select>
+
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="latest">Latest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="budget-low">Budget: Low → High</option>
+          <option value="budget-high">Budget: High → Low</option>
+        </select>
       </div>
 
-      {/* PROJECT GRID */}
+      {/* PROJECT CARDS */}
       <div className="projects-grid">
-        {filtered.length === 0 ? (
-          <p>No projects found.</p>
-        ) : (
-          filtered.map((p) => (
-            <div className="project-card" key={p.id}>
-              <h3>{p.title}</h3>
+        {currentCards.map((p) => (
+          <div className="project-card" key={p.id}>
+            <h3>{p.title}</h3>
+            <p className="desc">{p.description.slice(0, 120)}...</p>
+            <p><strong>Budget:</strong> ₹{p.budget_min || "N/A"}</p>
+            <p><strong>Skills:</strong> {p.skills}</p>
+            <p><strong>Client:</strong> {p.client?.name}</p>
 
-              <p className="desc">{p.description.slice(0, 120)}...</p>
+            {appliedIds.includes(p.id) ? (
+              <button className="applied-btn">Applied ✔</button>
+            ) : (
+              <button className="apply-btn" onClick={() => openApply(p)}>Apply Now</button>
+            )}
+          </div>
+        ))}
+      </div>
 
-              <p><strong>Budget:</strong> ₹{p.budget_min || "N/A"}</p>
-              <p><strong>Skills:</strong> {p.skills}</p>
-              <p><strong>Client:</strong> {p.client?.name}</p>
-
-              {appliedIds.includes(p.id) ? (
-                <button className="applied-btn">Applied ✔</button>
-              ) : (
-                <button className="apply-btn" onClick={() => openApply(p)}>
-                  Apply Now
-                </button>
-              )}
-            </div>
-          ))
-        )}
+      {/* PAGINATION */}
+      <div className="pagination">
+        <button disabled={currentPage === 1} onClick={prevPage}>⬅ Prev</button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button disabled={currentPage === totalPages} onClick={nextPage}>Next ➡</button>
       </div>
 
       {/* APPLY POPUP */}
@@ -153,9 +178,18 @@ const BrowseJobsPage = () => {
             <h3>Apply to: {activeProject.title}</h3>
 
             <textarea
-              placeholder="Write your proposal..."
+              placeholder="Write a short proposal..."
               value={proposal}
               onChange={(e) => setProposal(e.target.value)}
+            />
+
+            <input
+              type="text"
+              placeholder="Portfolio Link (required)"
+              value={portfolio}
+              onChange={(e) => setPortfolio(e.target.value)}
+              className="portfolio-input"
+              required
             />
 
             <div className="modal-actions">
@@ -165,7 +199,6 @@ const BrowseJobsPage = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

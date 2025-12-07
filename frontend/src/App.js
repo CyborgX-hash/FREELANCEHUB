@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useParams,
 } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
@@ -16,14 +17,26 @@ import EditProjectPage from "./pages/EditProjectPage";
 
 import BrowseJobsPage from "./pages/BrowseJobsPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
-import AppliedFreelancersPage from "./pages/AppliedFreelancersPage";
+import AppliedFreelancersPage from "./pages/AppliedFreelancersPage"; 
+import FreelancersAppliedList from "./pages/FreelancersAppliedList";  // ⭐ ADD THIS
 import MyApplicationsPage from "./pages/MyApplicationsPage";
-import ProfilePage from "./pages/ProfilePage";  // ⭐ IMPORTANT
+import ProfilePage from "./pages/ProfilePage";
 
+// ====================
+// PRIVATE ROUTE
+// ====================
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" replace />;
 };
+
+// ====================
+// WRAPPER TO GET projectId
+// ====================
+function FreelancersAppliedWrapper() {
+  const { projectId } = useParams();
+  return <FreelancersAppliedList projectId={projectId} />;
+}
 
 function App() {
 
@@ -42,48 +55,107 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* PROTECTED ROUTES */}
-        <Route path="/dashboard" element={
-          <PrivateRoute><DashboardPage /></PrivateRoute>
-        }/>
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
+        />
 
-        {/* CLIENT */}
-        <Route path="/post-project" element={
-          <PrivateRoute><PostProjectPage /></PrivateRoute>
-        }/>
+        {/* CLIENT ROUTES */}
+        <Route
+          path="/post-project"
+          element={
+            <PrivateRoute>
+              <PostProjectPage />
+            </PrivateRoute>
+          }
+        />
 
-        <Route path="/my-projects" element={
-          <PrivateRoute><MyProjectsPage /></PrivateRoute>
-        }/>
+        <Route
+          path="/my-projects"
+          element={
+            <PrivateRoute>
+              <MyProjectsPage />
+            </PrivateRoute>
+          }
+        />
 
-        <Route path="/edit-project/:id" element={
-          <PrivateRoute><EditProjectPage /></PrivateRoute>
-        }/>
+        <Route
+          path="/edit-project/:id"
+          element={
+            <PrivateRoute>
+              <EditProjectPage />
+            </PrivateRoute>
+          }
+        />
 
-        {/* FREELANCER */}
-        <Route path="/browse" element={
-          <PrivateRoute><BrowseJobsPage /></PrivateRoute>
-        }/>
+        {/* FREELANCER ROUTES */}
+        <Route
+          path="/browse"
+          element={
+            <PrivateRoute>
+              <BrowseJobsPage />
+            </PrivateRoute>
+          }
+        />
 
-        <Route path="/my-applications" element={
-          <PrivateRoute><MyApplicationsPage /></PrivateRoute>
-        }/>
+        <Route
+          path="/my-applications"
+          element={
+            <PrivateRoute>
+              <MyApplicationsPage />
+            </PrivateRoute>
+          }
+        />
 
-        <Route path="/project/:id" element={
-          <PrivateRoute><ProjectDetailsPage /></PrivateRoute>
-        }/>
+        <Route
+          path="/project/:id"
+          element={
+            <PrivateRoute>
+              <ProjectDetailsPage />
+            </PrivateRoute>
+          }
+        />
 
-        <Route path="/applied-freelancers/:projectId" element={
-          <PrivateRoute><AppliedFreelancersPage /></PrivateRoute>
-        }/>
+        {/* ================================
+            CLIENT VIEWING APPLIED FREELANCERS
+            ================================ */}
 
-        {/* PROFILE PAGE */}
-        <Route path="/profile" element={
-          <PrivateRoute><ProfilePage /></PrivateRoute>
-        }/>
+        {/* SHOW PROJECT LIST */}
+        <Route
+          path="/applied-freelancers"
+          element={
+            <PrivateRoute>
+              <AppliedFreelancersPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* SHOW FREELANCER LIST FOR A PROJECT */}
+        <Route
+          path="/applied-freelancers/:projectId"
+          element={
+            <PrivateRoute>
+              <FreelancersAppliedWrapper />
+            </PrivateRoute>
+          }
+        />
+
+        {/* PROFILE */}
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
 
         {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
-
       </Routes>
     </Router>
   );

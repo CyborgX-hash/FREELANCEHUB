@@ -102,10 +102,7 @@ const DashboardPage = () => {
             {/* You can activate this later */}
             
 
-            <div className="dash-card">
-              <h3>🏆 Earnings</h3>
-              <p>Check your total freelancing earnings.</p>
-            </div>
+            
 
           </div>
         )}

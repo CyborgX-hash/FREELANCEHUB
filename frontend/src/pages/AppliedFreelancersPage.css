@@ -1,0 +1,93 @@
+.af-container {
+    padding: 40px;
+    color: white;
+    font-family: Poppins, sans-serif;
+  }
+  
+  .af-container h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  
+  /* SEARCH BOX */
+  .search-box {
+    padding: 12px 14px;
+    width: 280px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    margin-bottom: 25px;
+    background: #111;
+    color: white;
+  }
+  
+  /* ==== PROJECT GRID PAGE ==== */
+  .af-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+    gap: 18px;
+  }
+  
+  .af-card {
+    background: #181b20;
+    padding: 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 1px solid #272b32;
+    transition: 0.3s ease;
+  }
+  
+  .af-card:hover {
+    border-color: #3d7eff;
+    transform: translateY(-4px);
+  }
+  
+  .af-card h3 {
+    margin-bottom: 5px;
+    color: #3d7eff;
+  }
+  
+  /* ==== FREELANCER TABLE PAGE ==== */
+  .table-header,
+  .table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.3fr 2fr 0.8fr;
+    padding: 12px 10px;
+    border-bottom: 1px solid #333;
+  }
+  
+  .table-header {
+    font-weight: 600;
+    background: #222;
+  }
+  
+  .table-row:hover {
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .table-row a {
+    color: #3d7eff;
+    text-decoration: underline;
+  }
+  
+  /* PAGINATION */
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .pagination button {
+    background: #3d7eff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .pagination button:disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+  

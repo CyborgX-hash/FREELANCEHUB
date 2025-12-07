@@ -6,7 +6,7 @@ const { prisma } = require("../config/database");
 async function applyToProjectController(req, res) {
   try {
     const freelancer = req.user;
-    const { projectId, proposal, bid_amount } = req.body;
+    const { projectId, proposal, portfolio_url, bid_amount } = req.body;
 
     if (!projectId)
       return res.status(400).json({ ERROR: "projectId is required" });
@@ -18,15 +18,13 @@ async function applyToProjectController(req, res) {
     if (!project)
       return res.status(404).json({ ERROR: "Project not found" });
 
-    if (freelancer.role.toLowerCase() !== "freelancer") {
+    if (freelancer.role.toLowerCase() !== "freelancer")
       return res.status(403).json({ ERROR: "Only freelancers can apply" });
-    }
 
-    if (project.client_id === freelancer.id) {
+    if (project.client_id === freelancer.id)
       return res.status(403).json({ ERROR: "Cannot apply to your own project" });
-    }
 
-    // prevent duplicate Application
+    // prevent duplicate
     const existing = await prisma.application.findFirst({
       where: {
         project_id: Number(projectId),
@@ -43,6 +41,7 @@ async function applyToProjectController(req, res) {
         freelancer_id: freelancer.id,
         cover_letter: proposal || null,
         bid_amount: bid_amount ? Number(bid_amount) : null,
+        portfolio_url: portfolio_url || null,   // ⭐ FIX ADDED
         status: "Applied",
       },
       include: {
@@ -58,7 +57,7 @@ async function applyToProjectController(req, res) {
 }
 
 /* ============================================================
-   CLIENT → SEE APPLICANTS
+   CLIENT → SEE APPLICANTS (FIXED)
 ============================================================ */
 async function getApplicationsByProjectController(req, res) {
   try {
@@ -84,11 +83,15 @@ async function getApplicationsByProjectController(req, res) {
           select: {
             id: true,
             name: true,
+            email: true,           // ⭐ ADDED EMAIL
             username: true,
+            portfolio_url: true,   // ⭐ ADDED PORTFOLIO URL
           },
         },
       },
     });
+
+    console.log("APPLICATIONS RESPONSE:", applications);
 
     res.json({ applications });
   } catch (err) {
@@ -140,9 +143,8 @@ async function withdrawApplicationController(req, res) {
     if (!application)
       return res.status(404).json({ ERROR: "Application not found" });
 
-    if (application.freelancer_id !== freelancer.id) {
+    if (application.freelancer_id !== freelancer.id)
       return res.status(403).json({ ERROR: "Forbidden" });
-    }
 
     await prisma.application.delete({
       where: { id: Number(id) },
