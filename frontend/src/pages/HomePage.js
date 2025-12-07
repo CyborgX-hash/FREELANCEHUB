@@ -146,14 +146,13 @@ export default function HomePage() {
           <section ref={aboutRef} className="about-section">
             <h2>About Us</h2>
             <p>
-              FreelanceHub connects businesses with verified freelancers worldwide.
-              We simplify hiring with transparency, speed, and trust.
+            FreelanceHub connects businesses with verified freelancers worldwide, making hiring faster, simpler, and more reliable. From small tasks to full-scale projects, we help clients collaborate with trusted talent while empowering freelancers to grow their careers with confidence.
             </p>
           </section>
 
           {/* =================== SERVICES =================== */}
           <section ref={servicesRef} className="services-section">
-            <h2>Our Services</h2>
+            <h2>Popular Services</h2>
 
             <div className="services-grid">
               <div className="service-box"><h3>💻 Web Development</h3><p>Frontend, backend, full-stack solutions.</p></div>

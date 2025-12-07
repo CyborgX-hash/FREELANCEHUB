@@ -56,8 +56,10 @@
   background: var(--card-bg);
   padding: 35px;
   border-radius: 14px;
+
+  /* FIXED: Better border for light theme */
   border: 1px solid var(--border-color);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   transition: 0.3s;
 }
 
@@ -69,29 +71,20 @@
   color: var(--text-color);
 }
 
-.postproject-form label span {
-  color: #ef4444;
-}
-
 .postproject-form input,
 .postproject-form textarea,
 .postproject-form select {
   width: 100%;
   padding: 12px;
   margin-top: 6px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border-color);
   background: var(--input-bg);
-  font-size: 15px;
-  color: var(--text-color);
-  transition: 0.25s;
-}
 
-.postproject-form input:hover,
-.postproject-form textarea:hover,
-.postproject-form select:hover {
-  border-color: #60a5fa;
-  box-shadow: 0 0 5px rgba(59, 130, 246, 0.15);
+  /* FIX: Increase text contrast */
+  color: var(--text-color);
+  font-size: 15px;
+  transition: 0.25s;
 }
 
 textarea {
@@ -99,17 +92,19 @@ textarea {
   resize: vertical;
 }
 
-/* ---------- TWO COLUMN FIX (Budget + Category) ---------- */
+.postproject-form input:hover,
+.postproject-form textarea:hover,
+.postproject-form select:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
+}
+
+/* ---------- TWO COLUMN FIELDS ---------- */
 .two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px;
   margin-top: 18px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -118,7 +113,7 @@ textarea {
   }
 }
 
-/* ---------- BUTTON ---------- */
+/* ---------- CREATE BUTTON ---------- */
 .create-btn {
   margin-top: 25px;
   background: #10b981;
@@ -128,7 +123,6 @@ textarea {
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 15px;
   transition: 0.25s;
 }
 
@@ -137,18 +131,15 @@ textarea {
   transform: translateY(-2px);
 }
 
-.create-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
 /* ---------- PREVIEW SECTION ---------- */
 .project-preview {
   background: var(--card-bg);
   padding: 30px;
   border-radius: 14px;
+
+  /* FIXED: Border + shadow for clarity in light mode */
   border: 1px solid var(--border-color);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
 
 .preview-card {
@@ -156,8 +147,16 @@ textarea {
   background: var(--input-bg);
   padding: 18px;
   border-radius: 12px;
+
+  /* FIX: Higher contrast for text inside preview box */
   border: 1px solid var(--border-color);
+  color: var(--text-color);
   transition: 0.25s ease;
+}
+
+.preview-card p,
+.preview-card h4 {
+  color: var(--text-color); /* FIX: Always visible */
 }
 
 .preview-card:hover {
@@ -165,13 +164,13 @@ textarea {
   box-shadow: 0 3px 12px rgba(59, 130, 246, 0.18);
 }
 
-/* ---------- THEME COLORS ---------- */
+/* ---------- THEME VARIABLES ---------- */
 :root {
-  --bg-color: #f9fafb;
-  --text-color: #111827;
-  --card-bg: #ffffff;
-  --input-bg: #f3f4f6;
-  --border-color: #d1d5db;
+  --bg-color: #f5f7fa; /* FIXED light background */
+  --text-color: #111827; /* strong readable text */
+  --card-bg: #ffffff; /* pure white card */
+  --input-bg: #f2f3f5; /* light grey, good contrast */
+  --border-color: #cbd5e1; /* slightly darker border */
   --hover-bg: #e5e7eb;
 }
 

@@ -1,132 +1,195 @@
 /* =======================
-   DARK THEME VARIABLES
-   ======================= */
-   :root {
-    --bg-color: #0d1117;
-    --card-bg: #161b22;
-    --border-color: #30363d;
-    --text-color: #f0f6fc;
-    --subtext-color: #8b949e;
-    --primary: #3d7eff;
-    --primary-hover: #2a6eff;
-    --danger: #ff4d4d;
-    --danger-hover: #d93636;
-  }
-  
-  /* =======================
-     PAGE
-     ======================= */
-  .myprojects-page {
-    padding: 40px;
-    min-height: 100vh;
-    background: var(--bg-color);
-    font-family: "Poppins", sans-serif;
-    color: var(--text-color);
-  }
-  
-  .myprojects-page h2 {
-    font-size: 32px;
-    margin-bottom: 30px;
-    font-weight: 600;
-  }
-  
-  /* EMPTY MESSAGE */
-  .empty-msg {
-    margin-top: 20px;
-    font-size: 18px;
-    color: var(--subtext-color);
-    text-align: center;
-  }
-  
-  /* GRID */
-  .project-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 28px;
-  }
-  
-  /* =======================
-     PROJECT CARD
-     ======================= */
-  .project-card {
-    background: var(--card-bg);
-    padding: 25px;
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transition: 0.25s ease;
-  }
-  
-  .project-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--primary);
-    box-shadow: 0 12px 30px rgba(61, 126, 255, 0.15);
-  }
-  
-  .project-card h3 {
-    font-size: 22px;
-    margin-bottom: 12px;
-    color: var(--text-color);
-    font-weight: 600;
-  }
-  
-  .project-card p {
-    margin: 6px 0;
-    color: var(--text-color);
-    opacity: 0.95;
-  }
-  
-  .info p {
-    opacity: 0.85;
-    color: var(--subtext-color);
-  }
-  
-  .date {
-    margin-top: 12px;
-    font-size: 13px;
-    color: var(--subtext-color);
-  }
-  
-  /* =======================
-     ACTION BUTTONS
-     ======================= */
-  .action-buttons {
-    margin-top: 18px;
-    display: flex;
-    gap: 12px;
-  }
-  
-  /* EDIT BUTTON */
-  .edit-btn {
-    flex: 1;
-    padding: 10px 0;
-    background: var(--primary);
-    border: none;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
-  }
-  
-  .edit-btn:hover {
-    background: var(--primary-hover);
-  }
-  
-  /* DELETE BUTTON */
-  .delete-btn {
-    flex: 1;
-    padding: 10px 0;
-    background: var(--danger);
-    border: none;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
-  }
-  
-  .delete-btn:hover {
-    background: var(--danger-hover);
-  }
-  
+   THEME COLORS
+======================= */
+:root {
+  --bg-color: #0d1117;
+  --card-bg: #161b22;
+  --border-color: #30363d;
+  --text-color: #f0f6fc;
+  --subtext-color: #8b949e;
+
+  --primary: #3d7eff;
+  --primary-hover: #2a6eff;
+
+  --danger: #ff4d4d;
+  --danger-hover: #d93636;
+}
+
+/* =======================
+   PAGE WRAPPER
+======================= */
+.myprojects-page {
+  padding: 30px 40px;
+  min-height: 100vh;
+  background: var(--bg-color);
+  font-family: "Poppins", sans-serif;
+  color: var(--text-color);
+}
+
+/* TITLE */
+.myprojects-page h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* EMPTY MESSAGE */
+.empty-msg {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--subtext-color);
+  font-size: 18px;
+}
+
+/* =======================
+   SEARCH + FILTER + SORT BAR
+======================= */
+.project-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.project-controls input,
+.project-controls select {
+  padding: 10px 14px;
+  width: 210px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.project-controls input::placeholder {
+  color: var(--subtext-color);
+}
+
+/* =======================
+   GRID (Reduced spacing)
+======================= */
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;     /* reduced gap */
+}
+
+/* =======================
+   PROJECT CARD (square style)
+======================= */
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 18px;
+  border-radius: 12px;
+  height: 260px;       /* square shape */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary);
+  box-shadow: 0 6px 18px rgba(61,126,255,0.25);
+}
+
+.project-card h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.project-card p {
+  font-size: 14px;
+  opacity: 0.95;
+  margin: 3px 0;
+}
+
+.info p {
+  color: var(--subtext-color);
+}
+
+/* =======================
+   DATE TEXT
+======================= */
+.date {
+  font-size: 12px;
+  color: var(--subtext-color);
+  margin-top: 8px;
+}
+
+/* =======================
+   ACTION BUTTONS
+======================= */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+  flex: 1;
+  border: none;
+  padding: 9px 0;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-size: 14px;
+}
+
+/* EDIT BUTTON */
+.edit-btn {
+  background: var(--primary);
+  color: white;
+}
+
+.edit-btn:hover {
+  background: var(--primary-hover);
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+  background: var(--danger);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: var(--danger-hover);
+}
+
+/* =======================
+   PAGINATION
+======================= */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  background: var(--primary);
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.pagination button:disabled {
+  background: #3b3b3b;
+  color: #777;
+  cursor: not-allowed;
+}
