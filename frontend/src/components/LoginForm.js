@@ -27,9 +27,8 @@ const LoginForm = () => {
       localStorage.setItem("token", result.token);
       setMessage("Login successful! Redirecting...");
 
-      // 🔥 Redirect to HOME, not dashboard
       setTimeout(() => {
-        navigate("/");  // redirect to homepage
+        navigate("/");  
       }, 1200);
 
     } else {

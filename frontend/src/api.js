@@ -1,21 +1,16 @@
 import axios from "axios";
 
-/* ---------------------------------------------------
-   BASE URL
---------------------------------------------------- */
+
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_BACKEND_SERVER_URL
     : process.env.REACT_APP_BACKEND_LOCAL_URL;
 
-/* API PATHS */
 const USER_API = `${API_BASE_URL}/api/users`;
 const PROJECT_API = `${API_BASE_URL}/api/projects`;
 const APPLICATION_API = `${API_BASE_URL}/api/applications`;
 
-/* ---------------------------------------------------
-   AXIOS INSTANCE + TOKEN
---------------------------------------------------- */
+
 const api = axios.create({
   baseURL: USER_API,
   headers: { "Content-Type": "application/json" },
@@ -27,9 +22,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-/* ===================================================
-   USER AUTH
-=================================================== */
+
 
 export const signupUser = async (userData) => {
   try {
@@ -49,11 +42,8 @@ export const loginUser = async (credentials) => {
   }
 };
 
-/* ===================================================
-   PROJECTS
-=================================================== */
 
-/** ✔ Get all browse projects */
+
 export const fetchProjects = async () => {
   try {
     const res = await axios.get(`${PROJECT_API}`);
@@ -63,7 +53,6 @@ export const fetchProjects = async () => {
   }
 };
 
-/** ✔ Get project by ID (DETAILS PAGE) */
 export const fetchProjectById = async (id) => {
   try {
     const res = await axios.get(`${PROJECT_API}/${id}`);
@@ -73,11 +62,8 @@ export const fetchProjectById = async (id) => {
   }
 };
 
-/* ===================================================
-   APPLICATIONS (Freelancers)
-=================================================== */
 
-/** ✔ Apply to a project */
+
 export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   try {
     const token = localStorage.getItem("token");
@@ -98,7 +84,6 @@ export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   }
 };
 
-/** ✔ Get all applied projects of freelancer */
 export const getAppliedProjects = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -113,7 +98,6 @@ export const getAppliedProjects = async () => {
   }
 };
 
-/** ✔ Withdraw an application */
 export const withdrawApplication = async (applicationId) => {
   try {
     const token = localStorage.getItem("token");

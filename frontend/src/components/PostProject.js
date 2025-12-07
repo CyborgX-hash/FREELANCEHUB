@@ -24,7 +24,7 @@ const PostProject = ({ onClose, clientId, apiUrl }) => {
         body: JSON.stringify({
           client_id: clientId,
           ...form,
-          budget_min: form.budget, // temporary mapping if needed
+          budget_min: form.budget, 
           budget_max: form.budget,
         }),
       });
@@ -68,7 +68,6 @@ const PostProject = ({ onClose, clientId, apiUrl }) => {
             onChange={handleChange}
           />
 
-          {/* ⭐ 2 Column Budget + Category */}
           <div className="form-row">
             <div className="form-group">
               <label>Budget (₹)</label>

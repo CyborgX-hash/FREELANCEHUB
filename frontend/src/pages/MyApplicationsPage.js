@@ -9,7 +9,6 @@ const MyApplicationsPage = () => {
 
   const [apps, setApps] = useState([]);
 
-  /* Pagination State */
   const [currentPage, setCurrentPage] = useState(1);
   const appsPerPage = 6;
 
@@ -33,7 +32,6 @@ const MyApplicationsPage = () => {
     setApps((prev) => prev.filter((a) => a.id !== applicationId));
   };
 
-  /* Pagination Logic */
   const lastIndex = currentPage * appsPerPage;
   const firstIndex = lastIndex - appsPerPage;
   const currentApps = apps.slice(firstIndex, lastIndex);
@@ -50,7 +48,6 @@ const MyApplicationsPage = () => {
         <p>No applications yet.</p>
       ) : (
         <>
-          {/* === GRID (3 cards per row) === */}
           <div className="app-grid">
             {currentApps.map((a) => (
               <div key={a.id} className="app-card">
@@ -72,7 +69,6 @@ const MyApplicationsPage = () => {
             ))}
           </div>
 
-          {/* === PAGINATION === */}
           <div className="pagination">
             <button
               disabled={currentPage === 1}

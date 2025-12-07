@@ -1,6 +1,4 @@
-/* =====================================================
-      FULL UPDATED PROFILE PAGE
-===================================================== */
+
 
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -13,7 +11,6 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
 
-  /* ---------------- Load Profile ---------------- */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return navigate("/login");
@@ -34,11 +31,9 @@ const ProfilePage = () => {
       </div>
     );
   
-  /* ---------------- Handle edits ---------------- */
   const handleChange = (e) =>
     setUser({ ...user, [e.target.name]: e.target.value });
 
-  /* ---------------- Save Profile ---------------- */
   const saveChanges = async () => {
     const token = localStorage.getItem("token");
 
@@ -49,15 +44,15 @@ const ProfilePage = () => {
       "age",
       "gender",
       "city",
-      "state",            // ADD THIS
+      "state",            
       "experience",
       "skills",
       "portfolio_url",
       "organization",
       "aboutOrg",
-      "department",        // ADD THIS (admin)
-      "designation",       // ADD THIS (admin)
-      "about",             // ADD THIS (admin)
+      "department",        
+      "designation",       
+      "about",            
     ];
 
     allowedFields.forEach((field) => {
@@ -97,7 +92,6 @@ const ProfilePage = () => {
         <h3 className="card-title">Profile Information</h3>
 
         <div className="profile-grid">
-          {/* Name */}
           <div className="field">
             <label>Name</label>
             <input
@@ -108,7 +102,6 @@ const ProfilePage = () => {
             />
           </div>
 
-          {/* Username */}
           <div className="field">
             <label>Username</label>
             <input
@@ -119,13 +112,11 @@ const ProfilePage = () => {
             />
           </div>
 
-          {/* Email */}
           <div className="field full">
             <label>Email</label>
             <input disabled value={user.email} />
           </div>
 
-          {/* ===================== FREELANCER ===================== */}
           {user.role === "freelancer" && (
             <>
               <div className="field">
@@ -205,7 +196,6 @@ const ProfilePage = () => {
             </>
           )}
 
-          {/* ===================== CLIENT ===================== */}
           {user.role === "client" && (
             <>
               <div className="field">
@@ -240,7 +230,6 @@ const ProfilePage = () => {
             </>
           )}
 
-          {/* ===================== ADMIN ===================== */}
           {user.role === "admin" && (
             <>
               <div className="field">

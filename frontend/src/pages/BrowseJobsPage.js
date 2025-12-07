@@ -25,13 +25,11 @@ const BrowseJobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 8;
 
-  /* Load Theme */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  /* Fetch Projects */
   const fetchProjects = async () => {
     try {
       const res = await fetch(API_URL);
@@ -43,7 +41,6 @@ const BrowseJobsPage = () => {
     }
   };
 
-  /* Fetch Applied */
   const fetchApplied = async () => {
     const res = await getAppliedProjects();
     const ids = (res.applications || []).map((a) => a.project_id);
@@ -55,7 +52,6 @@ const BrowseJobsPage = () => {
     fetchApplied();
   }, []);
 
-  /* Filtering + Sort */
   useEffect(() => {
     let result = [...projects];
 
@@ -88,7 +84,6 @@ const BrowseJobsPage = () => {
     setCurrentPage(1);
   }, [search, categoryFilter, sortBy, projects]);
 
-  /* Pagination Logic */
   const indexOfLast = currentPage * cardsPerPage;
   const indexOfFirst = indexOfLast - cardsPerPage;
   const currentCards = filtered.slice(indexOfFirst, indexOfLast);
@@ -97,7 +92,6 @@ const BrowseJobsPage = () => {
   const nextPage = () => currentPage < totalPages && setCurrentPage((p) => p + 1);
   const prevPage = () => currentPage > 1 && setCurrentPage((p) => p - 1);
 
-  /* Apply Popup */
   const openApply = (project) => {
     setActiveProject(project);
     setProposal("");
@@ -126,14 +120,12 @@ const BrowseJobsPage = () => {
   return (
     <div className="browse-container">
 
-      {/* BACK BUTTON */}
       <button className="back-btn" onClick={() => navigate("/dashboard")}>
         ← Back
       </button>
 
       <h2>🔍 Browse Freelance Jobs</h2>
 
-      {/* FILTER BAR */}
       <div className="filters">
         <input
           type="text"
@@ -145,25 +137,20 @@ const BrowseJobsPage = () => {
 <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
   <option value="all">All Categories</option>
 
-  {/* DEVELOPMENT */}
   <option value="web">Web Development</option>
   <option value="mobile">Mobile App</option>
   <option value="ai">AI / Machine Learning</option>
 
-  {/* DESIGN */}
   <option value="uiux">UI / UX Design</option>
   <option value="graphics">Graphic Design</option>
   <option value="video">Video Editing</option>
 
-  {/* WRITING */}
   <option value="content">Content Writing</option>
   <option value="copywriting">Copywriting</option>
 
-  {/* MARKETING */}
   <option value="marketing">Digital Marketing</option>
   <option value="seo">SEO / SEM</option>
 
-  {/* BUSINESS / OTHER */}
   <option value="finance">Finance & Accounting</option>
   <option value="general">General</option>
 </select>
@@ -177,7 +164,6 @@ const BrowseJobsPage = () => {
         </select>
       </div>
 
-      {/* PROJECT CARDS */}
       <div className="projects-grid">
         {currentCards.map((p) => (
           <div className="project-card" key={p.id}>
@@ -199,14 +185,12 @@ const BrowseJobsPage = () => {
         ))}
       </div>
 
-      {/* PAGINATION */}
       <div className="pagination">
         <button disabled={currentPage === 1} onClick={prevPage}>⬅ Prev</button>
         <span>Page {currentPage} of {totalPages}</span>
         <button disabled={currentPage === totalPages} onClick={nextPage}>Next ➡</button>
       </div>
 
-      {/* APPLY POPUP */}
       {applyOpen && (
         <div className="modal-overlay">
           <div className="modal-card">

@@ -39,11 +39,9 @@ const SignupForm = () => {
 
     const result = await signupUser(formData);
 
-    // ⭐ CHECK FOR TOKEN (Backend now returns token)
     if (result.token) {
       localStorage.setItem("token", result.token);
 
-      // Notify homepage that token changed
       window.dispatchEvent(new Event("tokenChanged"));
 
       setMessage("Signup successful! Redirecting...");
@@ -51,7 +49,6 @@ const SignupForm = () => {
       return;
     }
 
-    // If backend didn't return token (fallback auto-login)
     const loginRes = await loginUser({
       email: formData.email,
       password: formData.password

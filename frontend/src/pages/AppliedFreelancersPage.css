@@ -1,6 +1,4 @@
-/* ============================================================
-   PAGE WRAPPER
-============================================================ */
+
 .af-container {
     padding: 40px;
     background: var(--background);
@@ -16,9 +14,7 @@
     margin-bottom: 20px;
   }
   
-  /* ============================================================
-     BACK BUTTON
-  ============================================================ */
+  
   .back-btn {
     background: transparent;
     border: 1px solid var(--subtext);
@@ -41,9 +37,7 @@
     transform: translateY(-2px);
   }
   
-  /* ============================================================
-     SEARCH BOX
-  ============================================================ */
+
   .search-box {
     padding: 12px 15px;
     width: 300px;
@@ -60,9 +54,7 @@
     outline: none;
   }
   
-  /* ============================================================
-     PROJECT GRID (4 PER ROW)
-  ============================================================ */
+
   .af-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -79,9 +71,7 @@
     .af-grid { grid-template-columns: 1fr; }
   }
   
-  /* ============================================================
-     PROJECT CARD
-  ============================================================ */
+  
   .af-card {
     background: var(--surface);
     border: 1px solid var(--subtext);
@@ -101,7 +91,6 @@
     box-shadow: var(--shadow-hover);
   }
   
-  /* TITLE */
   .af-card h3 {
     color: var(--primary);
     font-size: 20px;
@@ -109,16 +98,13 @@
     font-weight: 600;
   }
   
-  /* DESCRIPTION */
   .af-card p {
     font-size: 14px;
     color: var(--subtext);
     margin: 6px 0;
   }
   
-  /* ============================================================
-     PAGINATION
-  ============================================================ */
+  
   .pagination {
     display: flex;
     justify-content: center;
@@ -153,9 +139,7 @@
     color: var(--subtext);
   }
   
-  /* ============================================================
-     TABLE STRUCTURE (Applied List Inside)
-  ============================================================ */
+ 
   .table-header {
     display: grid;
     grid-template-columns: 1fr 1.5fr 2fr 1fr;
@@ -188,13 +172,11 @@
     align-items: center;
   }
   
-  /* Wrap long proposal text */
   .table-row span:nth-child(3) {
     white-space: normal;
     line-height: 1.4;
   }
   
-  /* Portfolio link */
   .table-row a {
     color: var(--primary);
     font-weight: 600;

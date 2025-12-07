@@ -6,7 +6,7 @@ import "./AppliedFreelancersPage.css";
 const API_URL = "http://localhost:5001/api/projects";
 
 export default function AppliedFreelancersPage() {
-  const navigate = useNavigate();  // ⭐ FIXED — useNavigate hook
+  const navigate = useNavigate();  
 
   const [projects, setProjects] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -16,9 +16,6 @@ export default function AppliedFreelancersPage() {
 
   const PER_PAGE = 8;
 
-  /* ================================
-     LOAD CLIENT PROJECTS
-  ================================= */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -35,9 +32,7 @@ export default function AppliedFreelancersPage() {
       .catch((err) => console.error("Fetch error:", err));
   }, []);
 
-  /* ================================
-     SEARCH FILTER
-  ================================= */
+  
   useEffect(() => {
     let results = [...projects];
 
@@ -52,9 +47,7 @@ export default function AppliedFreelancersPage() {
     setPage(1);
   }, [search, projects]);
 
-  /* ================================
-     PAGINATION
-  ================================= */
+  
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const startIndex = (page - 1) * PER_PAGE;
   const paginated = filtered.slice(startIndex, startIndex + PER_PAGE);
@@ -81,7 +74,7 @@ export default function AppliedFreelancersPage() {
           <div
             className="af-card"
             key={p.id}
-            onClick={() => navigate(`/applied-freelancers/${p.id}`)}  // ⭐ FIXED
+            onClick={() => navigate(`/applied-freelancers/${p.id}`)}  
           >
             <h3>{p.title}</h3>
             <p>{p.description?.slice(0, 80)}...</p>
@@ -90,7 +83,6 @@ export default function AppliedFreelancersPage() {
         ))}
       </div>
 
-      {/* PAGINATION */}
       <div className="pagination">
         <button
           disabled={page === 1}

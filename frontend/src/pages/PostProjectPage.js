@@ -14,7 +14,7 @@ const PostProjectPage = () => {
     description: "",
     budget_min: "",
     skills: "",
-    category: "General",  // ⭐ NEW
+    category: "General",  
   });
 
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ const PostProjectPage = () => {
         budget_min: Number(formData.budget_min) || null,
         budget_max: null,
         skills: formData.skills || "General",
-        category: formData.category,     // ⭐ ADDING CATEGORY
+        category: formData.category,   
         deadline: null,
         client_id,
       };
@@ -81,7 +81,6 @@ const PostProjectPage = () => {
 
       <div className="postproject-container">
         
-        {/* LEFT FORM */}
         <form className="postproject-form" onSubmit={handleSubmit}>
           
           <label>Project Title <span>*</span></label>
@@ -127,7 +126,6 @@ const PostProjectPage = () => {
             </div>
           </div>
 
-          {/* ⭐ NEW CATEGORY FIELD */}
           <label>Project Category</label>
           <select
               name="category"
@@ -136,20 +134,16 @@ const PostProjectPage = () => {
             >
               <option value="General">General</option>
 
-              {/* DEVELOPMENT */}
               <option value="Web Development">Web Development</option>
               <option value="Mobile App">Mobile App</option>
               <option value="AI / Machine Learning">AI / Machine Learning</option>
 
-              {/* DESIGN */}
               <option value="UI/UX Design">UI/UX Design</option>
               <option value="Graphic Design">Graphic Design</option>
               <option value="Video Editing">Video Editing</option>
 
-              {/* WRITING */}
               <option value="Content Writing">Content Writing</option>
 
-              {/* MARKETING */}
               <option value="Digital Marketing">Digital Marketing</option>
             </select>
 
@@ -158,7 +152,6 @@ const PostProjectPage = () => {
           </button>
         </form>
 
-        {/* RIGHT PREVIEW */}
         <div className="project-preview">
           <h3>🧩 Project Summary</h3>
           <p>This project will appear in Browse Jobs for freelancers.</p>
@@ -175,7 +168,6 @@ const PostProjectPage = () => {
             <p><strong>💰 Budget:</strong> ₹{formData.budget_min || "Not set"}</p>
             <p><strong>🛠 Skills:</strong> {formData.skills || "Not specified"}</p>
 
-            {/* ⭐ SHOW CATEGORY IN PREVIEW */}
             <p><strong>📁 Category:</strong> {formData.category}</p>
           </div>
         </div>

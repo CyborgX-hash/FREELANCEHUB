@@ -1,6 +1,4 @@
-/* =========================================================
-   THEME VARIABLES
-========================================================= */
+
 :root {
   --bg-light: #f5f5f7;
   --card-light: #ffffff;
@@ -19,38 +17,28 @@
   --success: #28c76f;
 }
 
-/* =========================================================
-   PAGE WRAPPER
-========================================================= */
+
 .browse-container {
   min-height: 100vh;
   padding: 30px 40px;
 }
 
-/* Light theme */
 [data-theme="light"] .browse-container {
   background: var(--bg-light);
   color: var(--text-light);
 }
 
-/* Dark theme */
 [data-theme="dark"] .browse-container {
   background: var(--bg-dark);
   color: var(--text-dark);
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
 .browse-container h2 {
   margin-bottom: 15px;
   font-size: 32px;
   font-weight: 700;
 }
 
-/* =========================================================
-   FILTER BAR
-========================================================= */
 .filters {
   display: flex;
   gap: 14px;
@@ -89,12 +77,10 @@
   color: var(--text-dark);
 }
 
-/* =========================================================
-   PROJECT GRID — 4 CARDS PER ROW
-========================================================= */
+
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);   /* ⭐ EXACTLY 4 per row */
+  grid-template-columns: repeat(4, 1fr);  
   gap: 16px;
 }
 
@@ -114,27 +100,23 @@
   }
 }
 
-/* =========================================================
-   PROJECT CARD — SQUARE MINIMAL STYLE
-========================================================= */
+
 .project-card {
   padding: 18px;
   border-radius: 14px;
-  height: 260px;                 /* Defines square ratio */
+  height: 260px;                
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: 0.25s ease;
 }
 
-/* DARK */
 [data-theme="dark"] .project-card {
   background: var(--card-dark);
   border: 1px solid var(--border-dark);
   color: var(--text-dark);
 }
 
-/* LIGHT */
 [data-theme="light"] .project-card {
   background: var(--card-light);
   border: 1px solid var(--border-light);
@@ -158,9 +140,7 @@
   opacity: 0.9;
 }
 
-/* =========================================================
-   APPLY BUTTON
-========================================================= */
+
 .apply-btn,
 .applied-btn {
   padding: 10px;
@@ -188,9 +168,6 @@
   cursor: default;
 }
 
-/* =========================================================
-   APPLY POPUP
-========================================================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -208,14 +185,12 @@
   animation: fadeIn 0.25s ease;
 }
 
-/* DARK */
 [data-theme="dark"] .modal-card {
   background: var(--card-dark);
   border: 1px solid var(--border-dark);
   color: var(--text-dark);
 }
 
-/* LIGHT */
 [data-theme="light"] .modal-card {
   background: var(--card-light);
   border: 1px solid var(--border-light);
@@ -230,7 +205,6 @@
   resize: none;
 }
 
-/* modal actions */
 .modal-actions {
   margin-top: 15px;
   display: flex;
@@ -276,12 +250,10 @@
   color: #333;
 }
 
-/* fade */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-/* BACK BUTTON */
 .back-btn {
   background: transparent;
   border: 1px solid var(--border);

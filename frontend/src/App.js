@@ -18,21 +18,17 @@ import EditProjectPage from "./pages/EditProjectPage";
 import BrowseJobsPage from "./pages/BrowseJobsPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import AppliedFreelancersPage from "./pages/AppliedFreelancersPage"; 
-import FreelancersAppliedList from "./pages/FreelancersAppliedList";  // ⭐ ADD THIS
+import FreelancersAppliedList from "./pages/FreelancersAppliedList";  
 import MyApplicationsPage from "./pages/MyApplicationsPage";
 import ProfilePage from "./pages/ProfilePage";
 
-// ====================
-// PRIVATE ROUTE
-// ====================
+
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" replace />;
 };
 
-// ====================
-// WRAPPER TO GET projectId
-// ====================
+
 function FreelancersAppliedWrapper() {
   const { projectId } = useParams();
   return <FreelancersAppliedList projectId={projectId} />;
@@ -49,12 +45,10 @@ function App() {
     <Router>
       <Routes>
 
-        {/* PUBLIC ROUTES */}
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* PROTECTED ROUTES */}
         <Route
           path="/dashboard"
           element={
@@ -64,7 +58,6 @@ function App() {
           }
         />
 
-        {/* CLIENT ROUTES */}
         <Route
           path="/post-project"
           element={
@@ -92,7 +85,6 @@ function App() {
           }
         />
 
-        {/* FREELANCER ROUTES */}
         <Route
           path="/browse"
           element={
@@ -120,11 +112,8 @@ function App() {
           }
         />
 
-        {/* ================================
-            CLIENT VIEWING APPLIED FREELANCERS
-            ================================ */}
+        
 
-        {/* SHOW PROJECT LIST */}
         <Route
           path="/applied-freelancers"
           element={
@@ -134,7 +123,6 @@ function App() {
           }
         />
 
-        {/* SHOW FREELANCER LIST FOR A PROJECT */}
         <Route
           path="/applied-freelancers/:projectId"
           element={
@@ -144,7 +132,6 @@ function App() {
           }
         />
 
-        {/* PROFILE */}
         <Route
           path="/profile"
           element={
@@ -154,7 +141,6 @@ function App() {
           }
         />
 
-        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

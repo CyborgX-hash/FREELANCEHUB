@@ -13,10 +13,9 @@ export default function HomePage() {
   const [user, setUser] = useState(null);
   const [menu, setMenu] = useState(false);
 
-  // ⭐ SHOW SPLASH ONLY FIRST TIME EVER
   const [showSplash, setShowSplash] = useState(() => {
     const seen = localStorage.getItem("seenSplash");
-    return !seen; // show only if NOT seen before
+    return !seen; 
   });
 
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
@@ -25,19 +24,17 @@ export default function HomePage() {
   const servicesRef = useRef(null);
   const menuRef = useRef(null);
 
-  /* ⭐ SPLASH SCREEN TIMER (ONLY FIRST TIME) */
   useEffect(() => {
     if (showSplash) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-        localStorage.setItem("seenSplash", "true"); // mark splash as seen
+        localStorage.setItem("seenSplash", "true");
       }, 2200);
 
       return () => clearTimeout(timer);
     }
   }, [showSplash]);
 
-  /* ⭐ LOAD USER WHENEVER TOKEN CHANGES */
   useEffect(() => {
     const loadUser = () => {
       const token = localStorage.getItem("token");
@@ -50,21 +47,18 @@ export default function HomePage() {
       }
     };
 
-    loadUser(); // run on mount AND whenever route changes
+    loadUser(); 
 
-    // Listen for token changes from login/signup/logout
     window.addEventListener("tokenChanged", loadUser);
 
     return () => window.removeEventListener("tokenChanged", loadUser);
   }, [location.key]);
 
-  /* ⭐ APPLY THEME */
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  /* ⭐ CLOSE MENU IF CLICKED OUTSIDE */
   useEffect(() => {
     const close = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) setMenu(false);
@@ -73,7 +67,6 @@ export default function HomePage() {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  /* ⭐ LOGOUT */
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
@@ -89,7 +82,6 @@ export default function HomePage() {
   return (
     <div className="home">
 
-      {/* ⭐ SPLASH SCREEN (ONLY FIRST PAGE LOAD) */}
       {showSplash && (
         <div className="logo-overlay">
           <div className="logo-fullscreen">
@@ -98,10 +90,8 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ⭐ MAIN HOME UI */}
       {!showSplash && (
         <>
-          {/* NAVBAR */}
           <nav className="nav">
             <h1 className="logo" onClick={() => navigate("/")}>FreelanceHub</h1>
 
@@ -141,7 +131,6 @@ export default function HomePage() {
             </div>
           </nav>
 
-          {/* HERO SECTION */}
           <section className="hero">
             <video autoPlay muted loop className="hero-video">
               <source src={heroVideo} type="video/mp4" />
@@ -157,13 +146,11 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* ABOUT */}
           <section ref={aboutRef} className="about-section">
             <h2>About Us</h2>
             <p>FreelanceHub connects businesses with verified freelancers worldwide.</p>
           </section>
 
-          {/* SERVICES */}
           <section ref={servicesRef} className="services-section">
             <h2>Popular Services</h2>
 
@@ -175,7 +162,6 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* TESTIMONIALS */}
           <section className="testimonials-section">
             <h2 className="section-title">TESTIMONIAL</h2>
 
@@ -198,7 +184,6 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* FOOTER */}
           <footer className="footer">
             <p>© 2025 FreelanceHub — Work from Anywhere</p>
             <p>Made by Saksham</p>

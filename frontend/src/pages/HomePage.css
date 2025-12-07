@@ -1,11 +1,9 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* =========== THEME VARIABLES =========== */
 :root {
   --primary: #4f6df5;
   --primary-light: #6f85ff;
@@ -22,7 +20,6 @@
   --shadow-hover: 0 10px 30px rgba(0,0,0,0.10);
 }
 
-/* DARK MODE OVERRIDE */
 [data-theme="dark"] {
   --background: #0f1118;
   --light: #181b20;
@@ -32,14 +29,12 @@
   --primary: #90a8ff;
 }
 
-/* BODY */
 body {
   background: var(--background);
   color: var(--text);
   font-family: "Poppins", sans-serif;
 }
 
-/* =============== NAVBAR =============== */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -52,7 +47,6 @@ body {
   z-index: 100;
 }
 
-/* ⭐ Dark Mode Navbar Fix */
 [data-theme="dark"] .nav {
   background: #0f1118 !important;
 }
@@ -64,7 +58,6 @@ body {
   cursor: pointer;
 }
 
-/* CENTER NAV LINKS */
 .nav-center {
   display: flex;
   gap: 28px;
@@ -81,14 +74,12 @@ body {
   color: var(--primary);
 }
 
-/* RIGHT SIDE BUTTONS */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* BOTH BUTTONS LOOK SAME */
 .nav-btn,
 .filled {
   -webkit-appearance: none !important;
@@ -115,7 +106,6 @@ body {
 }
 
 
-/* USER MENU */
 .user-icon {
   font-size: 32px;
   color: var(--primary);
@@ -152,9 +142,7 @@ body {
   color: #d42f2f !important;
 }
 
-/* ======================================================
-   HERO SECTION → VIDEO BACKGROUND
-====================================================== */
+
 .hero {
   position: relative;
   width: 100%;
@@ -166,7 +154,6 @@ body {
   text-align: center;
 }
 
-/* VIDEO BACKGROUND */
 .hero-video {
   position: absolute;
   inset: 0;
@@ -181,7 +168,6 @@ body {
   opacity: 0.65;
 }
 
-/* HERO CONTENT */
 .hero-content {
   position: relative;
   z-index: 5;
@@ -206,7 +192,6 @@ body {
   opacity: 0.95;
 }
 
-/* HERO BUTTON */
 .hero-content .btn {
   margin-top: 20px;
   padding: 14px 30px;
@@ -223,7 +208,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* =============== ABOUT SECTION =============== */
 .about-section {
   padding: 90px 60px;
   text-align: center;
@@ -241,7 +225,6 @@ body {
   margin: 0 auto;
 }
 
-/* =============== SERVICES SECTION =============== */
 .services-section {
   padding: 90px 60px;
 }
@@ -252,7 +235,6 @@ body {
   margin-bottom: 40px;
 }
 
-/* GRID – equal square cards */
 .services-grid {
   display: grid;
   gap: 35px;
@@ -260,7 +242,6 @@ body {
   justify-items: center;
 }
 
-/* SERVICE CARD */
 .service-box {
   width: 240px;
   height: 240px;
@@ -298,9 +279,7 @@ body {
   color: var(--subtext);
 }
 
-/* ======================================================
-   ⭐ TESTIMONIALS SECTION
-====================================================== */
+
 .testimonials-section {
   margin-top: 60px;
   text-align: center;
@@ -313,23 +292,21 @@ body {
   color: var(--text);
 }
 
-/* Horizontal scroll */
 .testimonials-wrapper {
   display: flex;
   gap: 28px;
   overflow-x: auto;
   padding-bottom: 10px;
   scroll-snap-type: x mandatory;
-  justify-content: flex-start; /* FIX */
+  justify-content: flex-start; 
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
 .testimonials-wrapper::-webkit-scrollbar {
-  display: none; /* FULLY HIDE */
+  display: none;
 }
 
-/* Testimonial card */
 .testimonial-card {
   width: 240px;
   min-width: 240px;
@@ -352,7 +329,6 @@ body {
   color: var(--text);
 }
 
-/* Heading Fix */
 [data-theme="dark"] .testimonial-name {
   color: #ffffff;
 }
@@ -380,16 +356,13 @@ body {
   color: var(--primary);
 }
 
-/* =============== FOOTER =============== */
 .footer {
   padding: 30px;
   text-align: center;
   background: var(--light);
   margin-top: 80px;
 }
-/* ======================================================
-   SPLASH SCREEN (FULLSCREEN LOGO)
-====================================================== */
+
 .logo-overlay {
   position: fixed;
   inset: 0;

@@ -18,7 +18,6 @@ export default function MyProjectsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  /* FETCH PROJECTS */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -35,7 +34,6 @@ export default function MyProjectsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  /* DELETE PROJECT */
   const deleteProject = async (projectId) => {
     if (!window.confirm("Are you sure? This cannot be undone!")) return;
 
@@ -63,7 +61,6 @@ export default function MyProjectsPage() {
 
   const editProject = (project) => navigate(`/edit-project/${project.id}`);
 
-  /* SEARCH + CATEGORY FILTER + SORT */
   const filteredProjects = projects
     .filter((p) => p.title.toLowerCase().includes(search.toLowerCase()))
     .filter((p) =>
@@ -102,7 +99,6 @@ export default function MyProjectsPage() {
     </button>
       <h2>My Projects</h2>
 
-      {/* SEARCH + FILTERS + SORT */}
       <div className="project-controls">
         <input
           type="text"
@@ -131,34 +127,28 @@ export default function MyProjectsPage() {
         </select>
       </div>
 
-      {/* PROJECT LIST */}
       {paginatedProjects.length === 0 ? (
         <p className="empty-msg">No matching projects found.</p>
       ) : (
         <div className="project-list">
           {paginatedProjects.map((project) => (
             <div className="project-card" key={project.id}>
-              {/* TITLE */}
               <h3>{project.title}</h3>
 
-              {/* DESCRIPTION */}
               <p className="description">
                 {project.description?.slice(0, 140)}...
               </p>
 
-              {/* INFO SECTION */}
               <div className="info">
                 <p><strong>💰 Budget:</strong> ₹{project.budget_min || "Not set"}</p>
                 <p><strong>📂 Category:</strong> {project.category || "General"}</p>
                 <p><strong>🛠 Skills:</strong> {project.skills || "Not specified"}</p>
               </div>
 
-              {/* POSTED DATE */}
               <p className="date">
                 Posted on {new Date(project.created_at).toLocaleDateString()}
               </p>
 
-              {/* ACTION BUTTONS */}
               <div className="action-buttons">
                 <button className="edit-btn" onClick={() => editProject(project)}>
                   Edit
@@ -172,7 +162,6 @@ export default function MyProjectsPage() {
         </div>
       )}
 
-      {/* PAGINATION */}
       <div className="pagination">
         <button onClick={prevPage} disabled={currentPage === 1}>
           ⬅ Previous

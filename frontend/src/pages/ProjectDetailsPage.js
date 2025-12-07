@@ -88,7 +88,6 @@ const ProjectDetailsPage = () => {
 
         </div>
 
-        {/* ONLY SHOW APPLY BUTTON TO FREELANCERS */}
         {user?.role === "freelancer" && (
           <button className="apply-btn" onClick={() => setShowApplyBox(true)}>
             Apply Now
@@ -96,7 +95,6 @@ const ProjectDetailsPage = () => {
         )}
       </div>
 
-      {/* APPLY MODAL */}
       {showApplyBox && (
         <div className="apply-overlay">
           <div className="apply-box">

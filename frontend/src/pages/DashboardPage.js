@@ -43,17 +43,14 @@ const DashboardPage = () => {
   return (
     <div className="dashboard-container">
 
-      {/* NAVBAR */}
       <nav className="navbar">
         <h2>FreelanceHub</h2>
       </nav>
 
-      {/* BACK BUTTON */}
       <button className="back-btn" onClick={() => navigate("/")}>
         ← Back to Home
       </button>
 
-      {/* CONTENT */}
       <div className="dashboard-content">
         <h1>Welcome {user.name}</h1>
 
@@ -63,7 +60,6 @@ const DashboardPage = () => {
           <p className="subtitle">Explore projects and showcase your skills.</p>
         )}
 
-        {/* CLIENT DASHBOARD */}
         {role === "client" && (
           <div className="cards-container">
 
@@ -85,7 +81,6 @@ const DashboardPage = () => {
           </div>
         )}
 
-        {/* FREELANCER DASHBOARD */}
         {role === "freelancer" && (
           <div className="cards-container">
 

@@ -1,6 +1,4 @@
-/* =======================
-   MODAL OVERLAY
-======================= */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -13,9 +11,7 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* =======================
-   MODAL CARD
-======================= */
+
 .modal-card {
   width: 480px;
   background: var(--light);
@@ -40,9 +36,6 @@
   margin-bottom: 18px;
 }
 
-/* =======================
-   INPUT FIELDS
-======================= */
 .modal-card input,
 .modal-card textarea {
   width: 100%;
@@ -80,9 +73,7 @@
   resize: none;
 }
 
-/* =======================
-   FORM ROW (2 COLUMN)
-======================= */
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -103,9 +94,7 @@
   color: var(--text);
 }
 
-/* =======================
-   ACTION BUTTONS
-======================= */
+
 .actions {
   display: flex;
   justify-content: flex-end;
@@ -122,7 +111,6 @@
   transition: 0.25s ease;
 }
 
-/* Primary */
 .actions button:first-child {
   background: var(--primary);
   color: #fff;
@@ -133,7 +121,6 @@
   box-shadow: 0 8px 18px rgba(79, 109, 245, 0.35);
 }
 
-/* Cancel */
 .actions .cancel {
   background: #e2e5ee;
   color: #333;
@@ -149,9 +136,7 @@
   transform: translateY(-2px);
 }
 
-/* =======================
-   ANIMATIONS
-======================= */
+
 @keyframes fadeIn {
   from {
     opacity: 0;

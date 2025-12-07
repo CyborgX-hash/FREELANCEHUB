@@ -1,6 +1,4 @@
-/* ============================================================
-   PAGE WRAPPER
-============================================================ */
+
 .myprojects-page {
   min-height: 100vh;
   padding: 32px;
@@ -16,9 +14,6 @@
   margin-bottom: 25px;
 }
 
-/* ============================================================
-   BACK BUTTON
-============================================================ */
 .back-btn {
   background: transparent;
   border: 1px solid var(--subtext);
@@ -41,9 +36,7 @@
   transform: translateY(-2px);
 }
 
-/* ============================================================
-   CONTROLS (SEARCH / FILTER / SORT)
-============================================================ */
+
 .project-controls {
   display: flex;
   flex-wrap: wrap;
@@ -70,9 +63,7 @@
   outline: none;
 }
 
-/* ============================================================
-   PROJECT GRID
-============================================================ */
+
 .project-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -80,9 +71,7 @@
   margin-top: 10px;
 }
 
-/* ============================================================
-   PROJECT CARD
-============================================================ */
+
 .project-card {
   background: var(--surface);
   border: 1px solid var(--subtext);
@@ -102,7 +91,6 @@
   box-shadow: var(--shadow-hover);
 }
 
-/* TITLE */
 .project-card h3 {
   font-size: 20px;
   font-weight: 600;
@@ -110,7 +98,6 @@
   color: var(--primary);
 }
 
-/* DESCRIPTION (line clamp) */
 .description {
   font-size: 14px;
   color: var(--subtext);
@@ -122,9 +109,7 @@
   overflow: hidden;
 }
 
-/* ============================================================
-   INFO BOX
-============================================================ */
+
 .info {
   background: var(--background);
   border: 1px solid var(--subtext);
@@ -146,9 +131,6 @@
   margin-top: auto;
 }
 
-/* ============================================================
-   ACTION BUTTONS
-============================================================ */
 .action-buttons {
   display: flex;
   gap: 12px;
@@ -194,9 +176,6 @@
   color: var(--subtext);
 }
 
-/* ============================================================
-   PAGINATION
-============================================================ */
 .pagination {
   display: flex;
   justify-content: center;
@@ -231,9 +210,7 @@
   color: var(--subtext);
 }
 
-/* ============================================================
-   LOADER
-============================================================ */
+
 .loading-wrapper {
   height: 60vh;
   display: flex;

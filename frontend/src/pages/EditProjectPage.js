@@ -39,7 +39,7 @@ export default function EditProjectPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(project), // includes category now
+        body: JSON.stringify(project), 
       });
 
       const data = await response.json();
@@ -105,7 +105,6 @@ export default function EditProjectPage() {
             </div>
           </div>
 
-          {/* ⭐ NEW CATEGORY FIELD */}
           <label>Category</label>
           <select
             name="category"
