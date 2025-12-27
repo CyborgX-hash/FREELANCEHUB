@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { applyToProject, getAppliedProjects } from "../api";
+import {
+  fetchProjects,
+  applyToProject,
+  getAppliedProjects,
+} from "../api"; // ✅ centralized API
 import { useNavigate } from "react-router-dom";
 import "./BrowseJobsPage.css";
-
-const API_URL = "http://localhost:5001/api/projects";
 
 const BrowseJobsPage = () => {
   const navigate = useNavigate();
@@ -25,33 +27,34 @@ const BrowseJobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 8;
 
+  /* THEME */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  const fetchProjects = async () => {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      setProjects(data.projects || []);
-      setFiltered(data.projects || []);
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
-  };
-
-  const fetchApplied = async () => {
-    const res = await getAppliedProjects();
-    const ids = (res.applications || []).map((a) => a.project_id);
-    setAppliedIds(ids);
-  };
-
+  /* FETCH PROJECTS + APPLIED PROJECTS */
   useEffect(() => {
-    fetchProjects();
-    fetchApplied();
+    const loadData = async () => {
+      try {
+        const projectRes = await fetchProjects();
+        setProjects(projectRes?.projects || []);
+        setFiltered(projectRes?.projects || []);
+
+        const appliedRes = await getAppliedProjects();
+        const ids = (appliedRes?.applications || []).map(
+          (a) => a.project_id
+        );
+        setAppliedIds(ids);
+      } catch (err) {
+        console.error("Error loading browse data:", err);
+      }
+    };
+
+    loadData();
   }, []);
 
+  /* FILTER + SORT */
   useEffect(() => {
     let result = [...projects];
 
@@ -59,8 +62,8 @@ const BrowseJobsPage = () => {
       const s = search.toLowerCase();
       result = result.filter(
         (p) =>
-          p.title.toLowerCase().includes(s) ||
-          p.description.toLowerCase().includes(s)
+          p.title?.toLowerCase().includes(s) ||
+          p.description?.toLowerCase().includes(s)
       );
     }
 
@@ -84,14 +87,18 @@ const BrowseJobsPage = () => {
     setCurrentPage(1);
   }, [search, categoryFilter, sortBy, projects]);
 
+  /* PAGINATION */
   const indexOfLast = currentPage * cardsPerPage;
   const indexOfFirst = indexOfLast - cardsPerPage;
   const currentCards = filtered.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filtered.length / cardsPerPage);
 
-  const nextPage = () => currentPage < totalPages && setCurrentPage((p) => p + 1);
-  const prevPage = () => currentPage > 1 && setCurrentPage((p) => p - 1);
+  const nextPage = () =>
+    currentPage < totalPages && setCurrentPage((p) => p + 1);
+  const prevPage = () =>
+    currentPage > 1 && setCurrentPage((p) => p - 1);
 
+  /* APPLY MODAL */
   const openApply = (project) => {
     setActiveProject(project);
     setProposal("");
@@ -110,7 +117,7 @@ const BrowseJobsPage = () => {
     };
 
     const res = await applyToProject(payload);
-    if (res.ERROR) return alert(res.ERROR);
+    if (res?.ERROR) return alert(res.ERROR);
 
     alert("Applied successfully!");
     setAppliedIds((prev) => [...prev, activeProject.id]);
@@ -119,13 +126,13 @@ const BrowseJobsPage = () => {
 
   return (
     <div className="browse-container">
-
       <button className="back-btn" onClick={() => navigate("/dashboard")}>
         ← Back
       </button>
 
       <h2>🔍 Browse Freelance Jobs</h2>
 
+      {/* FILTERS */}
       <div className="filters">
         <input
           type="text"
@@ -134,27 +141,24 @@ const BrowseJobsPage = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-<select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-  <option value="all">All Categories</option>
-
-  <option value="web">Web Development</option>
-  <option value="mobile">Mobile App</option>
-  <option value="ai">AI / Machine Learning</option>
-
-  <option value="uiux">UI / UX Design</option>
-  <option value="graphics">Graphic Design</option>
-  <option value="video">Video Editing</option>
-
-  <option value="content">Content Writing</option>
-  <option value="copywriting">Copywriting</option>
-
-  <option value="marketing">Digital Marketing</option>
-  <option value="seo">SEO / SEM</option>
-
-  <option value="finance">Finance & Accounting</option>
-  <option value="general">General</option>
-</select>
-
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="all">All Categories</option>
+          <option value="web">Web Development</option>
+          <option value="mobile">Mobile App</option>
+          <option value="ai">AI / Machine Learning</option>
+          <option value="uiux">UI / UX Design</option>
+          <option value="graphics">Graphic Design</option>
+          <option value="video">Video Editing</option>
+          <option value="content">Content Writing</option>
+          <option value="copywriting">Copywriting</option>
+          <option value="marketing">Digital Marketing</option>
+          <option value="seo">SEO / SEM</option>
+          <option value="finance">Finance & Accounting</option>
+          <option value="general">General</option>
+        </select>
 
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
           <option value="latest">Latest First</option>
@@ -164,15 +168,22 @@ const BrowseJobsPage = () => {
         </select>
       </div>
 
+      {/* PROJECTS */}
       <div className="projects-grid">
         {currentCards.map((p) => (
           <div className="project-card" key={p.id}>
             <h3>{p.title}</h3>
-            <p className="desc">{p.description.slice(0, 120)}...</p>
+            <p className="desc">{p.description?.slice(0, 120)}...</p>
 
-            <p><strong>Budget:</strong> ₹{p.budget_min || "N/A"}</p>
-            <p><strong>Skills:</strong> {p.skills}</p>
-            <p><strong>Client:</strong> {p.client?.name}</p>
+            <p>
+              <strong>Budget:</strong> ₹{p.budget_min || "N/A"}
+            </p>
+            <p>
+              <strong>Skills:</strong> {p.skills || "Not specified"}
+            </p>
+            <p>
+              <strong>Client:</strong> {p.client?.name}
+            </p>
 
             {appliedIds.includes(p.id) ? (
               <button className="applied-btn">Applied ✔</button>
@@ -185,12 +196,22 @@ const BrowseJobsPage = () => {
         ))}
       </div>
 
-      <div className="pagination">
-        <button disabled={currentPage === 1} onClick={prevPage}>⬅ Prev</button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button disabled={currentPage === totalPages} onClick={nextPage}>Next ➡</button>
-      </div>
+      {/* PAGINATION */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button disabled={currentPage === 1} onClick={prevPage}>
+            ⬅ Prev
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button disabled={currentPage === totalPages} onClick={nextPage}>
+            Next ➡
+          </button>
+        </div>
+      )}
 
+      {/* APPLY MODAL */}
       {applyOpen && (
         <div className="modal-overlay">
           <div className="modal-card">

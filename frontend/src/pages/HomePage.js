@@ -137,7 +137,7 @@ export default function HomePage() {
             </video>
 
             <div className="hero-content">
-              <h2>Our freelancers will take it from here</h2>
+              <h2>Where ideas turn into successful collaborations.</h2>
               <p>Search, hire & collaborate with industry-leading professionals worldwide.</p>
 
               <button className="btn primary" onClick={() => navigate("/dashboard")}>
@@ -148,7 +148,7 @@ export default function HomePage() {
 
           <section ref={aboutRef} className="about-section">
             <h2>About Us</h2>
-            <p>FreelanceHub connects businesses with verified freelancers worldwide.</p>
+            <p>FreelanceHub is a modern freelancing platform designed to seamlessly connect clients with skilled freelancers across various domains such as web development, design, mobile apps, AI, marketing, and content creation</p>
           </section>
 
           <section ref={servicesRef} className="services-section">

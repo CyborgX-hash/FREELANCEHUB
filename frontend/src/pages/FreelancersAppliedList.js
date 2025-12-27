@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from "react";
+import { getProjectApplications } from "../api"; // ✅ centralized API
 import "./AppliedFreelancersPage.css";
-
-const API_URL = "http://localhost:5001/api/applications";
 
 export default function FreelancersAppliedList({ projectId }) {
   const [apps, setApps] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/project/${projectId}`, {
-      headers: { Authorization: "Bearer " + localStorage.getItem("token") }
-    })
-      .then(res => res.json())
-      .then(data => setApps(data.applications || []));
+    if (!projectId) return;
+
+    const loadApplications = async () => {
+      try {
+        const data = await getProjectApplications(projectId);
+        setApps(data?.applications || []);
+      } catch (err) {
+        console.error("Error fetching applications:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadApplications();
   }, [projectId]);
+
+  if (loading) {
+    return <div className="loader">Loading applications...</div>;
+  }
 
   return (
     <div className="af-container">
@@ -25,25 +38,29 @@ export default function FreelancersAppliedList({ projectId }) {
         <span>Portfolio</span>
       </div>
 
-      {apps.map((a) => (
-        <div key={a.id} className="table-row">
-          <span>{a.freelancer?.name}</span>
-          <span>{a.freelancer?.email}</span>
-          <span>{a.cover_letter}</span>
+      {apps.length === 0 ? (
+        <p className="empty-msg">No applications yet.</p>
+      ) : (
+        apps.map((a) => (
+          <div key={a.id} className="table-row">
+            <span>{a.freelancer?.name || "N/A"}</span>
+            <span>{a.freelancer?.email || "N/A"}</span>
+            <span>{a.cover_letter || "—"}</span>
 
-          {a.portfolio_url || a.freelancer?.portfolio_url ? (
-            <a
-              href={a.portfolio_url || a.freelancer.portfolio_url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Portfolio →
-            </a>
-          ) : (
-            <span>No link</span>
-          )}
-        </div>
-      ))}
+            {a.portfolio_url || a.freelancer?.portfolio_url ? (
+              <a
+                href={a.portfolio_url || a.freelancer.portfolio_url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Portfolio →
+              </a>
+            ) : (
+              <span>No link</span>
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }

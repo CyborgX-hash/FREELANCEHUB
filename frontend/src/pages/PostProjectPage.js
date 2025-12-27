@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import { FaArrowLeft } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+import { createProject } from "../api";
 import "./PostProjectPage.css";
-
-const API_URL = "http://localhost:5001/api/projects";
 
 const PostProjectPage = () => {
   const navigate = useNavigate();
@@ -14,13 +13,14 @@ const PostProjectPage = () => {
     description: "",
     budget_min: "",
     skills: "",
-    category: "General",  
+    category: "General",
   });
 
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -29,10 +29,12 @@ const PostProjectPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      if (!token) return alert("You must be logged in to post a project.");
+      if (!token) {
+        alert("You must be logged in");
+        return;
+      }
 
       const decoded = jwtDecode(token);
-      const client_id = decoded.id;
 
       const payload = {
         title: formData.title,
@@ -40,30 +42,22 @@ const PostProjectPage = () => {
         budget_min: Number(formData.budget_min) || null,
         budget_max: null,
         skills: formData.skills || "General",
-        category: formData.category,   
+        category: formData.category,
         deadline: null,
-        client_id,
+        client_id: decoded.id, // ✅ REQUIRED FIELD (FIX)
       };
 
-      const response = await fetch(`${API_URL}/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await createProject(payload);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Project created successfully!");
-        navigate("/dashboard");
-      } else {
-        alert(data.ERROR || "Error creating project.");
+      if (res?.ERROR) {
+        alert(res.ERROR);
+        return;
       }
+
+      alert("Project created successfully!");
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Create project error:", error);
       alert("Something went wrong.");
     } finally {
       setLoading(false);
@@ -80,10 +74,10 @@ const PostProjectPage = () => {
       </div>
 
       <div className="postproject-container">
-        
         <form className="postproject-form" onSubmit={handleSubmit}>
-          
-          <label>Project Title <span>*</span></label>
+          <label>
+            Project Title <span>*</span>
+          </label>
           <input
             type="text"
             name="title"
@@ -93,14 +87,16 @@ const PostProjectPage = () => {
             required
           />
 
-          <label>Description <span>*</span></label>
+          <label>
+            Description <span>*</span>
+          </label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             placeholder="Describe your project"
             required
-          ></textarea>
+          />
 
           <div className="two-column">
             <div className="form-group">
@@ -121,37 +117,34 @@ const PostProjectPage = () => {
                 name="skills"
                 value={formData.skills}
                 onChange={handleChange}
-                placeholder="e.g. Web Dev, UI/UX, React..."
+                placeholder="e.g. HTML, CSS, React"
               />
             </div>
           </div>
 
           <label>Project Category</label>
           <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-            >
-              <option value="General">General</option>
-
-              <option value="Web Development">Web Development</option>
-              <option value="Mobile App">Mobile App</option>
-              <option value="AI / Machine Learning">AI / Machine Learning</option>
-
-              <option value="UI/UX Design">UI/UX Design</option>
-              <option value="Graphic Design">Graphic Design</option>
-              <option value="Video Editing">Video Editing</option>
-
-              <option value="Content Writing">Content Writing</option>
-
-              <option value="Digital Marketing">Digital Marketing</option>
-            </select>
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+          >
+            <option value="General">General</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile App">Mobile App</option>
+            <option value="AI / Machine Learning">AI / Machine Learning</option>
+            <option value="UI/UX Design">UI/UX Design</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="Content Writing">Content Writing</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+          </select>
 
           <button type="submit" className="create-btn" disabled={loading}>
             {loading ? "Creating..." : "Create Project"}
           </button>
         </form>
 
+        {/* PREVIEW */}
         <div className="project-preview">
           <h3>🧩 Project Summary</h3>
           <p>This project will appear in Browse Jobs for freelancers.</p>
@@ -165,13 +158,19 @@ const PostProjectPage = () => {
                 : "Your project description will appear here."}
             </p>
 
-            <p><strong>💰 Budget:</strong> ₹{formData.budget_min || "Not set"}</p>
-            <p><strong>🛠 Skills:</strong> {formData.skills || "Not specified"}</p>
-
-            <p><strong>📁 Category:</strong> {formData.category}</p>
+            <p>
+              <strong>💰 Budget:</strong>{" "}
+              ₹{formData.budget_min || "Not set"}
+            </p>
+            <p>
+              <strong>🛠 Skills:</strong>{" "}
+              {formData.skills || "Not specified"}
+            </p>
+            <p>
+              <strong>📁 Category:</strong> {formData.category}
+            </p>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -1,42 +1,53 @@
-
-
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import "./ProfilePage.css";
 import { FaUserCircle } from "react-icons/fa";
+import { getMe, updateProfile } from "../api"; // ✅ centralized API
+import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  /* FETCH PROFILE */
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return navigate("/login");
+    const loadProfile = async () => {
+      try {
+        const data = await getMe();
+        if (!data?.user) {
+          navigate("/login");
+          return;
+        }
+        setUser(data.user);
+      } catch (err) {
+        console.error("Profile fetch error:", err);
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    fetch("http://localhost:5001/api/users/me", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setUser(data.user))
-      .catch(() => navigate("/login"));
-  }, []);
+    loadProfile();
+  }, [navigate]);
 
-  if (!user)
+  if (loading)
     return (
       <div className="loading-wrapper">
         <div className="loader-ring"></div>
         <p>Loading your profile...</p>
       </div>
     );
-  
+
+  if (!user) return null;
+
+  /* HANDLE INPUT CHANGE */
   const handleChange = (e) =>
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  /* SAVE PROFILE */
   const saveChanges = async () => {
-    const token = localStorage.getItem("token");
-
     const allowed = {};
     const allowedFields = [
       "name",
@@ -44,15 +55,15 @@ const ProfilePage = () => {
       "age",
       "gender",
       "city",
-      "state",            
+      "state",
       "experience",
       "skills",
       "portfolio_url",
       "organization",
       "aboutOrg",
-      "department",        
-      "designation",       
-      "about",            
+      "department",
+      "designation",
+      "about",
     ];
 
     allowedFields.forEach((field) => {
@@ -61,17 +72,12 @@ const ProfilePage = () => {
       }
     });
 
-    const res = await fetch("http://localhost:5001/api/users/update", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(allowed),
-    });
+    const res = await updateProfile(allowed);
 
-    const data = await res.json();
-    if (!res.ok) return alert(data.ERROR);
+    if (res?.ERROR) {
+      alert(res.ERROR);
+      return;
+    }
 
     alert("Profile updated successfully!");
     setEditMode(false);
@@ -117,6 +123,7 @@ const ProfilePage = () => {
             <input disabled value={user.email} />
           </div>
 
+          {/* FREELANCER */}
           {user.role === "freelancer" && (
             <>
               <div className="field">
@@ -196,6 +203,7 @@ const ProfilePage = () => {
             </>
           )}
 
+          {/* CLIENT */}
           {user.role === "client" && (
             <>
               <div className="field">
@@ -230,6 +238,7 @@ const ProfilePage = () => {
             </>
           )}
 
+          {/* ADMIN */}
           {user.role === "admin" && (
             <>
               <div className="field">
@@ -275,7 +284,10 @@ const ProfilePage = () => {
               <button className="save-btn" onClick={saveChanges}>
                 Save Changes
               </button>
-              <button className="cancel-btn" onClick={() => setEditMode(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setEditMode(false)}
+              >
                 Cancel
               </button>
             </>

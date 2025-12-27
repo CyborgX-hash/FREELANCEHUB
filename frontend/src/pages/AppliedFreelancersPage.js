@@ -1,45 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { fetchClientProjects } from "../api"; // ✅ centralized API
 import "./AppliedFreelancersPage.css";
 
-const API_URL = "http://localhost:5001/api/projects";
-
 export default function AppliedFreelancersPage() {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
   const [filtered, setFiltered] = useState([]);
-
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   const PER_PAGE = 8;
 
+  /* FETCH CLIENT PROJECTS */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    const decoded = jwtDecode(token);
-    const clientId = decoded.id;
+    const { id: clientId } = jwtDecode(token);
 
-    fetch(`${API_URL}/client/${clientId}`)
-      .then((res) => res.json())
+    fetchClientProjects(clientId)
       .then((data) => {
-        setProjects(data.projects || []);
-        setFiltered(data.projects || []);
+        setProjects(data?.projects || []);
+        setFiltered(data?.projects || []);
       })
-      .catch((err) => console.error("Fetch error:", err));
+      .catch((err) => {
+        console.error("Error fetching client projects:", err);
+      });
   }, []);
 
-  
+  /* SEARCH FILTER */
   useEffect(() => {
     let results = [...projects];
 
     if (search.trim()) {
       const s = search.toLowerCase();
       results = results.filter((p) =>
-        p.title.toLowerCase().includes(s)
+        p.title?.toLowerCase().includes(s)
       );
     }
 
@@ -47,7 +46,7 @@ export default function AppliedFreelancersPage() {
     setPage(1);
   }, [search, projects]);
 
-  
+  /* PAGINATION */
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const startIndex = (page - 1) * PER_PAGE;
   const paginated = filtered.slice(startIndex, startIndex + PER_PAGE);
@@ -55,8 +54,8 @@ export default function AppliedFreelancersPage() {
   return (
     <div className="af-container">
       <button className="back-btn" onClick={() => navigate("/dashboard")}>
-      ← Back
-    </button>
+        ← Back
+      </button>
 
       <h2>Your Posted Projects</h2>
 
@@ -74,34 +73,39 @@ export default function AppliedFreelancersPage() {
           <div
             className="af-card"
             key={p.id}
-            onClick={() => navigate(`/applied-freelancers/${p.id}`)}  
+            onClick={() => navigate(`/applied-freelancers/${p.id}`)}
           >
             <h3>{p.title}</h3>
             <p>{p.description?.slice(0, 80)}...</p>
-            <p><strong>Skills:</strong> {p.skills}</p>
+            <p>
+              <strong>Skills:</strong> {p.skills || "Not specified"}
+            </p>
           </div>
         ))}
       </div>
 
-      <div className="pagination">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage(page - 1)}
-        >
-          Prev
-        </button>
+      {/* PAGINATION CONTROLS */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Prev
+          </button>
 
-        <span>
-          {page} / {totalPages}
-        </span>
+          <span>
+            {page} / {totalPages}
+          </span>
 
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
