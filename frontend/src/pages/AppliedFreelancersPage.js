@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { fetchClientProjects } from "../api"; // ✅ centralized API
+import { fetchClientProjects } from "../api"; 
 import "./AppliedFreelancersPage.css";
 
 export default function AppliedFreelancersPage() {
@@ -14,7 +14,6 @@ export default function AppliedFreelancersPage() {
 
   const PER_PAGE = 8;
 
-  /* FETCH CLIENT PROJECTS */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -31,7 +30,6 @@ export default function AppliedFreelancersPage() {
       });
   }, []);
 
-  /* SEARCH FILTER */
   useEffect(() => {
     let results = [...projects];
 
@@ -46,7 +44,6 @@ export default function AppliedFreelancersPage() {
     setPage(1);
   }, [search, projects]);
 
-  /* PAGINATION */
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const startIndex = (page - 1) * PER_PAGE;
   const paginated = filtered.slice(startIndex, startIndex + PER_PAGE);
@@ -59,7 +56,6 @@ export default function AppliedFreelancersPage() {
 
       <h2>Your Posted Projects</h2>
 
-      {/* SEARCH BAR */}
       <input
         className="search-box"
         placeholder="Search projects..."
@@ -67,7 +63,6 @@ export default function AppliedFreelancersPage() {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* PROJECT CARDS */}
       <div className="af-grid">
         {paginated.map((p) => (
           <div
@@ -84,7 +79,6 @@ export default function AppliedFreelancersPage() {
         ))}
       </div>
 
-      {/* PAGINATION CONTROLS */}
       {totalPages > 1 && (
         <div className="pagination">
           <button

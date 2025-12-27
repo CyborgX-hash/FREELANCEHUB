@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchClientProjects,
-  deleteProject,
-} from "../api"; // ✅ centralized API
+import {fetchClientProjects,deleteProject} from "../api"; 
 import "./MyProjectsPage.css";
 
 export default function MyProjectsPage() {
@@ -20,7 +17,6 @@ export default function MyProjectsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  /* FETCH CLIENT PROJECTS */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -41,7 +37,6 @@ export default function MyProjectsPage() {
     loadProjects();
   }, []);
 
-  /* DELETE PROJECT */
   const handleDelete = async (projectId) => {
     if (!window.confirm("Are you sure? This cannot be undone!")) return;
 
@@ -58,7 +53,6 @@ export default function MyProjectsPage() {
 
   const editProject = (project) => navigate(`/edit-project/${project.id}`);
 
-  /* FILTER + SORT */
   const filteredProjects = projects
     .filter((p) =>
       p.title?.toLowerCase().includes(search.toLowerCase())
@@ -82,7 +76,6 @@ export default function MyProjectsPage() {
       return 0;
     });
 
-  /* PAGINATION */
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedProjects = filteredProjects.slice(
@@ -111,7 +104,6 @@ export default function MyProjectsPage() {
 
       <h2>My Projects</h2>
 
-      {/* CONTROLS */}
       <div className="project-controls">
         <input
           type="text"
@@ -140,7 +132,6 @@ export default function MyProjectsPage() {
         </select>
       </div>
 
-      {/* PROJECT LIST */}
       {paginatedProjects.length === 0 ? (
         <p className="empty-msg">No matching projects found.</p>
       ) : (
@@ -192,7 +183,6 @@ export default function MyProjectsPage() {
         </div>
       )}
 
-      {/* PAGINATION */}
       {totalPages > 1 && (
         <div className="pagination">
           <button onClick={prevPage} disabled={currentPage === 1}>

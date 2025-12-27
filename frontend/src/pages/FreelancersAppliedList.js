@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProjectApplications } from "../api"; // ✅ centralized API
+import { getProjectApplications } from "../api"; 
 import "./AppliedFreelancersPage.css";
 
 export default function FreelancersAppliedList({ projectId }) {

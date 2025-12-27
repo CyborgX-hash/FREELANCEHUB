@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  fetchProjectById,
-  updateProject,
-} from "../api"; // ✅ centralized API
+import {fetchProjectById,updateProject,} from "../api";
 import "./EditProjectPage.css";
 
 export default function EditProjectPage() {
@@ -13,7 +10,6 @@ export default function EditProjectPage() {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* FETCH PROJECT DETAILS */
   useEffect(() => {
     const loadProject = async () => {
       try {
@@ -29,13 +25,11 @@ export default function EditProjectPage() {
     loadProject();
   }, [id]);
 
-  /* HANDLE FORM CHANGE */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProject((prev) => ({ ...prev, [name]: value }));
   };
 
-  /* SUBMIT UPDATED PROJECT */
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import { getMe, updateProfile } from "../api"; // ✅ centralized API
+import { getMe, updateProfile } from "../api"; 
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
@@ -11,7 +11,6 @@ const ProfilePage = () => {
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  /* FETCH PROFILE */
   useEffect(() => {
     const loadProfile = async () => {
       try {
@@ -42,11 +41,9 @@ const ProfilePage = () => {
 
   if (!user) return null;
 
-  /* HANDLE INPUT CHANGE */
   const handleChange = (e) =>
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  /* SAVE PROFILE */
   const saveChanges = async () => {
     const allowed = {};
     const allowedFields = [
@@ -123,7 +120,6 @@ const ProfilePage = () => {
             <input disabled value={user.email} />
           </div>
 
-          {/* FREELANCER */}
           {user.role === "freelancer" && (
             <>
               <div className="field">
@@ -203,7 +199,6 @@ const ProfilePage = () => {
             </>
           )}
 
-          {/* CLIENT */}
           {user.role === "client" && (
             <>
               <div className="field">
@@ -238,7 +233,6 @@ const ProfilePage = () => {
             </>
           )}
 
-          {/* ADMIN */}
           {user.role === "admin" && (
             <>
               <div className="field">

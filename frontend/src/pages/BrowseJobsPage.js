@@ -3,7 +3,7 @@ import {
   fetchProjects,
   applyToProject,
   getAppliedProjects,
-} from "../api"; // ✅ centralized API
+} from "../api"; 
 import { useNavigate } from "react-router-dom";
 import "./BrowseJobsPage.css";
 
@@ -27,13 +27,11 @@ const BrowseJobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 8;
 
-  /* THEME */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  /* FETCH PROJECTS + APPLIED PROJECTS */
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -54,7 +52,6 @@ const BrowseJobsPage = () => {
     loadData();
   }, []);
 
-  /* FILTER + SORT */
   useEffect(() => {
     let result = [...projects];
 
@@ -87,7 +84,6 @@ const BrowseJobsPage = () => {
     setCurrentPage(1);
   }, [search, categoryFilter, sortBy, projects]);
 
-  /* PAGINATION */
   const indexOfLast = currentPage * cardsPerPage;
   const indexOfFirst = indexOfLast - cardsPerPage;
   const currentCards = filtered.slice(indexOfFirst, indexOfLast);
@@ -98,7 +94,6 @@ const BrowseJobsPage = () => {
   const prevPage = () =>
     currentPage > 1 && setCurrentPage((p) => p - 1);
 
-  /* APPLY MODAL */
   const openApply = (project) => {
     setActiveProject(project);
     setProposal("");
@@ -132,7 +127,6 @@ const BrowseJobsPage = () => {
 
       <h2>🔍 Browse Freelance Jobs</h2>
 
-      {/* FILTERS */}
       <div className="filters">
         <input
           type="text"
@@ -168,7 +162,6 @@ const BrowseJobsPage = () => {
         </select>
       </div>
 
-      {/* PROJECTS */}
       <div className="projects-grid">
         {currentCards.map((p) => (
           <div className="project-card" key={p.id}>
@@ -196,12 +189,9 @@ const BrowseJobsPage = () => {
         ))}
       </div>
 
-      {/* PAGINATION */}
       {totalPages > 1 && (
         <div className="pagination">
-          <button disabled={currentPage === 1} onClick={prevPage}>
-            ⬅ Prev
-          </button>
+          <button disabled={currentPage === 1} onClick={prevPage}>⬅ Prev</button>
           <span>
             Page {currentPage} of {totalPages}
           </span>
@@ -211,7 +201,6 @@ const BrowseJobsPage = () => {
         </div>
       )}
 
-      {/* APPLY MODAL */}
       {applyOpen && (
         <div className="modal-overlay">
           <div className="modal-card">

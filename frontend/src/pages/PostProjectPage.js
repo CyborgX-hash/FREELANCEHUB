@@ -44,7 +44,7 @@ const PostProjectPage = () => {
         skills: formData.skills || "General",
         category: formData.category,
         deadline: null,
-        client_id: decoded.id, // ✅ REQUIRED FIELD (FIX)
+        client_id: decoded.id, 
       };
 
       const res = await createProject(payload);
@@ -144,7 +144,6 @@ const PostProjectPage = () => {
           </button>
         </form>
 
-        {/* PREVIEW */}
         <div className="project-preview">
           <h3>🧩 Project Summary</h3>
           <p>This project will appear in Browse Jobs for freelancers.</p>

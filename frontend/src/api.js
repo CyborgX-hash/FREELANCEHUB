@@ -1,18 +1,15 @@
 import axios from "axios";
 
-/* BASE URL (single source of truth) */
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_BACKEND_SERVER_URL
     : process.env.REACT_APP_BACKEND_LOCAL_URL;
 
-/* AXIOS INSTANCE */
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
-/* ATTACH TOKEN AUTOMATICALLY */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -24,7 +21,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-/* ================= USERS ================= */
 
 export const signupUser = async (data) => {
   try {
@@ -44,7 +40,6 @@ export const loginUser = async (data) => {
   }
 };
 
-/* ================= PROJECTS ================= */
 
 export const fetchProjects = async () => {
   try {
@@ -91,7 +86,6 @@ export const deleteProject = async (id) => {
   }
 };
 
-/* ================= APPLICATIONS ================= */
 
 export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   try {
