@@ -1,34 +1,42 @@
-const express = require("express")
-const usersRouter = express.Router()
+const express = require("express");
+const router = express.Router();
 
 const {
-    createUserMiddleware,
-    loginUserMiddleware,
-    logoutUserMiddleware,
-    updateUserMiddleware,
-} = require("../middlewares/userMiddleware")
+  createUserMiddleware,
+  loginUserMiddleware,
+  updateUserMiddleware,
+} = require("../middlewares/userMiddleware");
 
-const {
-    createUserController,
-    loginUserController,
-    logoutUserController,
-    getMeController,
-    updateUserController,
-} = require("../controllers/userController")
+const { authenticate } = require("../utils/auth");
 
-const { 
-    authenticate 
-} = require("../utils/auth")
+// Repository
+const UserRepository = require("../repositories/UserRepository");
 
+// Service
+const UserService = require("../services/UserService");
 
-usersRouter.post("/register",createUserMiddleware,createUserController)
-usersRouter.post("/login",loginUserMiddleware,loginUserController)
-usersRouter.post('/logout',logoutUserMiddleware,logoutUserController)
-usersRouter.get("/me",authenticate,getMeController)
-usersRouter.put("/update", authenticate, updateUserMiddleware, updateUserController);
+// Controller
+const UserController = require("../controllers/userController");
 
+// Dependency Injection
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
+const userController = new UserController(userService);
 
+// Routes
+router.post("/register", createUserMiddleware, userController.register);
 
+router.post("/login", loginUserMiddleware, userController.login);
 
-module.exports = usersRouter;
-  
+router.post("/logout", authenticate, userController.logout);
+
+router.get("/me", authenticate, userController.getMe);
+
+router.put(
+  "/update",
+  authenticate,
+  updateUserMiddleware,
+  userController.update
+);
+
+module.exports = router;
