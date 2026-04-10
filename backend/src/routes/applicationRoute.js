@@ -2,34 +2,37 @@ const express = require("express");
 const router = express.Router();
 
 const { authMiddleware } = require("../middlewares/userMiddleware");
-const applicationController = require("../controllers/applicationController");
 
-router.post(
-  "/apply",
-  authMiddleware,
-  applicationController.applyToProjectController
+// Repositories
+const ApplicationRepository = require("../repositories/ApplicationRepository");
+const ProjectRepository = require("../repositories/ProjectRepository");
+
+// Services
+const ApplicationService = require("../services/ApplicationService");
+
+// Controllers
+const ApplicationController = require("../controllers/applicationController");
+
+// Dependency Injection
+const applicationRepository = new ApplicationRepository();
+const projectRepository = new ProjectRepository();
+const applicationService = new ApplicationService(
+  applicationRepository,
+  projectRepository
 );
+const applicationController = new ApplicationController(applicationService);
 
+// Routes
+router.post("/apply", authMiddleware, applicationController.applyToProject);
 
 router.get(
   "/project/:projectId",
   authMiddleware,
-  applicationController.getApplicationsByProjectController
+  applicationController.getByProject
 );
 
+router.get("/me", authMiddleware, applicationController.getByFreelancer);
 
-router.get(
-  "/me",
-  authMiddleware,
-  applicationController.getApplicationsByFreelancerController
-);
-
-
-router.delete(
-  "/:id",
-  authMiddleware,
-  applicationController.withdrawApplicationController
-);
-
+router.delete("/:id", authMiddleware, applicationController.withdraw);
 
 module.exports = router;
