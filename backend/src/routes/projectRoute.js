@@ -2,16 +2,31 @@ const express = require("express");
 const router = express.Router();
 
 const { authMiddleware } = require("../middlewares/userMiddleware");
-const projectController = require("../controllers/projectController");
 
-router.post("/create", authMiddleware, projectController.createProjectController);
+const ProjectRepository = require("../repositories/ProjectRepository");
+const ProjectService = require("../services/ProjectService");
+const ProjectController = require("../controllers/projectController");
 
-router.get("/", projectController.getAllProjectsController);
+const projectRepository = new ProjectRepository();
+const projectService = new ProjectService(projectRepository);
+const projectController = new ProjectController(projectService);
 
-router.get("/client/:clientId", projectController.getClientProjectsController);
+// CREATE PROJECT (Only Client)
+router.post("/create", authMiddleware, projectController.create);
 
-router.get("/:id", projectController.getProjectByIdController);
-router.put("/:id", authMiddleware, projectController.updateProjectController);
-router.delete("/:id", authMiddleware, projectController.deleteProjectController);
+// GET ALL PROJECTS
+router.get("/", projectController.getAll);
+
+// ⭐ IMPORTANT: must come BEFORE "/:id"
+router.get("/client/:clientId", authMiddleware, projectController.getByClient);
+
+// GET PROJECT BY ID
+router.get("/:id", projectController.getById);
+
+// UPDATE PROJECT (Only Owner/Admin)
+router.put("/:id", authMiddleware, projectController.update);
+
+// DELETE PROJECT (Only Owner/Admin)
+router.delete("/:id", authMiddleware, projectController.delete);
 
 module.exports = router;
