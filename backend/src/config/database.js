@@ -1,5 +1,5 @@
-const { PrismaClient } = require("@prisma/client");
+const database = require("../patterns/DatabaseSingleton");
 
-const prisma = new PrismaClient();
+const prisma = database.getClient();
 
 module.exports = { prisma };
