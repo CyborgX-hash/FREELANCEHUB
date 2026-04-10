@@ -1,156 +1,66 @@
-const { prisma } = require("../config/database");
-
-
-async function applyToProjectController(req, res) {
-  try {
-    const freelancer = req.user;
-    const { projectId, proposal, portfolio_url, bid_amount } = req.body;
-
-    if (!projectId)
-      return res.status(400).json({ ERROR: "projectId is required" });
-
-    const project = await prisma.project.findUnique({
-      where: { id: Number(projectId) },
-    });
-
-    if (!project)
-      return res.status(404).json({ ERROR: "Project not found" });
-
-    if (freelancer.role.toLowerCase() !== "freelancer")
-      return res.status(403).json({ ERROR: "Only freelancers can apply" });
-
-    if (project.client_id === freelancer.id)
-      return res.status(403).json({ ERROR: "Cannot apply to your own project" });
-
-    const existing = await prisma.application.findFirst({
-      where: {
-        project_id: Number(projectId),
-        freelancer_id: freelancer.id,
-      },
-    });
-
-    if (existing)
-      return res.status(400).json({ ERROR: "Already applied to this project" });
-
-    const application = await prisma.application.create({
-      data: {
-        project_id: Number(projectId),
-        freelancer_id: freelancer.id,
-        cover_letter: proposal || null,
-        bid_amount: bid_amount ? Number(bid_amount) : null,
-        portfolio_url: portfolio_url || null,   // ⭐ FIX ADDED
-        status: "Applied",
-      },
-      include: {
-        project: true,
-      },
-    });
-
-    return res.json({ message: "Applied successfully", application });
-  } catch (err) {
-    console.error("Apply error:", err);
-    return res.status(500).json({ ERROR: "Internal Server Error" });
+class ApplicationController {
+  constructor(applicationService) {
+    this.applicationService = applicationService;
   }
-}
 
+  applyToProject = async (req, res) => {
+    try {
+      const result = await this.applicationService.applyToProject(
+        req.user,
+        req.body
+      );
 
-async function getApplicationsByProjectController(req, res) {
-  try {
-    const user = req.user;
-    const { projectId } = req.params;
-
-    const project = await prisma.project.findUnique({
-      where: { id: Number(projectId) },
-    });
-
-    if (!project)
-      return res.status(404).json({ ERROR: "Project not found" });
-
-    if (project.client_id !== user.id && user.role !== "Admin") {
-      return res.status(403).json({ ERROR: "Forbidden" });
+      return res.status(201).json(result);
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        ERROR: error.message || "Internal Server Error",
+      });
     }
+  };
 
-    const applications = await prisma.application.findMany({
-      where: { project_id: Number(projectId) },
-      orderBy: { created_at: "desc" },
-      include: {
-        freelancer: {
-          select: {
-            id: true,
-            name: true,
-            email: true,           
-            username: true,
-            portfolio_url: true,   
-          },
-        },
-      },
-    });
+  getByProject = async (req, res) => {
+    try {
+      const result = await this.applicationService.getByProject(
+        req.user,
+        req.params.projectId
+      );
 
-    console.log("APPLICATIONS RESPONSE:", applications);
+      return res.json(result);
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        ERROR: error.message,
+      });
+    }
+  };
 
-    res.json({ applications });
-  } catch (err) {
-    console.error("Applicants fetch error:", err);
-    res.status(500).json({ ERROR: "Internal Server Error" });
-  }
+  getByFreelancer = async (req, res) => {
+    try {
+      const result = await this.applicationService.getByFreelancer(
+        req.user
+      );
+
+      return res.json(result);
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        ERROR: error.message,
+      });
+    }
+  };
+
+  withdraw = async (req, res) => {
+    try {
+      const result = await this.applicationService.withdraw(
+        req.user,
+        req.params.id
+      );
+
+      return res.json(result);
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        ERROR: error.message,
+      });
+    }
+  };
 }
 
-
-async function getApplicationsByFreelancerController(req, res) {
-  try {
-    const freelancer = req.user;
-
-    const apps = await prisma.application.findMany({
-      where: { freelancer_id: freelancer.id },
-      orderBy: { created_at: "desc" },
-      include: {
-        project: {
-          include: {
-            client: {
-              select: { id: true, name: true, username: true },
-            },
-          },
-        },
-      },
-    });
-
-    res.json({ applications: apps });
-  } catch (err) {
-    console.error("My applications fetch error:", err);
-    res.status(500).json({ ERROR: "Internal Server Error" });
-  }
-}
-
-
-async function withdrawApplicationController(req, res) {
-  try {
-    const freelancer = req.user;
-    const { id } = req.params;
-
-    const application = await prisma.application.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!application)
-      return res.status(404).json({ ERROR: "Application not found" });
-
-    if (application.freelancer_id !== freelancer.id)
-      return res.status(403).json({ ERROR: "Forbidden" });
-
-    await prisma.application.delete({
-      where: { id: Number(id) },
-    });
-
-    res.json({ message: "Application withdrawn" });
-  } catch (err) {
-    console.error("Withdraw error:", err);
-    res.status(500).json({ ERROR: "Internal Server Error" });
-  }
-}
-
-module.exports = {
-  applyToProjectController,
-  getApplicationsByProjectController,
-  getApplicationsByFreelancerController,
-  withdrawApplicationController,
-};
+module.exports = ApplicationController;
