@@ -1,87 +1,132 @@
-FreelanceHub – A Freelance Marketplace Platform
+# FreelanceHub – A Freelance Marketplace Platform
 
-FreelanceHub is a full-stack freelance marketplace that enables clients to post projects, freelancers to bid on them, and users to easily browse projects using searching, sorting, filtering, and pagination.
-It provides an end-to-end workflow with authentication, project management, bidding, reviews, and a production-ready deployment setup.
+FreelanceHub is a comprehensive full-stack freelance marketplace that empowers clients to post projects and allows freelancers to bid on them. Users can efficiently browse projects and freelancers utilizing advanced searching, sorting, filtering, and pagination functionalities.
+It offers an end-to-end workflow, ensuring a robust platform for project management, application bidding, and authentication.
 
-📌 1. Problem Statement
+## 📌 Problem Statement
 
-The freelance market is growing rapidly, yet both clients and freelancers struggle due to:
+The freelance market is expanding rapidly, but users often face challenges such as:
+- Complex or poorly structured user interfaces on existing platforms
+- Lack of intelligent project discovery and matching features
+- Inefficient navigation missing flexible search, filter, sort & pagination capabilities
+- Difficulty finding the right freelancers for specific project requirements
 
-Complex or cluttered UI on existing platforms
+FreelanceHub addresses these issues by offering a clean, intuitive, and feature-rich system backed by a robust REST API and an interactive frontend.
 
-Lack of smart project discovery features
+## 📊 Database Entity-Relationship Diagram
 
-Inefficient navigation due to missing search, filter, sort & pagination
+*This ER Diagram illustrates the relationships between Users (Clients, Freelancers, Admins), Projects, and Applications.*
 
-Difficulty matching the right freelancers to the right projects
+![ER Diagram](./diagram/er_diagram.png)
 
-FreelanceHub solves this by offering a clean, intuitive system with a powerful backend and seamless frontend integration.
+## 🏗️ System Architecture & Tech Stack
 
-🏗️ 2. System Architecture
-Frontend  →  Backend (REST API)  →  Database
+**Frontend** → **Backend (REST API)** → **Database**
 
-Tech Components
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React (v19), React Router, Axios, Custom CSS (Light/Dark Mode) |
+| **Backend** | Node.js, Express.js |
+| **Database** | PostgreSQL |
+| **ORM** | Prisma |
+| **Authentication** | JWT (JSON Web Token), bcrypt |
 
-Frontend: React.js, React Router, Axios, TailwindCSS
+## ⭐ Key Features
 
-Backend: Node.js + Express.js
+| Category | Features |
+| :--- | :--- |
+| **Authentication & Authorization** | JWT login/signup, role-based access (Client/Freelancer/Admin) |
+| **Project Management** | Create, Read, Update, Delete for Projects. Search, filter, and apply |
+| **Advanced Discovery** | Search projects/freelancers, filter by categories/skills, sort by budget/date, and pagination |
+| **Application & Bidding** | Freelancers can submit bids/cover letters, clients can manage applications |
+| **Modern Aesthetics** | Fully featured custom UI with responsive design and theme support |
 
-Database: MySQL
+## 🚀 Getting Started
 
-Authentication: JWT (JSON Web Token)
+Follow these instructions to set up the project locally.
 
-Hosting
+### Prerequisites
+- Node.js (v18 or above recommended)
+- PostgreSQL Database
+- npm or pnpm
 
-Frontend → Vercel
+### 1. Clone the repository
+```bash
+git clone <repository_url>
+cd freelancehub
+```
 
-Backend → Render / Railway
+### 2. Backend Setup
+Navigate to the `backend` folder:
+```bash
+cd backend
+npm install
+```
 
-Database → Aiven / PlanetScale (MySQL Cloud)
+Create a `.env` file in the `backend` directory based on `.env.example`:
+```env
+# Server Configuration
+SERVER_PORT=5001
 
-⭐ 3. Key Features
-Category	Features
-Authentication & Authorization	JWT-based login & signup, role-based access (Client / Freelancer)
-CRUD Operations	Create, Read, Update, Delete for Projects, Bids & Reviews
-Search, Sort, Filter & Pagination	Search by title/skills, filter by category & budget, sort by date/budget, paginate results
-Frontend Routing	Home, Login, Signup, Dashboard, Project Details, Profile
-Bidding System	Freelancers can submit bids, clients can view/select bids
-Reviews & Ratings	Clients & freelancers can rate after project completion
-Hosting	Fully deployed frontend + backend + database
+# Frontend URLs
+FRONTEND_LOCAL_URL=http://localhost:3000
+FRONTEND_SERVER_URL=https://your-frontend.com
 
-🖥️ 4. Tech Stack
-Layer	Technologies
-Frontend	React.js, React Router, Axios, TailwindCSS
-Backend	Node.js, Express.js
-Database	MySQL
-Authentication	JWT
-Hosting Services	Vercel (Frontend), Render/Railway (Backend), Aiven/PlanetScale (Database)
+# Database Configuration (PostgreSQL)
+DATABASE_URL="postgresql://user:password@localhost:5432/freelancehub"
 
+# Authentication
+JWT_SECRET=your_super_secret_key
+JWT_EXPIRES_IN=7d
+```
 
-📡 5. API Overview
-Auth APIs
-Endpoint	Method	Description	Access
-/api/auth/signup	POST	Register new user	Public
-/api/auth/login	POST	Login + JWT token	Public
-Project APIs
-Endpoint	Method	Description	Access
-/api/projects	GET	Get all projects with search/sort/filter/pagination	Authenticated
-/api/projects	POST	Create a new project	Client only
-/api/projects/:id	GET	Get project details	Authenticated
-/api/projects/:id	PUT	Update project	Client only
-/api/projects/:id	DELETE	Delete project	Client only
-/api/projects/search	GET	Search projects by keyword	Authenticated
-/api/projects/filter	GET	Filter by category, budget, skill	Authenticated
-/api/projects/sort	GET	Sort by date/budget	Authenticated
-/api/projects/paginate	GET	Pagination	Authenticated
-Bid APIs
-Endpoint	Method	Description	Access
-/api/bids/:projectId	POST	Submit bid	Freelancer only
-/api/bids/:projectId	GET	View all bids on project	Client only
-Review APIs
-Endpoint	Method	Description	Access
-/api/reviews/:id	POST	Submit project review	Authenticated
-Freelancer APIs
-Endpoint	Method	Description	Access
-/api/freelancers	GET	List freelancers (with search, sort, filter, pagination)	Authenticated
-/api/freelancers/search	GET	Search freelancers by skill/name	Authenticated
-/api/freelancers/filter	GET	Filter by rating, category, experience	Authenticated
+Run Prisma migrations/generate:
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+Start the backend server:
+```bash
+npm run dev
+```
+
+### 3. Frontend Setup
+Navigate to the `frontend` folder:
+```bash
+cd frontend
+npm install
+```
+
+Create a `.env` file in the `frontend` directory based on `.env.example`:
+```env
+REACT_APP_BACKEND_LOCAL_URL=http://localhost:5001
+REACT_APP_BACKEND_SERVER_URL=https://freelancehub-1efa.onrender.com
+
+REACT_APP_FRONTEND_URL=http://localhost:3000
+REACT_APP_FRONTEND_SERVER_URL=https://freelancehub-uhtv.vercel.app/
+```
+
+Start the frontend application:
+```bash
+npm start
+```
+
+## 📡 API Overview (Sample Routes)
+
+### Auth APIs
+- `POST /api/auth/signup` - Register a new user
+- `POST /api/auth/login` - Login and receive JWT
+
+### Project APIs
+- `GET /api/projects` - Get all projects (supports search, sort, filter, pagination)
+- `POST /api/projects` - Create a new project (Client only)
+- `GET /api/projects/:id` - Get project details
+- `PUT /api/projects/:id` - Update project (Client only)
+- `DELETE /api/projects/:id` - Delete project (Client only)
+
+### Application APIs
+- `POST /api/applications` - Submit an application with a bid amount (Freelancer only)
+- `GET /api/applications/project/:projectId` - View applications for a project (Client only)
+
+*(Note: API routes are modularly separated and protected using middleware in the backend codebase).*
