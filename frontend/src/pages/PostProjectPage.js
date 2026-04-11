@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import { jwtDecode } from "jwt-decode";
 import { createProject } from "../api";
 import "./PostProjectPage.css";
 
@@ -25,26 +24,33 @@ const PostProjectPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.title.trim() || !formData.description.trim()) {
+      alert("Title and Description are required");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const token = localStorage.getItem("token");
+
       if (!token) {
         alert("You must be logged in");
         return;
       }
 
-      const decoded = jwtDecode(token);
-
       const payload = {
-        title: formData.title,
-        description: formData.description,
-        budget_min: Number(formData.budget_min) || null,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        budget_min:
+          formData.budget_min !== ""
+            ? Number(formData.budget_min)
+            : null,
         budget_max: null,
-        skills: formData.skills || "General",
-        category: formData.category,
+        skills: formData.skills?.trim() || null,
+        category: formData.category || "General",
         deadline: null,
-        client_id: decoded.id, 
       };
 
       const res = await createProject(payload);
@@ -131,7 +137,9 @@ const PostProjectPage = () => {
             <option value="General">General</option>
             <option value="Web Development">Web Development</option>
             <option value="Mobile App">Mobile App</option>
-            <option value="AI / Machine Learning">AI / Machine Learning</option>
+            <option value="AI / Machine Learning">
+              AI / Machine Learning
+            </option>
             <option value="UI/UX Design">UI/UX Design</option>
             <option value="Graphic Design">Graphic Design</option>
             <option value="Video Editing">Video Editing</option>
@@ -145,7 +153,7 @@ const PostProjectPage = () => {
         </form>
 
         <div className="project-preview">
-          <h3>🧩 Project Summary</h3>
+          <h3>Project Summary</h3>
           <p>This project will appear in Browse Jobs for freelancers.</p>
 
           <div className="preview-card">
@@ -158,15 +166,15 @@ const PostProjectPage = () => {
             </p>
 
             <p>
-              <strong>💰 Budget:</strong>{" "}
+              <strong>Budget:</strong>{" "}
               ₹{formData.budget_min || "Not set"}
             </p>
             <p>
-              <strong>🛠 Skills:</strong>{" "}
+              <strong>Skills:</strong>{" "}
               {formData.skills || "Not specified"}
             </p>
             <p>
-              <strong>📁 Category:</strong> {formData.category}
+              <strong>Category:</strong> {formData.category}
             </p>
           </div>
         </div>
