@@ -19,20 +19,19 @@ const ProjectDetailsPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token) {
       const decoded = jwtDecode(token);
       setUser(decoded);
     }
 
-    loadProject();
-  }, []);
+    const loadProject = async () => {
+      const data = await fetchProjectById(id);
+      if (data?.project) setProject(data.project);
+      setLoading(false);
+    };
 
-  const loadProject = async () => {
-    const data = await fetchProjectById(id);
-    if (data?.project) setProject(data.project);
-    setLoading(false);
-  };
+    loadProject();
+  }, [id]); // ✅ 'id' is the only real dependency
 
   const handleApply = async () => {
     if (!proposalText.trim()) {
@@ -73,19 +72,12 @@ const ProjectDetailsPage = () => {
         <p className="project-description">{project.description}</p>
 
         <div className="details-grid">
-
           <p><strong>Budget:</strong> ₹{project.budget_min || project.budget_max || "Not specified"}</p>
-
           <p><strong>Category:</strong> {project.category || "General"}</p>
-
           <p><strong>Client:</strong> {project.client?.name}</p>
-
           <p><strong>Visibility:</strong> {project.visibility}</p>
-
           <p><strong>Status:</strong> {project.status}</p>
-
           <p><strong>Posted:</strong> {new Date(project.created_at).toLocaleString()}</p>
-
         </div>
 
         {user?.role === "freelancer" && (
