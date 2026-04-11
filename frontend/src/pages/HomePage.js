@@ -155,10 +155,10 @@ export default function HomePage() {
             <h2>Popular Services</h2>
 
             <div className="services-grid">
-              <div className="service-box"><h3>💻 Web Development</h3><p>Frontend, backend, full-stack solutions.</p></div>
-              <div className="service-box"><h3>🎨 UI/UX Design</h3><p>Modern & intuitive user experiences.</p></div>
-              <div className="service-box"><h3>🤖 AI Automation</h3><p>Automate workflows with smart AI.</p></div>
-              <div className="service-box"><h3>📣 Marketing</h3><p>Branding, SEO & business growth.</p></div>
+              <div className="service-box"><h3>Web Development</h3><p>Frontend, backend, full-stack solutions.</p></div>
+              <div className="service-box"><h3>UI/UX Design</h3><p>Modern & intuitive user experiences.</p></div>
+              <div className="service-box"><h3>AI Automation</h3><p>Automate workflows with smart AI.</p></div>
+              <div className="service-box"><h3>Marketing</h3><p>Branding, SEO & business growth.</p></div>
             </div>
           </section>
 
