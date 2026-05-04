@@ -3,7 +3,7 @@
 FreelanceHub is a comprehensive full-stack freelance marketplace that empowers clients to post projects and allows freelancers to bid on them. Users can efficiently browse projects and freelancers utilizing advanced searching, sorting, filtering, and pagination functionalities.
 It offers an end-to-end workflow, ensuring a robust platform for project management, application bidding, and authentication.
 
-## 📌 Problem Statement
+##  Problem Statement
 
 The freelance market is expanding rapidly, but users often face challenges such as:
 - Complex or poorly structured user interfaces on existing platforms
@@ -13,13 +13,13 @@ The freelance market is expanding rapidly, but users often face challenges such 
 
 FreelanceHub addresses these issues by offering a clean, intuitive, and feature-rich system backed by a robust REST API and an interactive frontend.
 
-## 📊 Database Entity-Relationship Diagram
+##  Database Entity-Relationship Diagram
 
 *This ER Diagram illustrates the relationships between Users (Clients, Freelancers, Admins), Projects, and Applications.*
 
 ![ER Diagram](./diagram/er_diagram.png)
 
-## 🏗️ System Architecture & Tech Stack
+##  System Architecture & Tech Stack
 
 **Frontend** → **Backend (REST API)** → **Database**
 
@@ -31,7 +31,7 @@ FreelanceHub addresses these issues by offering a clean, intuitive, and feature-
 | **ORM** | Prisma |
 | **Authentication** | JWT (JSON Web Token), bcrypt |
 
-## ⭐ Key Features
+##  Key Features
 
 | Category | Features |
 | :--- | :--- |
@@ -41,7 +41,7 @@ FreelanceHub addresses these issues by offering a clean, intuitive, and feature-
 | **Application & Bidding** | Freelancers can submit bids/cover letters, clients can manage applications |
 | **Modern Aesthetics** | Fully featured custom UI with responsive design and theme support |
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these instructions to set up the project locally.
 
@@ -112,7 +112,7 @@ Start the frontend application:
 npm start
 ```
 
-## 📡 API Overview (Sample Routes)
+##  API Overview (Sample Routes)
 
 ### Auth APIs
 - `POST /api/auth/signup` - Register a new user
