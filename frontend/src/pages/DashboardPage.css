@@ -1,138 +1,134 @@
+/* ============================================
+   DashboardPage.css — Hand-Drawn Style
+   ============================================ */
 
 .dashboard-container {
   min-height: 100vh;
   width: 100%;
-  background: var(--background);
-  background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
-  font-family: "Poppins", sans-serif;
-  color: var(--text);
-  overflow-y: auto;
-  padding-bottom: 40px;
+  background: var(--paper);
+  background-image: radial-gradient(var(--muted) 1px, transparent 1px);
+  background-size: 24px 24px;
+  font-family: var(--font-body);
+  color: var(--pencil);
+  padding-bottom: 60px;
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-
+/* Navbar */
 .navbar {
   width: 100%;
-  background: var(--surface);
-  padding: 18px 40px;
+  background: var(--paper-white);
+  padding: 16px 40px;
   display: flex;
   align-items: center;
-  backdrop-filter: blur(10px);
+  border-bottom: 3px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: var(--shadow-soft);
 }
 
 .navbar h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--pencil);
 }
 
-
+/* Content */
 .dashboard-content {
   margin-top: 40px;
   text-align: center;
   width: 100%;
+  padding: 0 20px;
 }
 
 .dashboard-content h1 {
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 40px;
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  font-size: 16px;
-  color: var(--subtext);
+  font-size: 18px;
+  color: var(--pencil);
+  opacity: 0.6;
   margin-bottom: 50px;
 }
 
-
+/* Cards */
 .cards-container {
   width: 100%;
   max-width: 700px;
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 24px;
 }
 
-
 .dash-card {
-  background: var(--surface);
-  padding: 30px 35px;
-  border-radius: 18px;
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-soft);
+  background: var(--paper-white);
+  padding: 28px 32px;
+  border: 3px solid var(--border);
+  border-radius: var(--wobbly-md);
+  box-shadow: var(--shadow);
   cursor: pointer;
   text-align: left;
-  transition: all 0.35s ease;
-  border-left: 5px solid transparent;
+  transition: all 100ms ease;
+  border-left: 6px solid var(--pencil);
 }
 
 .dash-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  background: var(--surface);
-  border-left: 5px solid var(--primary);
-  box-shadow: var(--shadow-hover);
+  transform: rotate(-0.5deg) translateY(-4px);
+  border-left-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  background: var(--postit);
 }
 
 .dash-card h3 {
-  font-size: 20px;
-  margin-bottom: 8px;
-  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 22px;
+  margin-bottom: 6px;
 }
 
 .dash-card p {
-  font-size: 15px;
-  color: var(--subtext);
-  opacity: 0.9;
+  font-size: 16px;
+  opacity: 0.65;
 }
 
-
+/* Back button */
 .back-btn {
-  background: transparent;
-  border: 1px solid var(--subtext);
-  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  background: var(--paper-white);
+  border: 2px solid var(--border);
+  color: var(--pencil);
   padding: 8px 16px;
-  font-size: 15px;
-  border-radius: 8px;
+  border-radius: var(--wobbly-sm);
   cursor: pointer;
-  margin: 20px 0 10px 0;
+  margin: 20px 0 10px 40px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: 0.25s ease;
+  box-shadow: var(--shadow-hover);
+  transition: all 100ms ease;
 }
 
 .back-btn:hover {
-  background: rgba(79, 109, 245, 0.12);
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: translateY(-2px);
+  background: var(--accent);
+  color: var(--paper-white);
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-none);
 }
-
 
 @media (max-width: 600px) {
   .dash-card {
-    padding: 25px 22px;
+    padding: 22px 20px;
   }
 
   .dash-card h3 {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .dashboard-content h1 {
-    font-size: 26px;
+    font-size: 30px;
   }
 }

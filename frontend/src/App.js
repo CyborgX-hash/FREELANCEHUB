@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -36,10 +36,7 @@ function FreelancersAppliedWrapper() {
 
 function App() {
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
+  // Dark mode removed — single hand-drawn light theme
 
   return (
     <Router>

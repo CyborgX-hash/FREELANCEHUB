@@ -33,9 +33,6 @@ const DashboardPage = () => {
       navigate("/");
       return;
     }
-
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", savedTheme);
   }, [navigate]);
 
   const role = user.role?.toLowerCase();

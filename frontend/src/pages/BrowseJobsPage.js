@@ -27,10 +27,8 @@ const BrowseJobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 8;
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
+
+
 
   useEffect(() => {
     const loadData = async () => {

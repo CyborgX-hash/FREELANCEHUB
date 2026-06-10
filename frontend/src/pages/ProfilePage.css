@@ -1,78 +1,176 @@
-
+/* ============================================
+   ProfilePage.css — Hand-Drawn Style
+   ============================================ */
 
 .profile-wrapper {
   min-height: 100vh;
-  background: var(--background);
-  color: var(--text);
-  font-family: "Poppins", sans-serif;
-  transition: 0.25s ease;
+  background: var(--paper);
+  background-image: radial-gradient(var(--muted) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--pencil);
+  font-family: var(--font-body);
+  padding-bottom: 60px;
 }
 
+/* Banner — warm paper strip with sketchy border, NOT dark */
 .profile-header-banner {
   width: 100%;
-  height: 180px;
-  border-radius: 0 0 40px 40px;
-  background: var(--primary);
+  height: 140px;
+  background: var(--paper-white);
+  border-bottom: 4px solid var(--border);
+  position: relative;
+  overflow: hidden;
 }
 
+/* Notebook ruled lines inside the banner */
+.profile-header-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 28px,
+      var(--muted) 28px,
+      var(--muted) 30px
+    );
+  opacity: 0.6;
+}
+
+/* Decorative dashed line across banner */
+.profile-header-banner::after {
+  content: '~ your profile ~';
+  font-family: var(--font-heading);
+  font-size: 22px;
+  color: var(--pencil);
+  opacity: 0.15;
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  white-space: nowrap;
+  letter-spacing: 4px;
+}
+
+/* Avatar section */
 .profile-avatar-section {
   text-align: center;
-  margin-top: -70px;
+  margin-top: -55px;
+  position: relative;
+  z-index: 10;
 }
 
 .profile-avatar-icon,
 .profile-photo {
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  border: 5px solid var(--background);
-  background: var(--surface);
-  color: var(--primary);
+  border: 4px solid var(--border);
+  background: var(--paper-white);
+  color: var(--pencil);
   object-fit: cover;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* Thumbtack pin on top of avatar */
+.profile-avatar-section::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0px 0px var(--border);
+  z-index: 20;
 }
 
 .profile-name {
-  font-size: 30px;
-  font-weight: 700;
-  margin-top: 12px;
+  font-family: var(--font-heading);
+  font-size: 34px;
+  margin-top: 14px;
+  line-height: 1.1;
 }
 
 .profile-username {
-  font-size: 15px;
-  color: var(--subtext);
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--pencil);
+  opacity: 0.45;
+  margin-top: 2px;
 }
 
 .role-pill {
   display: inline-block;
-  margin-top: 10px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: rgba(79, 109, 245, 0.18);
-  color: var(--primary);
-  font-size: 13px;
-  font-weight: 500;
+  margin-top: 12px;
+  padding: 6px 22px;
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  background: var(--postit);
+  color: var(--pencil);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 2px 2px 0px 0px rgba(45, 45, 45, 0.1);
+  transform: rotate(-1deg);
 }
 
+/* Main card */
 .profile-main-card {
   width: 900px;
+  max-width: 95%;
   margin: 35px auto;
-  background: var(--surface);
-  padding: 28px;
-  border-radius: 20px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--subtext);
+  background: var(--paper-white);
+  padding: 32px;
+  border: 3px solid var(--border);
+  border-radius: var(--wobbly-md);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* Tape decoration on card */
+.profile-main-card::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 90px;
+  height: 20px;
+  background: rgba(200, 200, 200, 0.45);
+  border-radius: 4px;
+  border: 1px solid rgba(200, 200, 200, 0.3);
 }
 
 .card-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 18px;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 3px dashed var(--muted);
+  position: relative;
 }
 
+/* Little scribble decoration next to title */
+.card-title::after {
+  content: '✎';
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 20px;
+  opacity: 0.3;
+  transform: rotate(15deg);
+}
+
+/* Profile grid */
 .profile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px 22px;
+  gap: 20px 26px;
 }
 
 .field {
@@ -85,70 +183,117 @@
 }
 
 .field label {
-  font-size: 13px;
-  color: var(--subtext);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pencil);
+  opacity: 0.55;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+/* Inputs */
 .profile-main-card input,
 .profile-main-card select,
 .profile-main-card textarea {
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--subtext);
-  font-size: 15px;
-  background: var(--background);
-  color: var(--text);
-  transition: 0.25s;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  font-family: var(--font-body);
+  font-size: 16px;
+  background: var(--paper);
+  color: var(--pencil);
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .profile-main-card input:disabled,
 .profile-main-card select:disabled,
 .profile-main-card textarea:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  border-style: dashed;
+  background: var(--paper);
 }
 
 .profile-main-card input:focus,
 .profile-main-card select:focus,
 .profile-main-card textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(79,109,245,0.25);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(45, 93, 161, 0.15);
 }
 
+.profile-main-card textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.profile-main-card select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%232d2d2d' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548L10 12.032l4.484-4.484L16 8.064 10 14.064 4 8.064z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+/* Buttons */
 .profile-buttons {
   display: flex;
   justify-content: flex-end;
-  margin-top: 25px;
-  gap: 12px;
+  margin-top: 30px;
+  gap: 14px;
 }
 
 .edit-btn,
 .save-btn {
-  background: var(--primary);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 700;
+  background: var(--paper-white);
+  color: var(--pencil);
+  padding: 12px 28px;
+  border: 3px solid var(--border);
+  border-radius: var(--wobbly);
+  box-shadow: var(--shadow);
   cursor: pointer;
-  border: none;
-  font-weight: 600;
-  transition: 0.2s ease;
+  transition: all 100ms ease;
 }
 
 .edit-btn:hover,
 .save-btn:hover {
-  background: var(--primary-light);
+  background: var(--accent);
+  color: var(--paper-white);
+  box-shadow: var(--shadow-hover);
+  transform: translate(2px, 2px);
+}
+
+.edit-btn:active,
+.save-btn:active {
+  box-shadow: var(--shadow-none);
+  transform: translate(4px, 4px);
 }
 
 .cancel-btn {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--subtext);
-  padding: 12px 20px;
-  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 700;
+  background: var(--muted);
+  color: var(--pencil);
+  border: 2px solid var(--border);
+  padding: 12px 28px;
+  border-radius: var(--wobbly);
+  cursor: pointer;
+  box-shadow: var(--shadow-hover);
+  transition: all 100ms ease;
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--accent);
+  color: var(--paper-white);
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-none);
 }
 
 @media (max-width: 900px) {
@@ -160,6 +305,7 @@
   }
 }
 
+/* Loading */
 .loading-wrapper {
   height: 60vh;
   display: flex;
@@ -167,31 +313,20 @@
   gap: 18px;
   justify-content: center;
   align-items: center;
-  color: var(--subtext);
-  font-size: 16px;
-  animation: fadeIn 0.4s ease;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  color: var(--pencil);
 }
 
 .loader-ring {
-  width: 60px;
-  height: 60px;
-  border: 5px solid rgba(255,255,255,0.05);
-  border-top-color: var(--primary);
+  width: 50px;
+  height: 50px;
+  border: 4px dashed var(--pencil);
+  border-top-color: var(--accent);
   border-radius: 50%;
-  animation: spin 0.9s linear infinite, glow 1.4s ease-in-out infinite;
+  animation: sketchySpin 1.2s linear infinite;
 }
 
-@keyframes spin {
+@keyframes sketchySpin {
   to { transform: rotate(360deg); }
-}
-
-@keyframes glow {
-  0% { box-shadow: 0 0 0px var(--primary); }
-  50% { box-shadow: 0 0 12px var(--primary); }
-  100% { box-shadow: 0 0 0px var(--primary); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
 }

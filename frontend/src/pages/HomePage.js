@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaUserCircle, FaUser, FaSignOutAlt, FaSun, FaMoon } from "react-icons/fa";
-import heroVideo from "../Assets/vdo.webm";
-import logo from "../Assets/logo.png";
+import { FaUserCircle, FaUser, FaSignOutAlt } from "react-icons/fa";
 import "./HomePage.css";
 
 export default function HomePage() {
@@ -15,13 +13,10 @@ export default function HomePage() {
 
   const [showSplash, setShowSplash] = useState(() => {
     const seen = localStorage.getItem("seenSplash");
-    return !seen; 
+    return !seen;
   });
 
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-
   const aboutRef = useRef(null);
-  const servicesRef = useRef(null);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -47,17 +42,12 @@ export default function HomePage() {
       }
     };
 
-    loadUser(); 
+    loadUser();
 
     window.addEventListener("tokenChanged", loadUser);
 
     return () => window.removeEventListener("tokenChanged", loadUser);
   }, [location.key]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     const close = (e) => {
@@ -85,7 +75,8 @@ export default function HomePage() {
       {showSplash && (
         <div className="logo-overlay">
           <div className="logo-fullscreen">
-            <img src={logo} alt="Logo" />
+            <h1 className="splash-title">FreelanceHub</h1>
+            <p className="splash-sub">~ sketched with love ~</p>
           </div>
         </div>
       )}
@@ -116,11 +107,6 @@ export default function HomePage() {
                         <FaUser /> Profile
                       </p>
 
-                      <p onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-                        {theme === "light" ? <FaMoon /> : <FaSun />} 
-                        {theme === "light" ? " Dark Mode" : " Light Mode"}
-                      </p>
-
                       <p className="logout" onClick={logout}>
                         <FaSignOutAlt /> Logout
                       </p>
@@ -131,41 +117,88 @@ export default function HomePage() {
             </div>
           </nav>
 
-          <section className="hero">
-            <video autoPlay muted loop className="hero-video">
-              <source src={heroVideo} type="video/mp4" />
-            </video>
+          {/* ---- HERO (replaces video) ---- */}
+          <section className="hero-sketchy">
+            <div className="hero-doodles" aria-hidden="true">
+              {/* Decorative SVG elements */}
+              <svg className="doodle-arrow" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 50 C30 10, 70 10, 100 30" stroke="#2d2d2d" strokeWidth="2.5" strokeDasharray="6 4" fill="none"/>
+                <path d="M90 22 L102 32 L88 36" stroke="#2d2d2d" strokeWidth="2.5" fill="none"/>
+              </svg>
+              <div className="doodle-circle" />
+              <div className="doodle-star">✦</div>
+            </div>
 
-            <div className="hero-content">
-              <h2>Where ideas turn into successful collaborations.</h2>
-              <p>Search, hire & collaborate with industry-leading professionals worldwide.</p>
+            <div className="hero-content-sketchy">
+              <h2>
+                Where ideas turn into
+                <span className="hero-highlight"> successful </span>
+                collaborations<span className="hero-bang" aria-hidden="true">!</span>
+              </h2>
+              <p className="hero-sub">
+                Search, hire & collaborate with industry-leading professionals worldwide.
+              </p>
 
-              <button className="btn primary" onClick={() => navigate("/dashboard")}>
-                Get Started
+              <button
+                className="sketchy-btn filled hero-cta"
+                onClick={() => navigate("/dashboard")}
+              >
+                Get Started →
               </button>
             </div>
-          </section>
 
-          <section ref={aboutRef} className="about-section">
-            <h2>About Us</h2>
-            <p>FreelanceHub is a modern freelancing platform designed to seamlessly connect clients with skilled freelancers across various domains such as web development, design, mobile apps, AI, marketing, and content creation</p>
-          </section>
-
-          <section ref={servicesRef} className="services-section">
-            <h2>Popular Services</h2>
-
-            <div className="services-grid">
-              <div className="service-box"><h3>Web Development</h3><p>Frontend, backend, full-stack solutions.</p></div>
-              <div className="service-box"><h3>UI/UX Design</h3><p>Modern & intuitive user experiences.</p></div>
-              <div className="service-box"><h3>AI Automation</h3><p>Automate workflows with smart AI.</p></div>
-              <div className="service-box"><h3>Marketing</h3><p>Branding, SEO & business growth.</p></div>
+            {/* Notebook placeholder illustration */}
+            <div className="hero-illustration" aria-hidden="true">
+              <div className="notebook-page">
+                <div className="notebook-line" />
+                <div className="notebook-line" />
+                <div className="notebook-line" />
+                <div className="notebook-line" />
+                <div className="notebook-scribble">✎ your next project</div>
+              </div>
             </div>
           </section>
 
-          <section className="testimonials-section">
-            <h2 className="section-title">TESTIMONIAL</h2>
+          {/* ---- ABOUT ---- */}
+          <section ref={aboutRef} className="about-section-sketchy">
+            <div className="section-tape" aria-hidden="true" />
+            <h2>About Us</h2>
+            <p>
+              FreelanceHub is a modern freelancing platform designed to seamlessly connect
+              clients with skilled freelancers across various domains such as web development,
+              design, mobile apps, AI, marketing, and content creation
+            </p>
+          </section>
 
-            <div className="testimonials-wrapper">
+          {/* ---- SERVICES ---- */}
+          <section className="services-section-sketchy">
+            <h2>Popular Services</h2>
+
+            <div className="services-grid-sketchy">
+              {[
+                { title: "Web Development", desc: "Frontend, backend, full-stack solutions.", emoji: "🌐" },
+                { title: "UI/UX Design", desc: "Modern & intuitive user experiences.", emoji: "🎨" },
+                { title: "AI Automation", desc: "Automate workflows with smart AI.", emoji: "🤖" },
+                { title: "Marketing", desc: "Branding, SEO & business growth.", emoji: "📈" },
+              ].map((s, i) => (
+                <div
+                  className="service-card-sketchy"
+                  key={i}
+                  style={{ transform: `rotate(${i % 2 === 0 ? '-1' : '1'}deg)` }}
+                >
+                  <span className="service-emoji">{s.emoji}</span>
+                  <h3>{s.title}</h3>
+                  <p>{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ---- TESTIMONIALS ---- */}
+          <section className="testimonials-section-sketchy">
+            <h2 className="section-title-sketchy">Testimonials</h2>
+
+            <div className="testimonials-wrapper-sketchy">
               {[
                 { name: "Aman Sharma", text: "Amazing platform! I found a skilled developer within hours.", role: "Startup Founder" },
                 { name: "Priya Verma", text: "Top-level work. Smooth and reliable process.", role: "Marketing Manager" },
@@ -175,10 +208,12 @@ export default function HomePage() {
                 { name: "Drishti Kapoor", text: "Amazing video editors here!", role: "Content Creator" },
                 { name: "Vivek Rao", text: "Very smooth experience overall.", role: "Business Owner" },
               ].map((t, i) => (
-                <div className="testimonial-card" key={i}>
-                  <p className="testimonial-text">“{t.text}”</p>
-                  <h4 className="testimonial-name">{t.name}</h4>
-                  <p className="testimonial-role">{t.role}</p>
+                <div className="testimonial-card-sketchy" key={i}>
+                  {/* Speech bubble tail */}
+                  <div className="speech-tail" aria-hidden="true" />
+                  <p className="testimonial-text-sketchy">"{t.text}"</p>
+                  <h4 className="testimonial-name-sketchy">{t.name}</h4>
+                  <p className="testimonial-role-sketchy">{t.role}</p>
                 </div>
               ))}
             </div>

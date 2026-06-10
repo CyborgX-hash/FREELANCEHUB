@@ -1,189 +1,230 @@
+/* ============================================
+   AppliedFreelancersPage.css — Hand-Drawn Style
+   ============================================ */
 
 .af-container {
-    padding: 40px;
-    background: var(--background);
-    min-height: 100vh;
-    font-family: "Inter", "Poppins", sans-serif;
-    color: var(--text);
-  }
-  
-  /* PAGE TITLE */
-  .af-container h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 20px;
-  }
-  
-  
-  .back-btn {
-    background: transparent;
-    border: 1px solid var(--subtext);
-    color: var(--text);
-    padding: 8px 16px;
-    font-size: 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.25s ease;
-  }
-  
-  .back-btn:hover {
-    background: rgba(79, 109, 245, 0.12);
-    border-color: var(--primary);
-    color: var(--primary);
-    transform: translateY(-2px);
-  }
-  
+  padding: 40px;
+  background: var(--paper);
+  background-image: radial-gradient(var(--muted) 1px, transparent 1px);
+  background-size: 24px 24px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--pencil);
+}
 
-  .search-box {
-    padding: 12px 15px;
-    width: 300px;
-    border-radius: 10px;
-    border: 1px solid var(--subtext);
-    background: var(--surface);
-    color: var(--text);
-    margin-bottom: 25px;
-    transition: 0.25s;
-  }
-  
-  .search-box:focus {
-    border-color: var(--primary);
-    outline: none;
-  }
-  
+.af-container h2 {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  margin-bottom: 20px;
+}
 
-  .af-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 28px;
-  }
-  
-  @media (max-width: 1200px) {
-    .af-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 900px) {
-    .af-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 600px) {
-    .af-grid { grid-template-columns: 1fr; }
-  }
-  
-  
-  .af-card {
-    background: var(--surface);
-    border: 1px solid var(--subtext);
-    padding: 22px;
-    border-radius: 16px;
-    transition: 0.25s ease;
-    cursor: pointer;
-    box-shadow: var(--shadow-soft);
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .af-card:hover {
-    background: var(--surface);
-    border-color: var(--primary);
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-  }
-  
-  .af-card h3 {
-    color: var(--primary);
-    font-size: 20px;
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
-  
-  .af-card p {
-    font-size: 14px;
-    color: var(--subtext);
-    margin: 6px 0;
-  }
-  
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-top: 30px;
-  }
-  
-  .pagination button {
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.25s ease;
-  }
-  
-  .pagination button:hover {
-    background: var(--primary-light);
-    transform: translateY(-3px);
-  }
-  
-  .pagination button:disabled {
-    background: rgba(100, 100, 100, 0.4);
-    cursor: not-allowed;
-  }
-  
-  .pagination span {
-    font-size: 15px;
-    color: var(--subtext);
-  }
-  
- 
-  .table-header {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr 2fr 1fr;
-    background: var(--surface);
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--text);
-    border: 1px solid var(--subtext);
-  }
-  
-  .table-row {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr 2fr 1fr;
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--subtext);
-    align-items: center;
-    color: var(--subtext);
-    transition: 0.25s ease;
-  }
-  
-  .table-row:hover {
-    background: rgba(79, 109, 245, 0.08);
-  }
-  
-  .table-row span,
-  .table-header span {
-    display: flex;
-    align-items: center;
-  }
-  
-  .table-row span:nth-child(3) {
-    white-space: normal;
-    line-height: 1.4;
-  }
-  
-  .table-row a {
-    color: var(--primary);
-    font-weight: 600;
-    text-decoration: underline;
-  }
-  
-  .table-row a:hover {
-    color: var(--primary-light);
-  }
-  
+/* Back button */
+.back-btn {
+  font-family: var(--font-body);
+  font-size: 16px;
+  background: var(--paper-white);
+  border: 2px solid var(--border);
+  color: var(--pencil);
+  padding: 8px 16px;
+  border-radius: var(--wobbly-sm);
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-hover);
+  transition: all 100ms ease;
+}
+
+.back-btn:hover {
+  background: var(--accent);
+  color: var(--paper-white);
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-none);
+}
+
+/* Search */
+.search-box {
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 12px 16px;
+  width: 300px;
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  background: var(--paper-white);
+  color: var(--pencil);
+  margin-bottom: 25px;
+  outline: none;
+  transition: border-color 200ms ease;
+}
+
+.search-box::placeholder {
+  color: rgba(45, 45, 45, 0.4);
+}
+
+.search-box:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(45, 93, 161, 0.15);
+}
+
+/* Grid */
+.af-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .af-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .af-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .af-grid { grid-template-columns: 1fr; }
+}
+
+/* Card */
+.af-card {
+  background: var(--paper-white);
+  border: 2px solid var(--border);
+  padding: 22px;
+  border-radius: var(--wobbly-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: all 100ms ease;
+}
+
+.af-card:hover {
+  transform: rotate(-0.5deg) translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.af-card h3 {
+  font-family: var(--font-heading);
+  color: var(--pencil);
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.af-card p {
+  font-size: 14px;
+  opacity: 0.65;
+  margin: 4px 0;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.pagination button {
+  font-family: var(--font-body);
+  padding: 10px 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  background: var(--paper-white);
+  color: var(--pencil);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-hover);
+  transition: all 100ms ease;
+}
+
+.pagination button:hover {
+  background: var(--accent);
+  color: var(--paper-white);
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-none);
+}
+
+.pagination button:disabled {
+  background: var(--muted);
+  color: rgba(45, 45, 45, 0.4);
+  cursor: not-allowed;
+  box-shadow: none;
+  border-style: dashed;
+}
+
+.pagination span {
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+/* Table (FreelancersAppliedList) */
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 2fr 1fr;
+  background: var(--pencil);
+  color: var(--paper-white);
+  padding: 14px 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 2fr 1fr;
+  padding: 14px 18px;
+  border: 2px solid var(--muted);
+  border-radius: var(--wobbly-sm);
+  margin-bottom: 6px;
+  background: var(--paper-white);
+  align-items: center;
+  transition: all 100ms ease;
+}
+
+.table-row:hover {
+  background: var(--postit);
+  border-color: var(--border);
+  transform: translateX(4px);
+}
+
+.table-row span,
+.table-header span {
+  display: flex;
+  align-items: center;
+}
+
+.table-row span:nth-child(3) {
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.table-row a {
+  color: var(--blue);
+  font-weight: 700;
+  border-bottom: 2px dashed var(--blue);
+}
+
+.table-row a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Empty */
+.empty-msg {
+  text-align: center;
+  margin-top: 40px;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  opacity: 0.5;
+}
+
+/* Loader */
+.loader {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  margin-top: 80px;
+  text-align: center;
+  opacity: 0.5;
+}
