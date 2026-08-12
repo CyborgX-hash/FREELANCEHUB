@@ -77,6 +77,40 @@
   box-shadow: 0 0 0 3px rgba(45, 93, 161, 0.2);
 }
 
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.password-input-wrapper input {
+  margin-bottom: 0 !important;
+  padding-right: 46px !important;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: auto !important;
+  padding: 4px !important;
+  font-size: 18px !important;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 150ms ease, transform 150ms ease !important;
+}
+
+.toggle-password-btn:hover {
+  opacity: 1;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: translateY(-50%) scale(1.15) !important;
+}
+
 .login-card button {
   width: 100%;
   padding: 14px;

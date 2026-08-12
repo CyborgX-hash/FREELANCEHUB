@@ -4,7 +4,7 @@ const rateLimit = require("express-rate-limit");
 // Strict limits for login & signup to prevent brute-force attacks
 const authLimiter = rateLimit({
   windowMs: 3 * 60 * 1000, // 3 minutes window
-  max: 5, // Limit each IP to 5 auth requests per 3 minutes
+  max: 15, // Limit each IP to 15 auth requests per 3 minutes (allows OTP send, resend, register, login)
   standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false, // Disable `X-RateLimit-*` headers
   message: {

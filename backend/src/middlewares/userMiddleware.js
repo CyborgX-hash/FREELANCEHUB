@@ -81,6 +81,7 @@ async function createUserMiddleware(req, res, next) {
       email,
       password,
       role: normalizedRole,
+      otpCode: req.body.otpCode,
     };
 
     next();

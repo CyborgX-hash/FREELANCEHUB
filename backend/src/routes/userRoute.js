@@ -26,9 +26,9 @@ const userController = new UserController(userService);
 const { authLimiter, writeLimiter } = require("../middlewares/rateLimitMiddleware");
 
 // Routes
-router.post("/send-otp", authLimiter, userController.sendOtp);
+router.post("/send-otp", authLimiter, createUserMiddleware, userController.sendOtp);
 
-router.post("/register", authLimiter, userController.register);
+router.post("/register", authLimiter, createUserMiddleware, userController.register);
 
 router.post("/login", authLimiter, loginUserMiddleware, userController.login);
 
