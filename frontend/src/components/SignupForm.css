@@ -16,7 +16,7 @@
 
 .signup-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   padding: 38px 34px;
   background: var(--paper-white);
   border: 3px solid var(--border);
@@ -52,7 +52,7 @@
 .signup-card .subtitle {
   font-size: 15px;
   color: var(--pencil);
-  opacity: 0.5;
+  opacity: 0.7;
   margin-bottom: 24px;
 }
 
@@ -110,7 +110,7 @@
   width: 100%;
   padding: 14px;
   font-family: var(--font-body);
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
   background: var(--pencil);
   color: var(--paper-white);
@@ -132,12 +132,75 @@
   transform: translate(4px, 4px);
 }
 
+/* OTP Specific Styling */
+.otp-info {
+  background: var(--paper);
+  border: 2px dashed var(--border);
+  border-radius: var(--wobbly-sm);
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 15px;
+  color: var(--pencil);
+}
+
+.email-highlight {
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 26px !important;
+  font-weight: bold;
+  letter-spacing: 8px;
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  background: #fffdf9 !important;
+}
+
+.otp-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.text-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--pencil) !important;
+  font-size: 14px !important;
+  text-decoration: underline;
+  padding: 4px 8px !important;
+  width: auto !important;
+}
+
+.text-btn:hover {
+  color: var(--accent) !important;
+  transform: none !important;
+}
+
 /* Message & switch */
 .signup-card .message {
-  margin-top: 12px;
-  color: var(--accent);
+  margin-top: 14px;
   font-weight: 700;
   font-size: 15px;
+  padding: 8px 12px;
+  border-radius: var(--wobbly-sm);
+}
+
+.signup-card .message.error {
+  color: #d90429;
+  background: #ffe5e5;
+  border: 2px solid #d90429;
+}
+
+.signup-card .message.success {
+  color: #2b9348;
+  background: #e8f5e9;
+  border: 2px solid #2b9348;
 }
 
 .signup-card .switch {

@@ -11,6 +11,7 @@ const LoginForm = () => {
     password: ""
   });
 
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -20,6 +21,8 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
     const result = await loginUser(credentials);
 
@@ -33,6 +36,7 @@ const LoginForm = () => {
 
     } else {
       setMessage(result.ERROR || result.message || "Invalid credentials");
+      setLoading(false);
     }
   };
 
@@ -61,7 +65,9 @@ const LoginForm = () => {
             required
           />
 
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? <div className="loader light"></div> : "Login"}
+          </button>
         </form>
 
         {message && <p className="message">{message}</p>}

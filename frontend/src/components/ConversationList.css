@@ -1,0 +1,117 @@
+.conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.no-conversations {
+  text-align: center;
+  padding: 30px 15px;
+  color: var(--pencil);
+  font-family: var(--font-body);
+}
+
+.no-conversations p {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.no-conversations small {
+  opacity: 0.7;
+}
+
+.conversation-item {
+  position: relative;
+  background: var(--paper-white);
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 120ms ease;
+  box-shadow: 2px 2px 0px 0px var(--border);
+}
+
+.conversation-item:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow);
+  background: var(--paper);
+}
+
+.conversation-item.active {
+  background: var(--postit);
+  border-color: var(--blue);
+  box-shadow: var(--shadow-hover);
+}
+
+.conversation-item.unread {
+  border-left: 5px solid var(--accent);
+}
+
+.conv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.conv-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--pencil);
+}
+
+.conv-role-badge {
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  background: var(--paper-white);
+  color: var(--pencil);
+}
+
+.conv-project-title {
+  font-size: 14px;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conv-last-msg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: rgba(45, 45, 45, 0.75);
+}
+
+.msg-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75%;
+}
+
+.msg-time {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.unread-dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,138 @@
+.bot-chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--paper);
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-md);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.bot-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--postit);
+  border-bottom: 2px solid var(--border);
+}
+
+.bot-header-title h3 {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  margin: 0;
+  color: var(--pencil);
+}
+
+.bot-subtitle {
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.bot-messages-container {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-image: radial-gradient(var(--muted) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bot-msg-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.bot-msg-wrapper.user {
+  justify-content: flex-end;
+}
+
+.bot-msg-wrapper.bot {
+  justify-content: flex-start;
+}
+
+.bot-msg-bubble {
+  max-width: 85%;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  font-family: var(--font-body);
+  font-size: 16px;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+.bot-msg-bubble.user {
+  background: var(--pencil);
+  color: var(--paper-white);
+  box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.15);
+}
+
+.bot-msg-bubble.bot {
+  background: var(--paper-white);
+  color: var(--pencil);
+  box-shadow: 3px 3px 0px 0px var(--border);
+}
+
+.bot-msg-text {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.bot-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.suggestion-chip {
+  background: var(--paper);
+  border: 1.5px solid var(--border);
+  border-radius: var(--wobbly-sm);
+  padding: 4px 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--pencil);
+  transition: all 100ms ease;
+}
+
+.suggestion-chip:hover {
+  background: var(--accent);
+  color: var(--paper-white);
+  transform: translateY(-1px);
+}
+
+.bot-msg-time {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.bot-typing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--blue);
+}
+
+.bot-input-area {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: var(--paper-white);
+  border-top: 2px solid var(--border);
+}
+
+.bot-input {
+  flex: 1;
+  padding: 10px 14px !important;
+}

@@ -19,7 +19,7 @@ class ProjectController {
 
   getAll = async (req, res) => {
     try {
-      const result = await this.projectService.getAllProjects();
+      const result = await this.projectService.getAllProjects(req.query);
       return res.status(200).json(result);
     } catch (error) {
       return res.status(error.statusCode || 500).json({
@@ -43,7 +43,8 @@ class ProjectController {
     try {
       const result = await this.projectService.getProjectsByClient(
         req.user,
-        req.params.clientId
+        req.params.clientId,
+        req.query
       );
       return res.status(200).json(result);
     } catch (error) {

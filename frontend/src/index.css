@@ -274,3 +274,30 @@ select.sketchy-input {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-8px); }
 }
+
+/* User-requested Dot Loader Animation */
+.loader {
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+  display: inline-block;
+  margin: 0 auto;
+}
+@keyframes l5 {
+    0%  {box-shadow: 20px 0 #000, -20px 0 #0002;background: #000 }
+    33% {box-shadow: 20px 0 #000, -20px 0 #0002;background: #0002}
+    66% {box-shadow: 20px 0 #0002,-20px 0 #000; background: #0002}
+    100%{box-shadow: 20px 0 #0002,-20px 0 #000; background: #000 }
+}
+
+.loader.light {
+  animation: l5-light 1s infinite linear alternate;
+}
+@keyframes l5-light {
+    0%  {box-shadow: 20px 0 #fff, -20px 0 rgba(255,255,255,0.2);background: #fff }
+    33% {box-shadow: 20px 0 #fff, -20px 0 rgba(255,255,255,0.2);background: rgba(255,255,255,0.2)}
+    66% {box-shadow: 20px 0 rgba(255,255,255,0.2),-20px 0 #fff; background: rgba(255,255,255,0.2)}
+    100%{box-shadow: 20px 0 rgba(255,255,255,0.2),-20px 0 #fff; background: #fff }
+}
+

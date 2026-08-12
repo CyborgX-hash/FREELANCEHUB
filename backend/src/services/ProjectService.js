@@ -73,10 +73,10 @@ class ProjectService {
     };
   }
 
-  async getAllProjects() {
-    const projects = await this.projectRepository.findAll();
+  async getAllProjects(queryParams = {}) {
+    const result = await this.projectRepository.findAll(queryParams);
 
-    const formatted = projects.map((p) => ({
+    const formatted = (result.projects || []).map((p) => ({
       ...p,
       budget:
         p.budget_min !== null && p.budget_max !== null
@@ -89,7 +89,15 @@ class ProjectService {
       category: p.category || "General",
     }));
 
-    return { projects: formatted };
+    return {
+      projects: formatted,
+      pagination: {
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        totalPages: result.totalPages,
+      },
+    };
   }
 
   async getProjectById(id) {
@@ -108,7 +116,7 @@ class ProjectService {
     return { project };
   }
 
-  async getProjectsByClient(user, clientId) {
+  async getProjectsByClient(user, clientId, queryParams = {}) {
     const parsedClientId = Number(clientId);
 
     if (Number.isNaN(parsedClientId)) {
@@ -119,9 +127,12 @@ class ProjectService {
       throw new ApiError("Forbidden", 403);
     }
 
-    const projects = await this.projectRepository.findByClient(parsedClientId);
+    const result = await this.projectRepository.findByClient(
+      parsedClientId,
+      queryParams
+    );
 
-    const formatted = projects.map((p) => ({
+    const formatted = (result.projects || []).map((p) => ({
       ...p,
       budget:
         p.budget_min !== null && p.budget_max !== null
@@ -134,7 +145,15 @@ class ProjectService {
       category: p.category || "General",
     }));
 
-    return { projects: formatted };
+    return {
+      projects: formatted,
+      pagination: {
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        totalPages: result.totalPages,
+      },
+    };
   }
 
   async updateProject(user, projectId, data) {

@@ -22,7 +22,8 @@ class ApplicationController {
     try {
       const result = await this.applicationService.getByProject(
         req.user,
-        req.params.projectId
+        req.params.projectId,
+        req.query
       );
 
       return res.json(result);
@@ -36,7 +37,8 @@ class ApplicationController {
   getByFreelancer = async (req, res) => {
     try {
       const result = await this.applicationService.getByFreelancer(
-        req.user
+        req.user,
+        req.query
       );
 
       return res.json(result);

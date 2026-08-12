@@ -74,7 +74,7 @@ class ApplicationService {
     };
   }
 
-  async getByProject(user, projectId) {
+  async getByProject(user, projectId, queryParams = {}) {
     const parsedProjectId = Number(projectId);
 
     if (Number.isNaN(parsedProjectId)) {
@@ -91,22 +91,41 @@ class ApplicationService {
       throw new ApiError("Forbidden", 403);
     }
 
-    const applications =
-      await this.applicationRepository.findByProject(parsedProjectId);
+    const result = await this.applicationRepository.findByProject(
+      parsedProjectId,
+      queryParams
+    );
 
-    return { applications };
+    return {
+      applications: result.applications || [],
+      pagination: {
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        totalPages: result.totalPages,
+      },
+    };
   }
 
-  async getByFreelancer(user) {
+  async getByFreelancer(user, queryParams = {}) {
     if (user.role !== "freelancer" && user.role !== "admin") {
       throw new ApiError("Only freelancers can view their applications", 403);
     }
 
-    const applications = await this.applicationRepository.findByFreelancer(
-      user.id
+    const result = await this.applicationRepository.findByFreelancer(
+      user.id,
+      queryParams
     );
 
-    return { applications };
+    return {
+      applications: result.applications || [],
+      pagination: {
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        totalPages: result.totalPages,
+      },
+    };
   }
 
   async withdraw(user, applicationId) {

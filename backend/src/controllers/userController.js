@@ -3,6 +3,17 @@ class UserController {
     this.userService = userService;
   }
 
+  sendOtp = async (req, res) => {
+    try {
+      const result = await this.userService.sendOtp(req.body);
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        ERROR: error.message,
+      });
+    }
+  };
+
   register = async (req, res) => {
     try {
       const result = await this.userService.register(req.body);

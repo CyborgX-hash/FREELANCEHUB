@@ -72,6 +72,34 @@ class UserRepository {
       where: { id },
     });
   }
+
+  // ─── OTP Methods ───
+  async upsertOtp(email, code, expiresAt) {
+    return prisma.otp.upsert({
+      where: { email: email.toLowerCase() },
+      update: {
+        code,
+        expires_at: expiresAt,
+      },
+      create: {
+        email: email.toLowerCase(),
+        code,
+        expires_at: expiresAt,
+      },
+    });
+  }
+
+  async findOtpByEmail(email) {
+    return prisma.otp.findUnique({
+      where: { email: email.toLowerCase() },
+    });
+  }
+
+  async deleteOtpByEmail(email) {
+    return prisma.otp.deleteMany({
+      where: { email: email.toLowerCase() },
+    });
+  }
 }
 
 module.exports = UserRepository;

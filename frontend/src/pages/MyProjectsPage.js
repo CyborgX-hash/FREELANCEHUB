@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import {fetchClientProjects,deleteProject} from "../api"; 
+import { fetchClientProjects, deleteProject } from "../api"; 
 import "./MyProjectsPage.css";
 
 export default function MyProjectsPage() {
@@ -15,27 +15,42 @@ export default function MyProjectsPage() {
   const [sortBy, setSortBy] = useState("newest");
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 6;
 
-  useEffect(() => {
+  const loadProjects = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     const { id: clientId } = jwtDecode(token);
+    setLoading(true);
 
-    const loadProjects = async () => {
-      try {
-        const data = await fetchClientProjects(clientId);
-        setProjects(data?.projects || []);
-      } catch (err) {
-        console.error("Error fetching projects:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const data = await fetchClientProjects(clientId, {
+        page: currentPage,
+        limit: itemsPerPage,
+        search,
+        category,
+        sortBy,
+      });
 
+      setProjects(data?.projects || []);
+      setTotalPages(data?.pagination?.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, search, category, sortBy]);
+
+  useEffect(() => {
     loadProjects();
-  }, []);
+  }, [loadProjects]);
+
+  const handleFilterChange = (setter, value) => {
+    setter(value);
+    setCurrentPage(1);
+  };
 
   const handleDelete = async (projectId) => {
     if (!window.confirm("Are you sure? This cannot be undone!")) return;
@@ -48,45 +63,13 @@ export default function MyProjectsPage() {
     }
 
     alert("Project deleted!");
-    setProjects((prev) => prev.filter((p) => p.id !== projectId));
+    loadProjects();
   };
 
   const editProject = (project) => navigate(`/edit-project/${project.id}`);
 
-  const filteredProjects = projects
-    .filter((p) =>
-      p.title?.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter((p) =>
-      category === "all"
-        ? true
-        : (p.category || "")
-            .toLowerCase()
-            .includes(category.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortBy === "newest")
-        return new Date(b.created_at) - new Date(a.created_at);
-      if (sortBy === "oldest")
-        return new Date(a.created_at) - new Date(b.created_at);
-      if (sortBy === "budget-high")
-        return (b.budget_min || 0) - (a.budget_min || 0);
-      if (sortBy === "budget-low")
-        return (a.budget_min || 0) - (b.budget_min || 0);
-      return 0;
-    });
-
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProjects = filteredProjects.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
-
-  const nextPage = () =>
-    currentPage < totalPages && setCurrentPage((p) => p + 1);
-  const prevPage = () =>
-    currentPage > 1 && setCurrentPage((p) => p - 1);
+  const nextPage = () => currentPage < totalPages && setCurrentPage((p) => p + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage((p) => p - 1);
 
   if (loading)
     return (
@@ -109,10 +92,10 @@ export default function MyProjectsPage() {
           type="text"
           placeholder="Search by project title..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleFilterChange(setSearch, e.target.value)}
         />
 
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select value={category} onChange={(e) => handleFilterChange(setCategory, e.target.value)}>
           <option value="all">All Categories</option>
           <option value="Web Development">Web Development</option>
           <option value="Design">Design</option>
@@ -124,7 +107,7 @@ export default function MyProjectsPage() {
           <option value="General">General</option>
         </select>
 
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <select value={sortBy} onChange={(e) => handleFilterChange(setSortBy, e.target.value)}>
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
           <option value="budget-high">Budget: High → Low</option>
@@ -132,11 +115,11 @@ export default function MyProjectsPage() {
         </select>
       </div>
 
-      {paginatedProjects.length === 0 ? (
+      {projects.length === 0 ? (
         <p className="empty-msg">No matching projects found.</p>
       ) : (
         <div className="project-list">
-          {paginatedProjects.map((project) => (
+          {projects.map((project) => (
             <div className="project-card" key={project.id}>
               <h3>{project.title}</h3>
 
@@ -147,7 +130,7 @@ export default function MyProjectsPage() {
               <div className="info">
                 <p>
                   <strong>💰 Budget:</strong>{" "}
-                  ₹{project.budget_min || "Not set"}
+                  {project.budget || `₹${project.budget_min || "Not set"}`}
                 </p>
                 <p>
                   <strong>📂 Category:</strong>{" "}

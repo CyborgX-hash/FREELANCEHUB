@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   fetchProjects,
   applyToProject,
@@ -11,7 +11,7 @@ const BrowseJobsPage = () => {
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -25,72 +25,51 @@ const BrowseJobsPage = () => {
   const [appliedIds, setAppliedIds] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const cardsPerPage = 8;
 
-
-
-
+  // Load user's applied job IDs once
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const projectRes = await fetchProjects();
-        setProjects(projectRes?.projects || []);
-        setFiltered(projectRes?.projects || []);
-
-        const appliedRes = await getAppliedProjects();
-        const ids = (appliedRes?.applications || []).map(
-          (a) => a.project_id
-        );
+    getAppliedProjects()
+      .then((res) => {
+        const ids = (res?.applications || []).map((a) => a.project_id);
         setAppliedIds(ids);
-      } catch (err) {
-        console.error("Error loading browse data:", err);
-      }
-    };
-
-    loadData();
+      })
+      .catch((err) => console.error("Error loading applied jobs:", err));
   }, []);
 
+  // Fetch server-paginated & filtered jobs
+  const loadJobs = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetchProjects({
+        page: currentPage,
+        limit: cardsPerPage,
+        search,
+        category: categoryFilter,
+        sortBy,
+      });
+
+      setProjects(res?.projects || []);
+      setTotalPages(res?.pagination?.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching jobs from server:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, search, categoryFilter, sortBy]);
+
   useEffect(() => {
-    let result = [...projects];
+    loadJobs();
+  }, [loadJobs]);
 
-    if (search.trim()) {
-      const s = search.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.title?.toLowerCase().includes(s) ||
-          p.description?.toLowerCase().includes(s)
-      );
-    }
-
-    if (categoryFilter !== "all") {
-      result = result.filter((p) =>
-        p.skills?.toLowerCase().includes(categoryFilter.toLowerCase())
-      );
-    }
-
-    if (sortBy === "latest") {
-      result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    } else if (sortBy === "oldest") {
-      result.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-    } else if (sortBy === "budget-low") {
-      result.sort((a, b) => (a.budget_min || 0) - (b.budget_min || 0));
-    } else if (sortBy === "budget-high") {
-      result.sort((a, b) => (b.budget_min || 0) - (a.budget_min || 0));
-    }
-
-    setFiltered(result);
+  const handleFilterChange = (setter, value) => {
+    setter(value);
     setCurrentPage(1);
-  }, [search, categoryFilter, sortBy, projects]);
+  };
 
-  const indexOfLast = currentPage * cardsPerPage;
-  const indexOfFirst = indexOfLast - cardsPerPage;
-  const currentCards = filtered.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filtered.length / cardsPerPage);
-
-  const nextPage = () =>
-    currentPage < totalPages && setCurrentPage((p) => p + 1);
-  const prevPage = () =>
-    currentPage > 1 && setCurrentPage((p) => p - 1);
+  const nextPage = () => currentPage < totalPages && setCurrentPage((p) => p + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage((p) => p - 1);
 
   const openApply = (project) => {
     setActiveProject(project);
@@ -130,12 +109,12 @@ const BrowseJobsPage = () => {
           type="text"
           placeholder="Search projects..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleFilterChange(setSearch, e.target.value)}
         />
 
         <select
           value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
+          onChange={(e) => handleFilterChange(setCategoryFilter, e.target.value)}
         >
           <option value="all">All Categories</option>
           <option value="web">Web Development</option>
@@ -152,7 +131,10 @@ const BrowseJobsPage = () => {
           <option value="general">General</option>
         </select>
 
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <select
+          value={sortBy}
+          onChange={(e) => handleFilterChange(setSortBy, e.target.value)}
+        >
           <option value="latest">Latest First</option>
           <option value="oldest">Oldest First</option>
           <option value="budget-low">Budget: Low → High</option>
@@ -160,32 +142,42 @@ const BrowseJobsPage = () => {
         </select>
       </div>
 
-      <div className="projects-grid">
-        {currentCards.map((p) => (
-          <div className="project-card" key={p.id}>
-            <h3>{p.title}</h3>
-            <p className="desc">{p.description?.slice(0, 120)}...</p>
+      {loading ? (
+        <div className="loader">Loading server data...</div>
+      ) : (
+        <div className="projects-grid">
+          {projects.length === 0 ? (
+            <p className="no-conversations" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+              No projects found matching your criteria.
+            </p>
+          ) : (
+            projects.map((p) => (
+              <div className="project-card" key={p.id}>
+                <h3>{p.title}</h3>
+                <p className="desc">{p.description?.slice(0, 120)}...</p>
 
-            <p>
-              <strong>Budget:</strong> ₹{p.budget_min || "N/A"}
-            </p>
-            <p>
-              <strong>Skills:</strong> {p.skills || "Not specified"}
-            </p>
-            <p>
-              <strong>Client:</strong> {p.client?.name}
-            </p>
+                <p>
+                  <strong>Budget:</strong> {p.budget || `₹${p.budget_min || "N/A"}`}
+                </p>
+                <p>
+                  <strong>Skills:</strong> {p.skills || "Not specified"}
+                </p>
+                <p>
+                  <strong>Client:</strong> {p.client?.name || "Unknown"}
+                </p>
 
-            {appliedIds.includes(p.id) ? (
-              <button className="applied-btn">Applied ✔</button>
-            ) : (
-              <button className="apply-btn" onClick={() => openApply(p)}>
-                Apply Now
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
+                {appliedIds.includes(p.id) ? (
+                  <button className="applied-btn">Applied ✔</button>
+                ) : (
+                  <button className="apply-btn" onClick={() => openApply(p)}>
+                    Apply Now
+                  </button>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       {totalPages > 1 && (
         <div className="pagination">

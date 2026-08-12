@@ -75,6 +75,11 @@ const DashboardPage = () => {
               <p>See who applied for your projects.</p>
             </div>
 
+            <div className="dash-card" onClick={() => navigate("/chat")}>
+              <h3>💬 Messages</h3>
+              <p>Chat directly with your project applicants.</p>
+            </div>
+
           </div>
         )}
 
@@ -89,6 +94,11 @@ const DashboardPage = () => {
             <div className="dash-card" onClick={() => navigate("/my-applications")}>
               <h3>📄 My Applications</h3>
               <p>Track your submitted job proposals.</p>
+            </div>
+
+            <div className="dash-card" onClick={() => navigate("/chat")}>
+              <h3>💬 Messages</h3>
+              <p>Chat with client team for your proposals.</p>
             </div>
 
           </div>

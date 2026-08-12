@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { fetchClientProjects } from "../api"; 
@@ -8,45 +8,44 @@ export default function AppliedFreelancersPage() {
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const PER_PAGE = 8;
 
-  useEffect(() => {
+  const loadClientProjects = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     const { id: clientId } = jwtDecode(token);
+    setLoading(true);
 
-    fetchClientProjects(clientId)
-      .then((data) => {
-        setProjects(data?.projects || []);
-        setFiltered(data?.projects || []);
-      })
-      .catch((err) => {
-        console.error("Error fetching client projects:", err);
+    try {
+      const data = await fetchClientProjects(clientId, {
+        page,
+        limit: PER_PAGE,
+        search,
       });
-  }, []);
+
+      setProjects(data?.projects || []);
+      setTotalPages(data?.pagination?.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching client projects:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, search]);
 
   useEffect(() => {
-    let results = [...projects];
+    loadClientProjects();
+  }, [loadClientProjects]);
 
-    if (search.trim()) {
-      const s = search.toLowerCase();
-      results = results.filter((p) =>
-        p.title?.toLowerCase().includes(s)
-      );
-    }
-
-    setFiltered(results);
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
     setPage(1);
-  }, [search, projects]);
-
-  const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const startIndex = (page - 1) * PER_PAGE;
-  const paginated = filtered.slice(startIndex, startIndex + PER_PAGE);
+  };
 
   return (
     <div className="af-container">
@@ -60,24 +59,30 @@ export default function AppliedFreelancersPage() {
         className="search-box"
         placeholder="Search projects..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleSearchChange}
       />
 
-      <div className="af-grid">
-        {paginated.map((p) => (
-          <div
-            className="af-card"
-            key={p.id}
-            onClick={() => navigate(`/applied-freelancers/${p.id}`)}
-          >
-            <h3>{p.title}</h3>
-            <p>{p.description?.slice(0, 80)}...</p>
-            <p>
-              <strong>Skills:</strong> {p.skills || "Not specified"}
-            </p>
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <div className="loader">Loading projects...</div>
+      ) : projects.length === 0 ? (
+        <p className="empty-msg">No projects found.</p>
+      ) : (
+        <div className="af-grid">
+          {projects.map((p) => (
+            <div
+              className="af-card"
+              key={p.id}
+              onClick={() => navigate(`/applied-freelancers/${p.id}`)}
+            >
+              <h3>{p.title}</h3>
+              <p>{p.description?.slice(0, 80)}...</p>
+              <p>
+                <strong>Skills:</strong> {p.skills || "Not specified"}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
       {totalPages > 1 && (
         <div className="pagination">

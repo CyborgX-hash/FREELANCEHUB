@@ -2,29 +2,81 @@ const bcrypt = require("bcrypt");
 const ApiError = require("../utils/ApiError");
 const { createToken } = require("../utils/auth");
 const UserFactory = require("../patterns/UserFactory");
+const brevoEmailService = require("./BrevoEmailService");
 
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
   }
 
-  async register(data) {
+  async sendOtp(data) {
     const { name, username, email, password, role } = data;
 
-    if (!name || !username || !email || !password) {
-      throw new ApiError("Missing required fields", 400);
+    if (!name || !username || !email || !password || !role) {
+      throw new ApiError("All fields including role are required to request OTP", 400);
     }
 
-    const existingEmail = await this.userRepository.findByEmail(
-      email.toLowerCase()
-    );
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanUsername = username.trim().toLowerCase();
+
+    const existingEmail = await this.userRepository.findByEmail(cleanEmail);
     if (existingEmail) {
       throw new ApiError("Email already registered", 400);
     }
 
-    const existingUsername = await this.userRepository.findByUsername(
-      username.toLowerCase()
-    );
+    const existingUsername = await this.userRepository.findByUsername(cleanUsername);
+    if (existingUsername) {
+      throw new ApiError("Username already taken", 400);
+    }
+
+    // Generate 6-digit OTP code
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    await this.userRepository.upsertOtp(cleanEmail, otpCode, expiresAt);
+
+    await brevoEmailService.sendOtpEmail({
+      recipientEmail: cleanEmail,
+      recipientName: name.trim(),
+      otpCode,
+    });
+
+    return {
+      message: `Verification code sent to ${cleanEmail}`,
+    };
+  }
+
+  async register(data) {
+    const { name, username, email, password, role, otpCode } = data;
+
+    if (!name || !username || !email || !password || !role) {
+      throw new ApiError("Missing required registration fields", 400);
+    }
+
+    if (!otpCode || !String(otpCode).trim()) {
+      throw new ApiError("Email verification code (OTP) is required", 400);
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanUsername = username.trim().toLowerCase();
+
+    // Verify OTP in DB
+    const otpRecord = await this.userRepository.findOtpByEmail(cleanEmail);
+
+    if (!otpRecord || otpRecord.code !== String(otpCode).trim()) {
+      throw new ApiError("Invalid verification code. Please check your email and try again.", 400);
+    }
+
+    if (new Date() > new Date(otpRecord.expires_at)) {
+      throw new ApiError("Verification code has expired. Please request a new code.", 400);
+    }
+
+    const existingEmail = await this.userRepository.findByEmail(cleanEmail);
+    if (existingEmail) {
+      throw new ApiError("Email already registered", 400);
+    }
+
+    const existingUsername = await this.userRepository.findByUsername(cleanUsername);
     if (existingUsername) {
       throw new ApiError("Username already taken", 400);
     }
@@ -32,17 +84,38 @@ class UserService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const userObject = UserFactory.createUser(role, {
-      name,
-      username,
-      email,
+      name: name.trim(),
+      username: cleanUsername,
+      email: cleanEmail,
       password: hashedPassword,
     });
 
     const user = await this.userRepository.create(userObject);
 
+    // Clean up OTP record
+    await this.userRepository.deleteOtpByEmail(cleanEmail);
+
+    const normalizedRole =
+      user.role === "Freelancer"
+        ? "freelancer"
+        : user.role === "Admin"
+        ? "admin"
+        : "client";
+
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      role: normalizedRole,
+    };
+
+    const token = createToken(payload);
+
     return {
       message: "User registered successfully",
-      user,
+      token,
+      user: payload,
     };
   }
 

@@ -23,10 +23,14 @@ const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
-// Routes
-router.post("/register", createUserMiddleware, userController.register);
+const { authLimiter, writeLimiter } = require("../middlewares/rateLimitMiddleware");
 
-router.post("/login", loginUserMiddleware, userController.login);
+// Routes
+router.post("/send-otp", authLimiter, userController.sendOtp);
+
+router.post("/register", authLimiter, userController.register);
+
+router.post("/login", authLimiter, loginUserMiddleware, userController.login);
 
 router.post("/logout", authenticate, userController.logout);
 
@@ -35,6 +39,7 @@ router.get("/me", authenticate, userController.getMe);
 router.put(
   "/update",
   authenticate,
+  writeLimiter,
   updateUserMiddleware,
   userController.update
 );

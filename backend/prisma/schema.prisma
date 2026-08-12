@@ -32,6 +32,10 @@ model User {
   projects        Project[]
   applications    Application[]
 
+  clientConversations      Conversation[] @relation("ClientConversations")
+  freelancerConversations  Conversation[] @relation("FreelancerConversations")
+  sentMessages             Message[]      @relation("SentMessages")
+
   age             Int?
   gender          String?
   city            String?
@@ -65,7 +69,8 @@ model Project {
 
   client      User           @relation(fields: [client_id], references: [id], onDelete: Cascade)
 
-  applications Application[]
+  applications    Application[]
+  conversations   Conversation[]
 }
 
 model Application {
@@ -88,4 +93,45 @@ model Application {
   @@index([freelancer_id])
 
   @@unique([project_id, freelancer_id])
+}
+
+model Conversation {
+  id             Int       @id @default(autoincrement())
+  project_id     Int
+  client_id      Int
+  freelancer_id  Int
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  project        Project   @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  client         User      @relation("ClientConversations", fields: [client_id], references: [id], onDelete: Cascade)
+  freelancer     User      @relation("FreelancerConversations", fields: [freelancer_id], references: [id], onDelete: Cascade)
+  messages       Message[]
+
+  @@unique([project_id, client_id, freelancer_id])
+  @@index([client_id])
+  @@index([freelancer_id])
+}
+
+model Message {
+  id               Int          @id @default(autoincrement())
+  conversation_id  Int
+  sender_id        Int
+  content          String
+  is_read          Boolean      @default(false)
+  created_at       DateTime     @default(now())
+
+  conversation     Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+  sender           User         @relation("SentMessages", fields: [sender_id], references: [id], onDelete: Cascade)
+
+  @@index([conversation_id])
+  @@index([sender_id])
+}
+
+model Otp {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  code       String
+  expires_at DateTime
+  created_at DateTime @default(now())
 }

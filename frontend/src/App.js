@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,6 +6,8 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { connectSocket, disconnectSocket } from "./socket";
 
 import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
@@ -21,13 +23,14 @@ import AppliedFreelancersPage from "./pages/AppliedFreelancersPage";
 import FreelancersAppliedList from "./pages/FreelancersAppliedList";  
 import MyApplicationsPage from "./pages/MyApplicationsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ChatPage from "./pages/ChatPage";
 
+import ChatWidget from "./components/ChatWidget";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" replace />;
 };
-
 
 function FreelancersAppliedWrapper() {
   const { projectId } = useParams();
@@ -35,13 +38,27 @@ function FreelancersAppliedWrapper() {
 }
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const token = localStorage.getItem("token");
 
-  // Dark mode removed — single hand-drawn light theme
+  useEffect(() => {
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setCurrentUser(decoded);
+        connectSocket(token);
+      } catch (err) {
+        console.error("Invalid token:", err);
+      }
+    } else {
+      setCurrentUser(null);
+      disconnectSocket();
+    }
+  }, [token]);
 
   return (
     <Router>
       <Routes>
-
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -109,8 +126,6 @@ function App() {
           }
         />
 
-        
-
         <Route
           path="/applied-freelancers"
           element={
@@ -138,8 +153,20 @@ function App() {
           }
         />
 
+        <Route
+          path="/chat"
+          element={
+            <PrivateRoute>
+              <ChatPage />
+            </PrivateRoute>
+          }
+        />
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+
+      {/* Global floating AI Assistant & Chat Widget */}
+      <ChatWidget currentUserId={currentUser?.id} />
     </Router>
   );
 }

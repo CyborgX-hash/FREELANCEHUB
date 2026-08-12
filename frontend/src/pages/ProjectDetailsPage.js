@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchProjectById, applyToProject } from "../api";
+import { fetchProjectById, applyToProject, getOrCreateConversation } from "../api";
 import { jwtDecode } from "jwt-decode";
 import "./ProjectDetailsPage.css";
 
@@ -81,9 +81,28 @@ const ProjectDetailsPage = () => {
         </div>
 
         {user?.role === "freelancer" && (
-          <button className="apply-btn" onClick={() => setShowApplyBox(true)}>
-            Apply Now
-          </button>
+          <div className="project-action-btns" style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+            <button className="apply-btn" onClick={() => setShowApplyBox(true)}>
+              Apply Now
+            </button>
+            <button
+              className="sketchy-btn secondary"
+              onClick={async () => {
+                if (!project.client?.id) return;
+                const res = await getOrCreateConversation({
+                  projectId: project.id,
+                  otherUserId: project.client.id,
+                });
+                if (res.conversation) {
+                  navigate(`/chat?id=${res.conversation.id}`);
+                } else {
+                  alert(res.ERROR || "Please apply to this project first to message the client!");
+                }
+              }}
+            >
+              💬 Message Client
+            </button>
+          </div>
         )}
       </div>
 

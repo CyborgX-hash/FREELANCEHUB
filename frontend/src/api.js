@@ -22,6 +22,15 @@ api.interceptors.request.use(
 );
 
 
+export const sendSignupOtp = async (data) => {
+  try {
+    const res = await api.post("/api/users/send-otp", data);
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
 export const signupUser = async (data) => {
   try {
     const res = await api.post("/api/users/register", data);
@@ -41,9 +50,9 @@ export const loginUser = async (data) => {
 };
 
 
-export const fetchProjects = async () => {
+export const fetchProjects = async (params = {}) => {
   try {
-    const res = await api.get("/api/projects");
+    const res = await api.get("/api/projects", { params });
     return res.data;
   } catch (err) {
     return err.response?.data;
@@ -59,9 +68,9 @@ export const fetchProjectById = async (id) => {
   }
 };
 
-export const fetchClientProjects = async (clientId) => {
+export const fetchClientProjects = async (clientId, params = {}) => {
   try {
-    const res = await api.get(`/api/projects/client/${clientId}`);
+    const res = await api.get(`/api/projects/client/${clientId}`, { params });
     return res.data;
   } catch (err) {
     return err.response?.data;
@@ -100,18 +109,18 @@ export const applyToProject = async ({ projectId, proposal, bid_amount }) => {
   }
 };
 
-export const getAppliedProjects = async () => {
+export const getAppliedProjects = async (params = {}) => {
   try {
-    const res = await api.get("/api/applications/me");
+    const res = await api.get("/api/applications/me", { params });
     return res.data;
   } catch (err) {
     return err.response?.data;
   }
 };
 
-export const getProjectApplications = async (projectId) => {
+export const getProjectApplications = async (projectId, params = {}) => {
   try {
-    const res = await api.get(`/api/applications/project/${projectId}`);
+    const res = await api.get(`/api/applications/project/${projectId}`, { params });
     return res.data;
   } catch (err) {
     return err.response?.data;
@@ -151,4 +160,64 @@ export const createProject = async (data) => {
     return err.response?.data || { ERROR: "Network error" };
   }
 };
+
+// Chat APIs
+export const getOrCreateConversation = async ({ projectId, otherUserId }) => {
+  try {
+    const res = await api.post("/api/chat/conversations", { projectId, otherUserId });
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+export const getConversations = async () => {
+  try {
+    const res = await api.get("/api/chat/conversations");
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+export const getMessages = async (conversationId, page = 1) => {
+  try {
+    const res = await api.get(`/api/chat/conversations/${conversationId}/messages`, {
+      params: { page },
+    });
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+export const sendMessageApi = async (conversationId, content) => {
+  try {
+    const res = await api.post(`/api/chat/conversations/${conversationId}/messages`, {
+      content,
+    });
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+export const getUnreadCount = async () => {
+  try {
+    const res = await api.get("/api/chat/unread");
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
+export const sendBotQuery = async (message) => {
+  try {
+    const res = await api.post("/api/chat/bot", { message });
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { ERROR: "Network error" };
+  }
+};
+
 
